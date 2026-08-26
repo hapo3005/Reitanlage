@@ -9,6 +9,7 @@
       "image": "images/flyerferienreitkurs.png",
       "alt": "Ferienreitkurs auf der Reitanlage Eichhorn-Nels",
       "imageFit": "contain",
+      "imageZoom": true,
       "imagePosition": "50% 50%",
       "imagePositionMobile": "50% 50%",
       "link": "#kontakt",
