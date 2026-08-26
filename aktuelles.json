@@ -1,0 +1,35 @@
+{
+  "updated": "2026-08-26",
+  "items": [
+    {
+      "category": "Ferienkurse",
+      "meta": "Termine auf Anfrage",
+      "title": "Spiel und Spaß rund ums Pferd",
+      "text": "Ferienreitkurse verbinden Reiten, Theorie und gemeinsame Pferdezeit für Kinder und Jugendliche. Aktuelle Termine und freie Plätze bitte direkt erfragen.",
+      "image": "images/flyerferienreitkurs.png",
+      "alt": "Ferienreitkurs auf der Reitanlage Eichhorn-Nels",
+      "link": "#kontakt",
+      "linkText": "Termin erfragen"
+    },
+    {
+      "category": "Reitbeteiligungen",
+      "meta": "Aktuell",
+      "title": "Freizeit- und Turnierpferde kennenlernen",
+      "text": "Reitbeteiligungen werden je nach Pferd und Situation individuell vereinbart. Kosten, Umfang und passende Möglichkeiten werden persönlich besprochen.",
+      "image": "images/reitbeteiligung1.png",
+      "alt": "Reitbeteiligung auf der Reitanlage Eichhorn-Nels",
+      "link": "#kontakt",
+      "linkText": "Anfragen"
+    },
+    {
+      "category": "Besuche & Termine",
+      "meta": "Bitte vorher abstimmen",
+      "title": "Am Stall am besten direkt verabreden",
+      "text": "Da der Alltag auf der Anlage bei den Pferden stattfindet, werden Besuche und Termine am zuverlässigsten telefonisch oder per WhatsApp abgestimmt.",
+      "image": "images/eventbild4.png",
+      "alt": "Hofleben auf der Reitanlage Eichhorn-Nels",
+      "link": "#kontakt",
+      "linkText": "Kontakt aufnehmen"
+    }
+  ]
+}
