@@ -1,58 +1,163 @@
-/* Mobile-specific layout polish. The desktop composition remains untouched. */
-@media(max-width:820px){
-  .stable,.pricing{width:100%;max-width:none;margin:0;padding-left:22px;padding-right:22px}
+/* Mobile-first refinement for Reitanlage Eichhorn-Nels.
+   Desktop composition stays untouched; <=820px is deliberately recomposed. */
+@media (max-width:820px){
+  html{scroll-padding-top:72px}
+  body{font-size:16px;line-height:1.62}
+  .header{padding:15px 20px}
+  .header.scrolled{padding:11px 20px}
+  .menu{width:42px;height:42px;background:rgba(244,240,231,.06)}
+  .nav{padding:104px 22px 42px;justify-content:flex-start;gap:0;font-size:clamp(2rem,8.6vw,3.25rem);line-height:1.05;overflow:auto}
+  .nav a{width:100%;padding:14px 0;border-bottom:1px solid var(--line)}
+  .nav .nav-cta{margin:14px 0 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:0;color:var(--bronze)}
   .hero-copy,.chapter>*,.training-grid>*,.horse-ledger>*,.news-layout>*,.pricing>*,.contact>*{min-width:0}
-  .chapter-head h2{max-width:12ch}
-  .stable-gallery{width:100%}
-  .terrain{padding-bottom:2px}
-  .news-feature h3{font-size:clamp(1.85rem,8vw,2.55rem)}
-  .price-details{width:100%}
-  .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-}
-
-@media(max-width:540px){
-  body{font-size:15.5px;line-height:1.6}
-  .header{padding:14px 18px}
-  .menu{width:42px;height:42px}
-  .chapter{width:calc(100% - 36px);padding:64px 0}
-  .stable,.pricing{width:100%;margin:0;padding:64px 18px}
-  .facts{padding:0}
-  .facts div{padding:20px 18px}
-  .chapter-index{gap:10px}
-  .side-note{font-size:1.08rem;line-height:1.4}
-  .copy-columns{gap:18px}
-  .philosophy-copy blockquote{font-size:clamp(1.65rem,7.4vw,2.15rem)}
-  .training-grid article,.training-grid article:nth-child(odd),.training-grid article:nth-child(even){padding:25px 0}
-  .training-grid p{margin-bottom:0}
+  .hero-copy,.hero-copy h1{color:#fff}
+  .hero-copy .kicker,.hero-copy h1 em{color:#eadbc2}
+  .facts{grid-template-columns:1fr 1fr;padding:0}
+  .facts div{padding:20px 20px;border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+  .facts div:nth-child(even){border-right:0}
+  .facts strong{font-size:1.45rem}
+  .facts span{font-size:.6rem;letter-spacing:.1em}
+  .chapter{width:calc(100% - 44px);padding:72px 0}
+  .chapter-light{grid-template-columns:1fr;gap:30px}
+  .chapter-index{display:block;padding-top:0}
+  .chapter-index .kicker{margin-bottom:12px}
+  .side-note{max-width:30ch;margin-bottom:0;font-size:1.08rem;line-height:1.42}
+  .philosophy-copy h2,.chapter-head h2{max-width:12ch;margin-bottom:24px}
+  .lead{font-size:1.08rem;line-height:1.55}
+  .copy-columns{grid-template-columns:1fr;gap:14px}
+  .copy-columns p{margin-bottom:0}
+  .philosophy-copy blockquote{margin-top:34px;padding-top:24px;font-size:clamp(1.72rem,7.5vw,2.25rem);line-height:1.16}
+  .philosophy-copy cite{margin-top:14px}
+  .editorial-image{margin:4px 0 0}
+  .editorial-image img{height:68vw;min-height:0;max-height:390px;object-position:50% 38%}
+  .chapter-head,.chapter-head.narrow{display:block;margin-bottom:34px}
+  .chapter-head>p{max-width:34ch;margin:18px 0 0}
+  .training{padding-top:66px}
+  .training-grid{grid-template-columns:1fr;border-top:1px solid var(--line)}
+  .training-grid article,.training-grid article:nth-child(odd),.training-grid article:nth-child(even){min-height:0;padding:25px 0;border-right:0;border-bottom:1px solid var(--line)}
+  .training-grid h3{margin-bottom:10px;font-size:1.55rem}
+  .training-grid p{margin-bottom:0;line-height:1.56}
+  .training-grid span{margin-top:14px;font-size:.6rem;letter-spacing:.085em;line-height:1.5}
   .service-ribbon{margin-top:30px;padding:22px 0}
-  .stable-gallery{grid-template-rows:300px 190px 190px;gap:4px}
-  .horse-ledger article,.horse-ledger article+article{grid-template-columns:98px minmax(0,1fr);gap:16px;padding:22px 0}
-  .horse-ledger h3{font-size:1.38rem;margin-bottom:8px}
-  .horse-meta{font-size:.56rem;line-height:1.45;letter-spacing:.08em}
-  .horse-ledger article p:last-child{margin-bottom:0;line-height:1.5}
-  .sport-story{margin-top:62px;padding-top:48px;gap:32px}
-  .sport-story figure{height:74vw;min-height:280px}
-  .results div{grid-template-columns:64px minmax(0,1fr);gap:12px}
-  .history-strip{gap:28px;margin-top:56px}
-  .price-highlight div{grid-template-columns:minmax(0,1fr) auto;gap:5px 14px}
-  .price-highlight dd{font-size:1.28rem}
-  .price-details summary{padding:19px 0}
-  .table-wrap{overflow:visible;border-top:1px solid rgba(255,255,255,.18)}
-  table{min-width:0;width:100%;font-size:.78rem}
+  .service-ribbon p{line-height:1.72}
+  .service-ribbon strong{display:block;margin:0 0 6px}
+  .cinematic{height:66vw;min-height:250px;max-height:440px;margin:48px 0 0}
+  .cinematic figcaption{left:14px;right:14px;bottom:13px;font-size:.58rem;line-height:1.4}
+  .stable,.pricing{width:100%;max-width:none;margin:0;padding:72px 22px;display:block}
+  .stable-copy{max-width:none}
+  .stable-copy>p:not(.kicker){max-width:36ch}
+  .stable h2,.pricing h2{max-width:11ch;margin-bottom:24px}
+  .stable-specs{margin-top:34px}
+  .stable-specs div{grid-template-columns:84px minmax(0,1fr);gap:14px;padding:14px 0}
+  .stable-specs dt{font-size:.72rem}
+  .stable-specs dd{font-size:.94rem;line-height:1.5}
+  .stable-gallery{display:flex;grid-column:auto;width:calc(100% + 22px);margin:42px -22px 0 0;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain;padding-right:22px;scrollbar-width:none}
+  .stable-gallery::-webkit-scrollbar{display:none}
+  .stable-gallery figure,.stable-gallery .sg-main{flex:0 0 min(82vw,360px);height:min(62vw,285px);margin:0;scroll-snap-align:start;grid-row:auto;grid-column:auto}
+  .stable-gallery img{height:100%;object-fit:cover}
+  .terrain{grid-column:auto;display:block;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,.18)}
+  .terrain h3{margin:8px 0 14px;font-size:1.65rem}
+  .terrain p:last-child{margin-bottom:0}
+  .horses{padding-bottom:74px}
+  .horse-ledger{grid-template-columns:1fr;border-top:1px solid var(--line)}
+  .horse-ledger article,.horse-ledger article+article{display:grid;grid-template-columns:118px minmax(0,1fr);gap:20px;padding:24px 0;border-left:0;border-bottom:1px solid var(--line)}
+  .horse-ledger figure{aspect-ratio:4/5}
+  .horse-ledger h3{margin:5px 0 8px;font-size:1.5rem}
+  .horse-ledger article p:last-child{margin:0;line-height:1.5}
+  .horse-note{margin-top:24px}
+  .sport-story{grid-template-columns:1fr;gap:34px;margin-top:62px;padding-top:48px}
+  .sport-story figure{height:72vw;min-height:260px;max-height:430px}
+  .sport-story h2{max-width:12ch;margin-bottom:20px}
+  .results{margin-top:26px}
+  .results div{grid-template-columns:62px minmax(0,1fr);gap:14px;padding:13px 0}
+  .results dt{font-size:1.2rem}
+  .results dd{line-height:1.45}
+  .news{padding-top:68px}
+  .news-head{margin-bottom:30px}
+  .news-host{min-height:0}
+  .news-host>p{margin:0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .news-layout{grid-template-columns:1fr;gap:34px}
+  .news-feature-image{height:auto;aspect-ratio:4/3}
+  .news-feature-image.is-contain{padding:12px}
+  .news-feature-copy{padding-top:16px}
+  .news-feature h3{font-size:clamp(1.9rem,8vw,2.55rem);line-height:1.04}
+  .news-list article{grid-template-columns:92px minmax(0,1fr);gap:16px;padding:18px 0}
+  .news-list h3{font-size:1.22rem;line-height:1.1}
+  .news-list p{margin-bottom:8px;font-size:.9rem;line-height:1.5}
+  .history-strip{grid-template-columns:1fr;gap:0;margin-top:52px;padding-top:0;border-top:1px solid var(--line)}
+  .history-strip article{padding:20px 0;border-bottom:1px solid var(--line)}
+  .history-strip span{margin-bottom:8px}
+  .pricing-intro{max-width:none;margin-bottom:36px}
+  .pricing-intro p:last-child{max-width:34ch}
+  .price-highlight{margin-bottom:38px}
+  .price-highlight div{grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:16px 0}
+  .price-highlight dd{font-size:1.3rem}
+  .price-details{width:100%;margin-top:12px}
+  .price-details summary{padding:18px 0}
+  .table-wrap{width:100%;overflow:visible;border-top:1px solid rgba(255,255,255,.16)}
+  table{min-width:0;width:100%;font-size:.8rem}
   thead{display:none}
   tbody,table{display:block}
-  tr{display:block;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.14)}
-  td{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:3px 0;border:0;color:rgba(255,255,255,.76)}
-  td::before{color:#dfcfb6;font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  tr{display:block;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.13)}
+  td{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:3px 0;border:0;color:rgba(255,255,255,.78);line-height:1.45}
+  td::before{color:#dfcfb6;font-size:.57rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
   td:nth-child(1)::before{content:'Angebot'}
   td:nth-child(2)::before{content:'Bezeichnung'}
   td:nth-child(3)::before{content:'Umfang'}
   td:nth-child(4)::before{content:'Preis'}
   td:nth-child(5)::before{content:'Karte / Monat'}
   td:empty{display:none}
-  .contact-copy{padding:58px 18px 62px}
-  .contact-actions{gap:10px}
-  .contact-actions a{width:100%;text-align:center}
-  .legal{padding:48px 18px;gap:42px}
-  .footer{padding:28px 18px}
+  .price-notes{grid-template-columns:1fr;gap:12px}
+  .contact{grid-template-columns:1fr}
+  .contact-image{height:68vw;min-height:260px;max-height:430px}
+  .contact-image img{object-position:50% 42%}
+  .contact-copy{padding:62px 22px 68px}
+  .contact-copy h2{max-width:11ch;margin-bottom:22px}
+  .contact-actions{flex-direction:column;gap:10px;margin:28px 0 34px}
+  .contact-actions a{width:100%;text-align:center;padding:13px 16px}
+  .contact address p{grid-template-columns:84px minmax(0,1fr);gap:14px;padding:14px 0}
+  .contact address a{overflow-wrap:anywhere}
+  .legal{grid-template-columns:1fr;gap:38px;padding:48px 22px}
+  .legal h2{font-size:1.7rem}
+  .footer{grid-template-columns:1fr;gap:18px;padding:28px 22px}
+  .footer nav{flex-wrap:wrap;gap:14px 20px}
+}
+@media (max-width:540px){
+  body{font-size:15.5px}
+  .header{padding:13px 18px}
+  .header.scrolled{padding:10px 18px}
+  .wordmark strong{font-size:1.04rem}
+  .wordmark span{font-size:.53rem;letter-spacing:.14em}
+  .chapter{width:calc(100% - 36px);padding:62px 0}
+  h2{font-size:clamp(2.35rem,10.5vw,3rem)}
+  h3{letter-spacing:-.035em}
+  .facts div{padding:18px}
+  .philosophy-copy h2,.chapter-head h2{max-width:none}
+  .editorial-image img{height:72vw}
+  .cinematic{height:74vw;margin-top:42px}
+  .stable,.pricing{padding:62px 18px}
+  .stable h2,.pricing h2{max-width:none}
+  .stable-specs div{grid-template-columns:76px minmax(0,1fr);gap:12px}
+  .stable-gallery{width:calc(100% + 18px);margin-right:-18px;padding-right:18px}
+  .stable-gallery figure,.stable-gallery .sg-main{flex-basis:84vw;height:64vw}
+  .horse-ledger article,.horse-ledger article+article{grid-template-columns:108px minmax(0,1fr);gap:16px;padding:22px 0}
+  .horse-meta{font-size:.55rem;letter-spacing:.075em;line-height:1.4}
+  .sport-story figure{height:76vw}
+  .news-list article{grid-template-columns:86px minmax(0,1fr);gap:14px}
+  .news-feature-image{aspect-ratio:1/1}
+  .pricing-intro{margin-bottom:30px}
+  .contact-image{height:72vw}
+  .contact-copy{padding:56px 18px 62px}
+  .contact-copy h2{max-width:none}
+  .contact address p{grid-template-columns:1fr;gap:3px}
+  .legal{padding:44px 18px}
+  .footer{padding:26px 18px}
+}
+@media (max-width:370px){
+  .chapter{width:calc(100% - 32px)}
+  .stable,.pricing{padding-left:16px;padding-right:16px}
+  .facts div{padding:16px 14px}
+  .horse-ledger article,.horse-ledger article+article{grid-template-columns:96px minmax(0,1fr);gap:14px}
+  .news-list article{grid-template-columns:78px minmax(0,1fr)}
+  td{grid-template-columns:82px minmax(0,1fr);gap:10px}
 }
