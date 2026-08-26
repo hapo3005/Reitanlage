@@ -1,4 +1,4 @@
-/* Final mobile safeguards — loaded directly after all other styles. */
+/* Final mobile safeguards — loaded after all other styles. */
 
 @media (max-width:1100px){
   .chapter-light{
@@ -54,14 +54,29 @@
     word-break:normal!important;
     overflow-wrap:normal!important;
   }
-  .chapter,
-  .chapter-light,
-  .training,
-  .horses,
-  .news{
+
+  /* Normal editorial chapters keep a comfortable gutter. */
+  .chapter:not(.stable):not(.pricing){
     width:calc(100% - 40px)!important;
     margin-inline:auto!important;
   }
+
+  /* Dark visual chapters are true viewport sections, never narrow cards. */
+  .chapter.stable,
+  .chapter.pricing,
+  .contact.contact-editorial{
+    display:block!important;
+    grid-template-columns:none!important;
+    box-sizing:border-box!important;
+    width:100vw!important;
+    max-width:100vw!important;
+    margin-left:calc(50% - 50vw)!important;
+    margin-right:calc(50% - 50vw)!important;
+    overflow-x:clip!important;
+  }
+  .chapter.stable>*,
+  .chapter.pricing>*{width:100%!important;min-width:0!important}
+
   .chapter-light{padding:64px 0!important}
   .philosophy-copy{max-width:none!important}
   .philosophy-copy h2{
@@ -101,14 +116,6 @@
     border-right:0!important;
   }
 
-  .stable,.pricing{
-    display:block!important;
-    grid-template-columns:none!important;
-    width:100%!important;
-    max-width:none!important;
-    margin:0!important;
-  }
-  .stable>*,.pricing>*{width:100%!important;min-width:0!important}
   .stable-gallery{max-width:100%!important}
   .terrain{display:block!important;grid-template-columns:none!important}
 
@@ -118,17 +125,11 @@
   .news-layout{display:block!important;grid-template-columns:none!important}
   .news-list article{min-width:0!important}
   .history-strip{display:block!important;grid-template-columns:none!important}
-
-  .contact.contact-editorial{display:block!important;grid-template-columns:none!important}
   .legal{grid-template-columns:1fr!important}
 }
 
 @media (max-width:540px){
-  .chapter,
-  .chapter-light,
-  .training,
-  .horses,
-  .news{
+  .chapter:not(.stable):not(.pricing){
     width:calc(100% - 36px)!important;
   }
   .chapter-light{padding:56px 0!important}
@@ -139,15 +140,15 @@
   .horse-ledger article,.horse-ledger article+article{
     grid-template-columns:104px minmax(0,1fr)!important;
   }
+  .chapter.stable,
+  .chapter.pricing{padding-left:18px!important;padding-right:18px!important}
 }
 
 @media (max-width:370px){
-  .chapter,
-  .chapter-light,
-  .training,
-  .horses,
-  .news{width:calc(100% - 32px)!important}
+  .chapter:not(.stable):not(.pricing){width:calc(100% - 32px)!important}
   .horse-ledger article,.horse-ledger article+article{
     grid-template-columns:92px minmax(0,1fr)!important;
   }
+  .chapter.stable,
+  .chapter.pricing{padding-left:16px!important;padding-right:16px!important}
 }
