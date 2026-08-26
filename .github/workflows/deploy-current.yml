@@ -36,12 +36,13 @@ jobs:
 
           index = Path("index.html")
           html = index.read_text(encoding="utf-8")
+          html = re.sub(r'<link rel="stylesheet" href="contact-finish\.css\?v=[^"]+">', '', html)
+          html = re.sub(r'<link rel="stylesheet" href="mobile-final-20260826\.css\?v=[^"]+">', '', html)
           html = re.sub(
-              r'<link rel="preload" as="image" href="images/reitbeteiligung1\.png"><link rel="stylesheet" href="rebuild\.css\?v=[^"]+"><link rel="stylesheet" href="contact-finish\.css\?v=[^"]+">',
-              f'<link rel="preload" as="image" href="images/reitbeteiligung1.png"><link rel="stylesheet" href="rebuild.css?v={token}">',
+              r'<link rel="stylesheet" href="rebuild\.css\?v=[^"]+">',
+              f'<link rel="stylesheet" href="rebuild.css?v={token}"><link rel="stylesheet" href="mobile-final-20260826.css?v={token}">',
               html,
           )
-          html = re.sub(r'rebuild\.css\?v=[^"\']+', f'rebuild.css?v={token}', html)
           index.write_text(html, encoding="utf-8")
 
           rebuild = Path("rebuild.css")
@@ -53,6 +54,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-      - name: Deploy to GitHub Pages
+      - name: Let source Pages finish first
+        run: sleep 50
+      - name: Deploy fresh site last
         id: deployment
         uses: actions/deploy-pages@v4
