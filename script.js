@@ -46,6 +46,7 @@ function renderNewsItem(item, featured = false) {
   image.src = item.image;
   image.alt = item.alt || "Aktuelles von der Reitanlage Eichhorn-Nels";
   image.loading = "lazy";
+  image.decoding = "async";
   applyImageFraming(image, imageWrap, item);
   imageWrap.appendChild(image);
 
@@ -111,29 +112,51 @@ async function loadNews() {
   }
 }
 
+let scrollFrame = null;
 function updateScrollUI() {
   header?.classList.toggle("scrolled", window.scrollY > 24);
+  scrollFrame = null;
 }
 
-window.addEventListener("scroll", updateScrollUI, { passive: true });
-window.addEventListener("resize", updateScrollUI);
+function requestScrollUI() {
+  if (scrollFrame !== null) return;
+  scrollFrame = requestAnimationFrame(updateScrollUI);
+}
+
+window.addEventListener("scroll", requestScrollUI, { passive: true });
 updateScrollUI();
+
+function closeNavigation({ returnFocus = false } = {}) {
+  if (!nav || !navToggle) return;
+  nav.classList.remove("open");
+  document.body.classList.remove("nav-open");
+  navToggle.setAttribute("aria-expanded", "false");
+  navToggle.setAttribute("aria-label", "Menü öffnen");
+  if (returnFocus) navToggle.focus();
+}
 
 if (navToggle && nav) {
   navToggle.addEventListener("click", () => {
     const open = !nav.classList.contains("open");
-    nav.classList.toggle("open", open);
-    document.body.classList.toggle("nav-open", open);
-    navToggle.setAttribute("aria-expanded", String(open));
-    navToggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+    if (!open) {
+      closeNavigation();
+      return;
+    }
+
+    nav.classList.add("open");
+    document.body.classList.add("nav-open");
+    navToggle.setAttribute("aria-expanded", "true");
+    navToggle.setAttribute("aria-label", "Menü schließen");
   });
 
   nav.addEventListener("click", event => {
-    if (!event.target.closest("a")) return;
-    nav.classList.remove("open");
-    document.body.classList.remove("nav-open");
-    navToggle.setAttribute("aria-expanded", "false");
-    navToggle.setAttribute("aria-label", "Menü öffnen");
+    if (event.target.closest("a")) closeNavigation();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && nav.classList.contains("open")) {
+      closeNavigation({ returnFocus: true });
+    }
   });
 }
 
@@ -152,7 +175,7 @@ function setupRevealObservers(elements) {
         entry.target.classList.add("is-visible");
         revealObserver.unobserve(entry.target);
       });
-    }, { threshold: 0.14, rootMargin: "0px 0px -50px 0px" });
+    }, { threshold: 0.12, rootMargin: "0px 0px -42px 0px" });
   }
 
   items.forEach(item => revealObserver.observe(item));
@@ -160,15 +183,23 @@ function setupRevealObservers(elements) {
 
 function setupSectionObserver() {
   if (!("IntersectionObserver" in window)) return;
-  const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
+  const navLinks = Array.from(document.querySelectorAll('.main-nav a[href^="#"]'));
   const sections = document.querySelectorAll("main section[id]");
+
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       const id = entry.target.id;
-      navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${id}`));
+
+      navLinks.forEach(link => {
+        const active = link.getAttribute("href") === `#${id}`;
+        link.classList.toggle("active", active);
+        if (active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
     });
-  }, { rootMargin: "-25% 0px -65% 0px", threshold: 0 });
+  }, { rootMargin: "-24% 0px -66% 0px", threshold: 0 });
+
   sections.forEach(section => observer.observe(section));
 }
 
