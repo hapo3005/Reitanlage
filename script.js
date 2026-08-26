@@ -1,49 +1,143 @@
 const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
-const progress = document.querySelector(".scroll-progress span");
-const revealItems = document.querySelectorAll("[data-reveal]");
-const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
 
-/*
- * Design rule: no decorative sequence numbering such as 01 / 02 / 03.
- * The site should read like a deliberately designed local brand, not a
- * template or AI-generated portfolio layout. Real data such as years,
- * dimensions and prices remains untouched.
- */
-document.querySelectorAll(".offer-index, .service-editorial-grid article > span").forEach(element => {
-  element.remove();
-});
+const newsStyles = document.createElement("link");
+newsStyles.rel = "stylesheet";
+newsStyles.href = "aktuelles.css";
+document.head.appendChild(newsStyles);
 
-const naturalLayout = document.createElement("style");
-naturalLayout.textContent = `
-  .offer-row {
-    grid-template-columns: minmax(260px, .9fr) minmax(300px, 1.1fr) !important;
-    gap: clamp(28px, 5vw, 80px) !important;
+function createNewsSection() {
+  const moments = document.querySelector("#einblicke");
+  if (!moments || document.querySelector("#aktuelles")) return;
+
+  const section = document.createElement("section");
+  section.className = "section news-section";
+  section.id = "aktuelles";
+  section.innerHTML = `
+    <div class="container">
+      <div class="news-heading" data-reveal>
+        <div>
+          <p class="eyebrow">Aktuelles vom Hof</p>
+          <h2>Was gerade auf der Reitanlage passiert.</h2>
+        </div>
+        <p>Termine, freie Möglichkeiten, Kurse und Neuigkeiten – dieser Bereich wird laufend gepflegt.</p>
+      </div>
+      <div data-news-content>
+        <p class="news-empty">Aktuelles wird geladen …</p>
+      </div>
+      <p class="news-updated" data-news-updated hidden></p>
+    </div>
+  `;
+  moments.before(section);
+
+  const priceLink = nav?.querySelector('a[href="#preise"]');
+  if (nav && !nav.querySelector('a[href="#aktuelles"]')) {
+    const link = document.createElement("a");
+    link.href = "#aktuelles";
+    link.textContent = "Aktuelles";
+    nav.insertBefore(link, priceLink || nav.querySelector(".nav-contact"));
   }
+}
 
-  .service-editorial-grid article {
-    padding-top: clamp(30px, 4vw, 48px) !important;
-  }
+function buildMeta(item) {
+  const meta = document.createElement("p");
+  meta.className = "news-meta";
+  [item.category, item.meta].filter(Boolean).forEach(value => {
+    const span = document.createElement("span");
+    span.textContent = value;
+    meta.appendChild(span);
+  });
+  return meta;
+}
 
-  @media (max-width: 900px) {
-    .offer-row {
-      grid-template-columns: 1fr !important;
-      gap: 12px !important;
+function buildNewsLink(item) {
+  if (!item.link || !item.linkText) return null;
+  const link = document.createElement("a");
+  link.className = "news-link";
+  link.href = item.link;
+  link.textContent = `${item.linkText} →`;
+  return link;
+}
+
+function renderNewsItem(item, featured = false) {
+  const article = document.createElement("article");
+  article.dataset.reveal = "";
+  if (featured) article.className = "news-feature";
+
+  const imageWrap = document.createElement("div");
+  imageWrap.className = featured ? "news-feature-image" : "news-thumb";
+  const image = document.createElement("img");
+  image.src = item.image;
+  image.alt = item.alt || "Aktuelles von der Reitanlage Eichhorn-Nels";
+  image.loading = "lazy";
+  imageWrap.appendChild(image);
+
+  const copy = document.createElement("div");
+  if (featured) copy.className = "news-feature-copy";
+  copy.appendChild(buildMeta(item));
+
+  const title = document.createElement("h3");
+  title.textContent = item.title;
+  copy.appendChild(title);
+
+  const text = document.createElement("p");
+  text.textContent = item.text;
+  copy.appendChild(text);
+
+  const link = buildNewsLink(item);
+  if (link) copy.appendChild(link);
+
+  article.append(imageWrap, copy);
+  return article;
+}
+
+async function loadNews() {
+  const host = document.querySelector("[data-news-content]");
+  if (!host) return;
+
+  try {
+    const response = await fetch("aktuelles.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    const items = Array.isArray(data.items) ? data.items.filter(item => item?.title && item?.text) : [];
+
+    if (!items.length) {
+      host.innerHTML = '<p class="news-empty">Aktuell sind keine Meldungen veröffentlicht. Für Termine und Verfügbarkeiten bitte direkt Kontakt aufnehmen.</p>';
+      return;
     }
-    .offer-row > p {
-      grid-column: auto !important;
+
+    const layout = document.createElement("div");
+    layout.className = "news-layout";
+    layout.appendChild(renderNewsItem(items[0], true));
+
+    if (items.length > 1) {
+      const list = document.createElement("div");
+      list.className = "news-list";
+      items.slice(1).forEach(item => list.appendChild(renderNewsItem(item)));
+      layout.appendChild(list);
     }
+
+    host.replaceChildren(layout);
+
+    const updated = document.querySelector("[data-news-updated]");
+    if (updated && data.updated) {
+      const parsed = new Date(`${data.updated}T12:00:00`);
+      if (!Number.isNaN(parsed.getTime())) {
+        updated.textContent = `Redaktionell aktualisiert am ${parsed.toLocaleDateString("de-DE")}`;
+        updated.hidden = false;
+      }
+    }
+
+    setupRevealObservers(host.querySelectorAll("[data-reveal]"));
+  } catch (error) {
+    host.innerHTML = '<p class="news-empty">Die aktuellen Meldungen konnten gerade nicht geladen werden. Termine und Verfügbarkeiten bitte direkt telefonisch oder per WhatsApp erfragen.</p>';
+    console.error("Aktuelles konnte nicht geladen werden:", error);
   }
-`;
-document.head.appendChild(naturalLayout);
+}
 
 function updateScrollUI() {
-  const y = window.scrollY;
-  header?.classList.toggle("scrolled", y > 24);
-
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  if (progress) progress.style.width = `${max > 0 ? (y / max) * 100 : 0}%`;
+  header?.classList.toggle("scrolled", window.scrollY > 24);
 }
 
 window.addEventListener("scroll", updateScrollUI, { passive: true });
@@ -59,41 +153,54 @@ if (navToggle && nav) {
     navToggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
   });
 
-  nav.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("open");
-      document.body.classList.remove("nav-open");
-      navToggle.setAttribute("aria-expanded", "false");
-      navToggle.setAttribute("aria-label", "Menü öffnen");
-    });
+  nav.addEventListener("click", event => {
+    if (!event.target.closest("a")) return;
+    nav.classList.remove("open");
+    document.body.classList.remove("nav-open");
+    navToggle.setAttribute("aria-expanded", "false");
+    navToggle.setAttribute("aria-label", "Menü öffnen");
   });
 }
 
-if ("IntersectionObserver" in window) {
-  const revealObserver = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
+let revealObserver;
+function setupRevealObservers(elements) {
+  const items = Array.from(elements);
+  if (!("IntersectionObserver" in window)) {
+    items.forEach(item => item.classList.add("is-visible"));
+    return;
+  }
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
         entry.target.classList.add("is-visible");
         revealObserver.unobserve(entry.target);
-      }
-    }
-  }, { threshold: 0.14, rootMargin: "0px 0px -50px 0px" });
+      });
+    }, { threshold: 0.14, rootMargin: "0px 0px -50px 0px" });
+  }
 
-  revealItems.forEach(item => revealObserver.observe(item));
+  items.forEach(item => revealObserver.observe(item));
+}
 
+function setupSectionObserver() {
+  if (!("IntersectionObserver" in window)) return;
+  const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
   const sections = document.querySelectorAll("main section[id]");
-  const navObserver = new IntersectionObserver(entries => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       const id = entry.target.id;
       navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${id}`));
     });
   }, { rootMargin: "-25% 0px -65% 0px", threshold: 0 });
-
-  sections.forEach(section => navObserver.observe(section));
-} else {
-  revealItems.forEach(item => item.classList.add("is-visible"));
+  sections.forEach(section => observer.observe(section));
 }
+
+createNewsSection();
+setupRevealObservers(document.querySelectorAll("[data-reveal]"));
+setupSectionObserver();
+loadNews();
 
 const details = document.querySelector(".price-details");
 if (details) {
