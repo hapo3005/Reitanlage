@@ -25,6 +25,30 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Prepare current asset versions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os, re
+
+          token = os.environ["GITHUB_SHA"][:12]
+
+          index = Path("index.html")
+          html = index.read_text(encoding="utf-8")
+          html = re.sub(
+              r'<link rel="preload" as="image" href="images/reitbeteiligung1\.png"><link rel="stylesheet" href="rebuild\.css\?v=[^"]+"><link rel="stylesheet" href="contact-finish\.css\?v=[^"]+">',
+              f'<link rel="preload" as="image" href="images/reitbeteiligung1.png"><link rel="stylesheet" href="rebuild.css?v={token}">',
+              html,
+          )
+          html = re.sub(r'rebuild\.css\?v=[^"\']+', f'rebuild.css?v={token}', html)
+          index.write_text(html, encoding="utf-8")
+
+          rebuild = Path("rebuild.css")
+          css = rebuild.read_text(encoding="utf-8")
+          css = re.sub(r'\?v=[^"\)]+', f'?v={token}', css)
+          rebuild.write_text(css, encoding="utf-8")
+          PY
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
