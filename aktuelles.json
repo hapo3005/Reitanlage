@@ -8,6 +8,9 @@
       "text": "Ferienreitkurse verbinden Reiten, Theorie und gemeinsame Pferdezeit für Kinder und Jugendliche. Aktuelle Termine und freie Plätze bitte direkt erfragen.",
       "image": "images/flyerferienreitkurs.png",
       "alt": "Ferienreitkurs auf der Reitanlage Eichhorn-Nels",
+      "imageFit": "contain",
+      "imagePosition": "50% 50%",
+      "imagePositionMobile": "50% 50%",
       "link": "#kontakt",
       "linkText": "Termin erfragen"
     },
@@ -18,6 +21,9 @@
       "text": "Reitbeteiligungen werden je nach Pferd und Situation individuell vereinbart. Kosten, Umfang und passende Möglichkeiten werden persönlich besprochen.",
       "image": "images/reitbeteiligung1.png",
       "alt": "Reitbeteiligung auf der Reitanlage Eichhorn-Nels",
+      "imageFit": "cover",
+      "imagePosition": "50% 36%",
+      "imagePositionMobile": "50% 32%",
       "link": "#kontakt",
       "linkText": "Anfragen"
     },
@@ -28,6 +34,9 @@
       "text": "Da der Alltag auf der Anlage bei den Pferden stattfindet, werden Besuche und Termine am zuverlässigsten telefonisch oder per WhatsApp abgestimmt.",
       "image": "images/eventbild4.png",
       "alt": "Hofleben auf der Reitanlage Eichhorn-Nels",
+      "imageFit": "cover",
+      "imagePosition": "50% 42%",
+      "imagePositionMobile": "50% 38%",
       "link": "#kontakt",
       "linkText": "Kontakt aufnehmen"
     }
