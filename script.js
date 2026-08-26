@@ -5,6 +5,39 @@ const progress = document.querySelector(".scroll-progress span");
 const revealItems = document.querySelectorAll("[data-reveal]");
 const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
 
+/*
+ * Design rule: no decorative sequence numbering such as 01 / 02 / 03.
+ * The site should read like a deliberately designed local brand, not a
+ * template or AI-generated portfolio layout. Real data such as years,
+ * dimensions and prices remains untouched.
+ */
+document.querySelectorAll(".offer-index, .service-editorial-grid article > span").forEach(element => {
+  element.remove();
+});
+
+const naturalLayout = document.createElement("style");
+naturalLayout.textContent = `
+  .offer-row {
+    grid-template-columns: minmax(260px, .9fr) minmax(300px, 1.1fr) !important;
+    gap: clamp(28px, 5vw, 80px) !important;
+  }
+
+  .service-editorial-grid article {
+    padding-top: clamp(30px, 4vw, 48px) !important;
+  }
+
+  @media (max-width: 900px) {
+    .offer-row {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+    }
+    .offer-row > p {
+      grid-column: auto !important;
+    }
+  }
+`;
+document.head.appendChild(naturalLayout);
+
 function updateScrollUI() {
   const y = window.scrollY;
   header?.classList.toggle("scrolled", y > 24);
