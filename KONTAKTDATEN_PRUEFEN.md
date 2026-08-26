@@ -7,9 +7,10 @@ Diese Datei ist eine interne Prüfliste für die finale Freigabe der öffentlich
 ## Öffentlich bestätigt
 
 - Mobil / WhatsApp: **0174 3156082**
-  - aktuell in einem öffentlichen Unternehmenseintrag geführt
+  - aktuell im Cylex-Unternehmenseintrag geführt (aktualisiert am 16.04.2026)
   - zusätzlich aus dem bisherigen Seitenbestand bekannt
 - Festnetz: **06571 9561440**
+  - aktuell im Cylex-Unternehmenseintrag geführt
   - aktuell bei Das Örtliche geführt
   - aktuell im Telefonbuch-Eintrag für Minderlittgen geführt
 
@@ -21,14 +22,14 @@ Aktuell auf der Website: **Siedlung Dadscheid 3, 54518 Minderlittgen**
 Öffentliche Quellen sind widersprüchlich:
 - Das Örtliche: **Siedlung Datscheid 3**
 - Das Telefonbuch: **Siedlung Datscheid 3**
-- andere Karten-/Branchenquellen führen **Siedlung Dadscheid 3**
+- Cylex ist sogar innerhalb desselben Eintrags uneinheitlich: Im Kopfbereich steht **Siedlung Datscheid 3**, im Abschnitt „Adresse & Kontaktdaten“ **Siedlung Dadscheid 3**.
 
 **Nicht automatisch ändern. Carmen soll die offizielle Schreibweise bestätigen.** Danach Website, strukturierte Daten und Google-Maps-Link gemeinsam aktualisieren.
 
 ### E-Mail
 Aktuell auf der Website: **eichhorn.c@t-online.de**
 
-Die Adresse stammt aus dem bisherigen Seitenbestand, konnte aber aktuell nicht unabhängig über eine belastbare öffentliche Quelle im Klartext bestätigt werden.
+Die Adresse stammt aus dem bisherigen Seitenbestand. Cylex weist zwar eine E-Mail-Adresse aus, stellt sie in der öffentlich auslesbaren Fassung jedoch maskiert dar; die konkrete Schreibweise konnte daher nicht unabhängig bestätigt werden.
 
 **Mit Carmen bestätigen.**
 
