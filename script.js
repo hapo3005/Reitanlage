@@ -1,3 +1,8 @@
+const premiumStyles = document.createElement("link");
+premiumStyles.rel = "stylesheet";
+premiumStyles.href = "premium.css?v=20260826-worldclass1";
+document.head.appendChild(premiumStyles);
+
 const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
