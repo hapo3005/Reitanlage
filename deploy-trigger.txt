@@ -1,0 +1,2 @@
+Direct Pages deployment trigger for the image-led hero rebuild.
+2026-08-26T15:58:00Z
