@@ -43,6 +43,7 @@ jobs:
               f'<link rel="stylesheet" href="rebuild.css?v={token}"><link rel="stylesheet" href="mobile-final-20260826.css?v={token}">',
               html,
           )
+          html = re.sub(r'script\.js\?v=[^"\']+', f'script.js?v={token}', html)
           index.write_text(html, encoding="utf-8")
 
           rebuild = Path("rebuild.css")
