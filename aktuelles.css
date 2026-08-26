@@ -93,6 +93,56 @@ th,td{padding:13px 12px}
 /* Geometry rule: only the EN seal is deliberately circular. */
 .button,.nav-toggle,.main-nav .nav-contact,.news-feature-image,.news-thumb,.facility-gallery figure,.horse-photo,.moments-grid figure,.price-details,.contact-details{border-radius:0!important}
 
+/*
+ * Image framing system.
+ * Every editorial image may define its own crop. Flyers/graphics are never
+ * cropped; photography uses context-aware focal points instead of center/center.
+ */
+.hero-media{background-position:60% 42%}
+.photo-break>img{object-position:57% 41%}
+
+.facility-gallery img,
+.horse-photo img,
+.moments-grid img,
+.news-feature-image img,
+.news-thumb img{
+  object-fit:var(--image-fit,cover)!important;
+  object-position:var(--image-position,50% 50%)!important;
+}
+
+.facility-main img[src$="eventbild1.png"]{--image-position:50% 43%;--image-position-mobile:50% 39%}
+.facility-gallery img[src$="eventbild2.png"]{--image-position:52% 38%;--image-position-mobile:52% 35%}
+.facility-gallery img[src$="eventbild3.png"]{--image-position:48% 42%;--image-position-mobile:48% 38%}
+
+.horse-photo img[src$="schulpferd1.png"]{--image-position:50% 31%;--image-position-mobile:50% 28%}
+.horse-photo img[src$="schulpferd2.png"]{--image-position:50% 34%;--image-position-mobile:50% 30%}
+.horse-photo img[src$="schulpferd3.png"]{--image-position:50% 30%;--image-position-mobile:50% 27%}
+
+.news-thumb img[src$="reitbeteiligung1.png"]{--image-position:50% 36%;--image-position-mobile:50% 32%}
+.news-thumb img[src$="eventbild4.png"]{--image-position:50% 42%;--image-position-mobile:50% 38%}
+
+.moments-grid img[src$="eventbild4.png"]{--image-position:50% 39%;--image-position-mobile:50% 36%}
+.moments-grid img[src$="reitbeteiligung1.png"]{--image-position:50% 41%;--image-position-mobile:50% 36%}
+.moments-grid img[src$="familieanuth.png"]{--image-position:50% 38%;--image-position-mobile:50% 34%}
+
+.news-feature-image.is-contain,
+.news-thumb.is-contain,
+.news-feature-image:has(img[src*="flyerferien"]),
+.news-thumb:has(img[src*="flyerferien"]){
+  background:#ebe5da;
+  padding:10px;
+}
+
+.news-feature-image.is-contain,
+.news-feature-image:has(img[src*="flyerferien"]){aspect-ratio:4/3}
+
+.news-feature-image img[src*="flyerferien"],
+.news-thumb img[src*="flyerferien"]{
+  --image-fit:contain;
+  --image-position:50% 50%;
+  --image-position-mobile:50% 50%;
+}
+
 @media(max-width:900px){
   .news-heading,.news-layout{grid-template-columns:1fr}
   .news-heading{gap:18px;margin-bottom:34px}
@@ -134,4 +184,16 @@ th,td{padding:13px 12px}
   .news-updated{margin-top:21px}
   .contact{padding:72px 0}
   .legal{padding:48px 0}
+
+  .hero-media{background-position:64% 44%}
+  .photo-break>img{object-position:62% 43%}
+  .facility-gallery img,
+  .horse-photo img,
+  .moments-grid img,
+  .news-feature-image img,
+  .news-thumb img{
+    object-position:var(--image-position-mobile,var(--image-position,50% 50%))!important;
+  }
+  .news-feature-image.is-contain,
+  .news-feature-image:has(img[src*="flyerferien"]){aspect-ratio:1/1}
 }
