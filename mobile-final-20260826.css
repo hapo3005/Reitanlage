@@ -1,0 +1,153 @@
+/* Final mobile safeguards — loaded directly after all other styles. */
+
+@media (max-width:1100px){
+  .chapter-light{
+    display:block!important;
+    grid-template-columns:none!important;
+    gap:0!important;
+  }
+  .chapter-light>*{
+    width:100%!important;
+    min-width:0!important;
+  }
+  .chapter-index{
+    display:block!important;
+    padding:0!important;
+    margin:0 0 28px!important;
+  }
+  .chapter-index .kicker{margin-bottom:8px!important}
+  .side-note{
+    max-width:52ch!important;
+    margin:0!important;
+    font-family:var(--sans)!important;
+    font-size:.82rem!important;
+    line-height:1.55!important;
+    color:#66706b!important;
+  }
+  .philosophy-copy{
+    width:100%!important;
+    max-width:760px!important;
+    padding-top:20px!important;
+  }
+  .philosophy-copy h2{max-width:12ch!important}
+  .copy-columns{grid-template-columns:1fr!important}
+  .editorial-image{
+    grid-column:auto!important;
+    width:100%!important;
+    max-width:760px!important;
+    margin:34px 0 0!important;
+  }
+  .editorial-image img{
+    width:100%!important;
+    height:auto!important;
+    max-height:520px!important;
+    aspect-ratio:4/3!important;
+    object-fit:cover!important;
+    object-position:50% 38%!important;
+  }
+}
+
+@media (max-width:900px){
+  html,body{max-width:100%;overflow-x:hidden}
+  h1,h2,h3{
+    hyphens:none!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+  }
+  .chapter,
+  .chapter-light,
+  .training,
+  .horses,
+  .news{
+    width:calc(100% - 40px)!important;
+    margin-inline:auto!important;
+  }
+  .chapter-light{padding:64px 0!important}
+  .philosophy-copy{max-width:none!important}
+  .philosophy-copy h2{
+    max-width:none!important;
+    font-size:clamp(2.35rem,10vw,3rem)!important;
+    line-height:1.01!important;
+  }
+  .philosophy-copy .lead{
+    max-width:34ch!important;
+    font-size:1.05rem!important;
+    line-height:1.56!important;
+  }
+  .copy-columns{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .copy-columns p{max-width:38ch!important;line-height:1.62!important}
+  .editorial-image{max-width:none!important;margin-top:32px!important}
+  .editorial-image img{max-height:none!important;aspect-ratio:4/3!important}
+
+  .chapter-head,.chapter-head.narrow{
+    display:block!important;
+    grid-template-columns:none!important;
+  }
+  .training-grid{
+    display:block!important;
+    grid-template-columns:none!important;
+  }
+  .training-grid article,
+  .training-grid article:nth-child(odd),
+  .training-grid article:nth-child(even){
+    width:100%!important;
+    min-height:0!important;
+    padding:24px 0!important;
+    border-left:0!important;
+    border-right:0!important;
+  }
+
+  .stable,.pricing{
+    display:block!important;
+    grid-template-columns:none!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+  .stable>*,.pricing>*{width:100%!important;min-width:0!important}
+  .stable-gallery{max-width:100%!important}
+  .terrain{display:block!important;grid-template-columns:none!important}
+
+  .horse-ledger{display:block!important;grid-template-columns:none!important}
+  .sport-story{display:block!important;grid-template-columns:none!important}
+  .sport-story figure{width:100%!important;margin-bottom:30px!important}
+  .news-layout{display:block!important;grid-template-columns:none!important}
+  .news-list article{min-width:0!important}
+  .history-strip{display:block!important;grid-template-columns:none!important}
+
+  .contact.contact-editorial{display:block!important;grid-template-columns:none!important}
+  .legal{grid-template-columns:1fr!important}
+}
+
+@media (max-width:540px){
+  .chapter,
+  .chapter-light,
+  .training,
+  .horses,
+  .news{
+    width:calc(100% - 36px)!important;
+  }
+  .chapter-light{padding:56px 0!important}
+  .chapter-index{margin-bottom:24px!important}
+  .side-note{font-size:.78rem!important;line-height:1.5!important}
+  .philosophy-copy h2{font-size:clamp(2.25rem,10.8vw,2.8rem)!important}
+  .editorial-image{margin-top:28px!important}
+  .horse-ledger article,.horse-ledger article+article{
+    grid-template-columns:104px minmax(0,1fr)!important;
+  }
+}
+
+@media (max-width:370px){
+  .chapter,
+  .chapter-light,
+  .training,
+  .horses,
+  .news{width:calc(100% - 32px)!important}
+  .horse-ledger article,.horse-ledger article+article{
+    grid-template-columns:92px minmax(0,1fr)!important;
+  }
+}
