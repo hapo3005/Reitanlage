@@ -2,44 +2,6 @@ const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
 
-const newsStyles = document.createElement("link");
-newsStyles.rel = "stylesheet";
-newsStyles.href = "aktuelles.css";
-document.head.appendChild(newsStyles);
-
-function createNewsSection() {
-  const moments = document.querySelector("#einblicke");
-  if (!moments || document.querySelector("#aktuelles")) return;
-
-  const section = document.createElement("section");
-  section.className = "section news-section";
-  section.id = "aktuelles";
-  section.innerHTML = `
-    <div class="container">
-      <div class="news-heading" data-reveal>
-        <div>
-          <p class="eyebrow">Aktuelles vom Hof</p>
-          <h2>Was gerade auf der Reitanlage passiert.</h2>
-        </div>
-        <p>Termine, freie Möglichkeiten, Kurse und Neuigkeiten – dieser Bereich wird laufend gepflegt.</p>
-      </div>
-      <div data-news-content>
-        <p class="news-empty">Aktuelles wird geladen …</p>
-      </div>
-      <p class="news-updated" data-news-updated hidden></p>
-    </div>
-  `;
-  moments.before(section);
-
-  const priceLink = nav?.querySelector('a[href="#preise"]');
-  if (nav && !nav.querySelector('a[href="#aktuelles"]')) {
-    const link = document.createElement("a");
-    link.href = "#aktuelles";
-    link.textContent = "Aktuelles";
-    nav.insertBefore(link, priceLink || nav.querySelector(".nav-contact"));
-  }
-}
-
 function buildMeta(item) {
   const meta = document.createElement("p");
   meta.className = "news-meta";
@@ -60,6 +22,18 @@ function buildNewsLink(item) {
   return link;
 }
 
+function applyImageFraming(image, imageWrap, item) {
+  const fit = item.imageFit === "contain" ? "contain" : "cover";
+  const desktopPosition = item.imagePosition || "50% 50%";
+  const mobilePosition = item.imagePositionMobile || desktopPosition;
+
+  image.dataset.fit = fit;
+  image.style.setProperty("--image-fit", fit);
+  image.style.setProperty("--image-position", desktopPosition);
+  image.style.setProperty("--image-position-mobile", mobilePosition);
+  imageWrap.classList.toggle("is-contain", fit === "contain");
+}
+
 function renderNewsItem(item, featured = false) {
   const article = document.createElement("article");
   article.dataset.reveal = "";
@@ -67,10 +41,12 @@ function renderNewsItem(item, featured = false) {
 
   const imageWrap = document.createElement("div");
   imageWrap.className = featured ? "news-feature-image" : "news-thumb";
+
   const image = document.createElement("img");
   image.src = item.image;
   image.alt = item.alt || "Aktuelles von der Reitanlage Eichhorn-Nels";
   image.loading = "lazy";
+  applyImageFraming(image, imageWrap, item);
   imageWrap.appendChild(image);
 
   const copy = document.createElement("div");
@@ -131,7 +107,6 @@ async function loadNews() {
 
     setupRevealObservers(host.querySelectorAll("[data-reveal]"));
   } catch (error) {
-    host.innerHTML = '<p class="news-empty">Die aktuellen Meldungen konnten gerade nicht geladen werden. Termine und Verfügbarkeiten bitte direkt telefonisch oder per WhatsApp erfragen.</p>';
     console.error("Aktuelles konnte nicht geladen werden:", error);
   }
 }
@@ -197,7 +172,6 @@ function setupSectionObserver() {
   sections.forEach(section => observer.observe(section));
 }
 
-createNewsSection();
 setupRevealObservers(document.querySelectorAll("[data-reveal]"));
 setupSectionObserver();
 loadNews();
