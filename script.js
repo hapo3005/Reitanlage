@@ -1,3 +1,11 @@
+const heroViewportStyles=document.createElement('link');
+heroViewportStyles.rel='stylesheet';
+heroViewportStyles.href='hero-mobile.css?v=20260826-1';
+document.head.appendChild(heroViewportStyles);
+const heroVisual=document.querySelector('.hero-image img');
+if(heroVisual){heroVisual.src='images/reitbeteiligung1.png';heroVisual.alt='Pferd im Abendlicht auf der Reitanlage Eichhorn-Nels';heroVisual.loading='eager';heroVisual.fetchPriority='high'}
+const heroCaption=document.querySelector('.hero-image figcaption');
+if(heroCaption)heroCaption.textContent='Minderlittgen · zwischen Stall, Pferd und Eifel.';
 const header=document.querySelector('[data-header]');
 const menu=document.querySelector('[data-menu]');
 const nav=document.querySelector('[data-nav]');
