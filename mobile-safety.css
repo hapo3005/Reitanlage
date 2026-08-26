@@ -1,0 +1,39 @@
+/* Hard mobile overflow guard, tuned for Android text scaling and narrow webviews. */
+@media (max-width:900px){
+  html,body{width:100%;max-width:100%;overflow-x:clip}
+  main{width:100%;max-width:100%;overflow-x:clip}
+  .header{width:100%;max-width:100%}
+  .wordmark{min-width:0;max-width:calc(100% - 58px)}
+  .wordmark strong,.wordmark span{max-width:100%;overflow-wrap:break-word}
+
+  .chapter:not(.stable):not(.pricing){width:auto!important;max-width:none!important;margin-left:22px!important;margin-right:22px!important}
+  .chapter-head,.chapter-head.narrow,.chapter-head>*,.training-grid,.training-grid>*,.horse-ledger,.horse-ledger>*,.sport-story,.sport-story>*,.news-layout,.news-layout>*,.history-strip,.history-strip>*{min-width:0!important;max-width:100%!important}
+
+  .training .chapter-head{display:block!important;width:100%!important;margin-bottom:32px!important}
+  .training .chapter-head h2{display:block!important;width:100%!important;max-width:100%!important;margin:0 0 18px!important;font-size:clamp(2.25rem,9vw,2.9rem)!important;line-height:1.01!important;letter-spacing:-.035em!important;hyphens:auto;overflow-wrap:anywhere;word-break:normal}
+  .training .chapter-head>p{display:block!important;width:100%!important;max-width:100%!important;margin:0!important;font-size:1rem!important;line-height:1.55!important;overflow-wrap:anywhere}
+  .training{padding-top:50px!important}
+  .training .kicker{margin-bottom:22px!important}
+  .training-grid article{width:100%!important;max-width:100%!important}
+  .training-grid h3,.training-grid p,.training-grid span{max-width:100%!important;overflow-wrap:anywhere;hyphens:auto}
+
+  .philosophy-copy h2,.sport-story h2,.news h2,.pricing h2,.contact h2,.stable h2{max-width:100%!important;overflow-wrap:anywhere;hyphens:auto}
+  .stable,.pricing{width:100%!important;max-width:100%!important;margin-left:0!important;margin-right:0!important;overflow:hidden}
+  .contact,.legal,.footer{width:100%;max-width:100%;overflow:hidden}
+  .contact address a{overflow-wrap:anywhere;word-break:break-word}
+}
+
+@media (max-width:540px){
+  .chapter:not(.stable):not(.pricing){margin-left:18px!important;margin-right:18px!important}
+  .training{padding-top:44px!important}
+  .training .chapter-head{margin-bottom:28px!important}
+  .training .chapter-head h2{font-size:clamp(2.05rem,8.6vw,2.55rem)!important;line-height:1.03!important;margin-bottom:16px!important}
+  .training .chapter-head>p{font-size:.96rem!important;line-height:1.52!important}
+  .training-grid h3{font-size:1.42rem!important;line-height:1.08!important}
+}
+
+@media (max-width:370px){
+  .chapter:not(.stable):not(.pricing){margin-left:16px!important;margin-right:16px!important}
+  .training .chapter-head h2{font-size:2rem!important}
+  .training .chapter-head>p{font-size:.93rem!important}
+}
