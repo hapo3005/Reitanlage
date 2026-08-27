@@ -9,10 +9,16 @@ namespace = {}
 exec(prefix, namespace)
 namespace['replace_many'](Path('_site/index.html'), namespace['index_replacements'])
 
+# The first-person voice is established above; now make Carmen visibly the
+# author of the hero and trim the opening copy without touching later sections.
+exec(Path('hero-personality.py').read_text(encoding='utf-8'), {})
+
 index = Path('_site/index.html').read_text(encoding='utf-8')
 assert 'Was Carmen im Unterricht' not in index
 assert 'Schreiben Sie Carmen gern' not in index
 assert 'Reiten beginnt für mich mit <em>Vertrauen.</em>' in index
 assert 'Was mir beim Reiten <em>wichtig ist.</em>' in index
 assert 'melden Sie sich <em>gern bei mir.</em>' in index
-print('Applied strict Carmen voice editorial pass to homepage.')
+assert index.count('class="hero-signature"') == 1
+assert 'Schön, dass Sie da sind.' not in index
+print('Applied strict Carmen voice and hero personality pass to homepage.')
