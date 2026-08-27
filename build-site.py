@@ -17,6 +17,7 @@ CSS_PARTS = [
     'footer-fix.css',
     'photo-zoom.css',
     'ui-polish.css',
+    'ui-refine.css',
 ]
 
 IMAGE_META = {
