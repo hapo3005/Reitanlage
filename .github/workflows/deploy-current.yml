@@ -19,16 +19,21 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
       - name: Install image tooling
-        run: python -m pip install --disable-pip-version-check "Pillow>=11,<13"
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: -r requirements-build.txt
+          python -m pip check
 
       - name: Build production release
         run: |
@@ -52,6 +57,7 @@ jobs:
           cat mobile-header.js >> _site/site.js
           python carmen-index.py
           python carmen-journal.py
+          python security-hardening.py
 
       - name: Verify production artifact
         shell: bash
@@ -60,6 +66,7 @@ jobs:
           from pathlib import Path
           from PIL import Image
           import json
+          import re
 
           out = Path('_site')
           html = (out / 'index.html').read_text(encoding='utf-8')
@@ -68,6 +75,7 @@ jobs:
           js = (out / 'site.js').read_text(encoding='utf-8')
           imprint = (out / 'impressum.html').read_text(encoding='utf-8')
           privacy = (out / 'datenschutz.html').read_text(encoding='utf-8')
+          not_found = (out / '404.html').read_text(encoding='utf-8')
           sitemap = (out / 'sitemap.xml').read_text(encoding='utf-8')
           news = json.loads((out / 'aktuelles.json').read_text(encoding='utf-8'))
 
@@ -157,6 +165,28 @@ jobs:
           assert 'Google+' not in privacy
           assert 'Facebook-Plugin' not in privacy
 
+          # Security regression guardrails for every public HTML page.
+          pages = [html, journal, imprint, privacy, not_found]
+          for page in pages:
+              assert 'http-equiv="Content-Security-Policy"' in page
+              assert 'name="referrer" content="no-referrer"' in page
+              assert "script-src-attr 'none'" in page
+              assert "object-src 'none'" in page
+              assert "base-uri 'none'" in page
+              assert "form-action 'none'" in page
+              assert 'upgrade-insecure-requests' in page
+              assert not re.search(r'<script\b[^>]*\bsrc=["\']https?://', page, re.I)
+              assert not re.search(r'<link\b[^>]*\brel=["\']stylesheet["\'][^>]*\bhref=["\']https?://', page, re.I)
+              assert not re.search(r'\bon[a-z]+\s*=', page, re.I)
+              assert not re.search(r'(?:href|src)=["\']\s*javascript:', page, re.I)
+
+          assert 'safeNewsHref' in js
+          assert 'innerHTML' not in js
+          assert 'eval(' not in js
+          assert 'new Function(' not in js
+          assert 'document.write(' not in js
+          assert 'javascript:' not in js.lower()
+
           assert (out / 'site.css').stat().st_size > 60000
           assert (out / 'site.js').stat().st_size > 5000
           assert (out / 'images/reitbeteiligung1-480.webp').stat().st_size < 150_000
@@ -178,17 +208,31 @@ jobs:
           assert not list(out.glob('*.md'))
           total = sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
           assert total < 7_000_000, total
-          print(f'Production artifact checks passed: {total / 1024 / 1024:.2f} MiB.')
+          print(f'Production artifact and security checks passed: {total / 1024 / 1024:.2f} MiB.')
           PY
 
+      - name: Archive static site
+        shell: bash
+        run: |
+          tar --dereference --hard-dereference \
+            --directory "_site" \
+            -cf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+
       - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          path: _site
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 6
 
       - name: Deploy production site
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
 
       - name: Verify live release
         shell: bash
@@ -197,23 +241,31 @@ jobs:
         run: |
           token="${GITHUB_SHA:0:12}"
           for attempt in {1..12}; do
-            page="$(curl -fsSL "${PAGE_URL}?v=${GITHUB_SHA}" || true)"
-            journal="$(curl -fsSL "${PAGE_URL}aktuelles.html?v=${GITHUB_SHA}" || true)"
-            imprint="$(curl -fsSL "${PAGE_URL}impressum.html?v=${GITHUB_SHA}" || true)"
-            privacy="$(curl -fsSL "${PAGE_URL}datenschutz.html?v=${GITHUB_SHA}" || true)"
+            page="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}?v=${GITHUB_SHA}" || true)"
+            journal="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}aktuelles.html?v=${GITHUB_SHA}" || true)"
+            imprint="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}impressum.html?v=${GITHUB_SHA}" || true)"
+            privacy="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}datenschutz.html?v=${GITHUB_SHA}" || true)"
+            runtime="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}site.js?v=${GITHUB_SHA}" || true)"
             if grep -q "site.css?v=${token}" <<<"$page" \
               && grep -q "Reiten beginnt für mich mit <em>Vertrauen.</em>" <<<"$page" \
               && grep -q "Was mir beim Reiten <em>wichtig ist.</em>" <<<"$page" \
+              && grep -q 'Content-Security-Policy' <<<"$page" \
+              && grep -q 'name="referrer" content="no-referrer"' <<<"$page" \
               && grep -q "site.css?v=${token}" <<<"$journal" \
               && grep -q "Sommerferien auf dem Hof" <<<"$journal" \
               && grep -q "Das PM-Mobil zu Gast" <<<"$journal" \
+              && grep -q 'Content-Security-Policy' <<<"$journal" \
+              && grep -q "safeNewsHref" <<<"$runtime" \
+              && ! grep -q "innerHTML" <<<"$runtime" \
               && grep -q "§ 5 DDG" <<<"$imprint" \
               && grep -q "§ 18 Abs. 2 MStV" <<<"$imprint" \
+              && grep -q 'Content-Security-Policy' <<<"$imprint" \
               && grep -q "GitHub Pages" <<<"$privacy" \
-              && grep -q "WhatsApp Ireland Limited" <<<"$privacy"; then
-              curl -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
+              && grep -q "WhatsApp Ireland Limited" <<<"$privacy" \
+              && grep -q 'Content-Security-Policy' <<<"$privacy"; then
+              curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
               test -s /tmp/journal-hero.webp
-              echo "Live release ${token}, including final desktop and mobile navigation, mobile composition, final 10/10 desktop composition, art direction, Carmen voice, legal pages and Hofjournal, verified."
+              echo "Live release ${token}, including CSP, referrer protection, safe dynamic URLs, hardened JavaScript and pinned deployment actions, verified."
               exit 0
             fi
             sleep 3
