@@ -35,6 +35,8 @@ jobs:
           python build-release.py
           printf '\n\n/* ===== header-signature.css ===== */\n' >> _site/site.css
           cat header-signature.css >> _site/site.css
+          printf '\n\n/* ===== above-fold-direction.css ===== */\n' >> _site/site.css
+          cat above-fold-direction.css >> _site/site.css
           python build-journal.py
           printf '\n\n/* ===== journal-finish.css ===== */\n' >> _site/site.css
           cat journal-finish.css >> _site/site.css
@@ -52,6 +54,7 @@ jobs:
           out = Path('_site')
           html = (out / 'index.html').read_text(encoding='utf-8')
           journal = (out / 'aktuelles.html').read_text(encoding='utf-8')
+          css = (out / 'site.css').read_text(encoding='utf-8')
           imprint = (out / 'impressum.html').read_text(encoding='utf-8')
           privacy = (out / 'datenschutz.html').read_text(encoding='utf-8')
           sitemap = (out / 'sitemap.xml').read_text(encoding='utf-8')
@@ -77,6 +80,8 @@ jobs:
           assert 'Reiten beginnt für mich mit <em>Vertrauen.</em>' in html
           assert 'Was mir beim Reiten <em>wichtig ist.</em>' in html
           assert 'Schreiben Sie Carmen gern' not in html
+          assert 'above-fold-direction.css' in css
+          assert 'body:not(.journal-page) .hero-copy' in css
           assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
 
           assert '<body class="journal-page">' in journal
@@ -91,8 +96,6 @@ jobs:
           assert 'site.js?v=' in journal
           assert 'aktuelles.html' in sitemap
 
-          # Legal/source-of-truth checks. These guard against accidentally
-          # restoring obsolete boilerplate from the former website.
           assert '§ 5 DDG' in imprint
           assert '§ 18 Abs. 2 MStV' in imprint
           assert '§ 5 TMG' not in imprint
@@ -166,7 +169,7 @@ jobs:
               && grep -q "WhatsApp Ireland Limited" <<<"$privacy"; then
               curl -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
               test -s /tmp/journal-hero.webp
-              echo "Live release ${token}, including Carmen voice, legal pages and Hofjournal, verified."
+              echo "Live release ${token}, including above-fold direction, Carmen voice, legal pages and Hofjournal, verified."
               exit 0
             fi
             sleep 3
