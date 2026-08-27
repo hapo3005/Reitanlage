@@ -1,0 +1,23 @@
+/* Last journal details: archive captions and crisp responsive finishing. */
+.journal-archive-gallery figure{position:relative}
+.journal-archive-gallery figcaption{
+  padding:11px 2px 0;
+  color:#66706b;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.09em;
+  line-height:1.45;
+  text-transform:uppercase;
+}
+.journal-archive-gallery figure.is-contain{
+  overflow:visible;
+  background:transparent;
+}
+.journal-archive-gallery figure.is-contain img{
+  display:block;
+  background:#eee8dc;
+}
+@media(max-width:820px){
+  .journal-archive-gallery{gap:34px}
+  .journal-archive-gallery figcaption{padding-top:9px}
+}
