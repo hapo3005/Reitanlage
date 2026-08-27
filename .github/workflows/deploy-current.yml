@@ -38,7 +38,8 @@ jobs:
           python build-journal.py
           printf '\n\n/* ===== journal-finish.css ===== */\n' >> _site/site.css
           cat journal-finish.css >> _site/site.css
-          python carmen-voice.py
+          python carmen-index.py
+          python carmen-journal.py
 
       - name: Verify production artifact
         shell: bash
