@@ -1,10 +1,18 @@
 # Kontaktdaten – Verifizierungsstand
 
-Stand: 26.08.2026
+Stand: 27.08.2026
 
-Diese Datei ist eine interne Prüfliste für die finale Freigabe der öffentlichen Website. Unsichere Angaben werden nicht auf Verdacht geändert.
+Diese Datei ist die interne Prüfliste für die finale Kundenfreigabe. Unsichere Angaben werden nicht auf Verdacht geändert.
 
-## Öffentlich bestätigt
+## Carmen – bitte nur diese drei Punkte bestätigen
+
+- [ ] Offizielle Anschrift: **Siedlung Dadscheid 3, 54518 Minderlittgen** – stimmt die Schreibweise `Dadscheid`?
+- [ ] Öffentliche E-Mail: **eichhorn.c@t-online.de** – weiterhin korrekt und gewünscht?
+- [ ] Öffentlicher Facebook-Kanal: **https://www.facebook.com/groups/403038393066632/** – weiterhin die richtige Gruppe?
+
+Sobald diese drei Punkte bestätigt sind, müssen Kontaktbereich, strukturierte Daten, Impressum/Datenschutz und ggf. Routen-/Social-Verweise noch einmal synchron abgeglichen werden.
+
+## Öffentlich ausreichend bestätigt
 
 - Mobil / WhatsApp: **0174 3156082**
   - aktuell im Cylex-Unternehmenseintrag geführt (aktualisiert am 16.04.2026)
@@ -14,36 +22,30 @@ Diese Datei ist eine interne Prüfliste für die finale Freigabe der öffentlich
   - aktuell bei Das Örtliche geführt
   - aktuell im Telefonbuch-Eintrag für Minderlittgen geführt
 
-## Vor finaler Kundenfreigabe mit Carmen bestätigen
-
-### Straßenname
-Aktuell auf der Website: **Siedlung Dadscheid 3, 54518 Minderlittgen**
+## Warum die Anschrift noch bestätigt werden muss
 
 Öffentliche Quellen sind widersprüchlich:
+
 - Das Örtliche: **Siedlung Datscheid 3**
 - Das Telefonbuch: **Siedlung Datscheid 3**
-- Cylex ist sogar innerhalb desselben Eintrags uneinheitlich: Im Kopfbereich steht **Siedlung Datscheid 3**, im Abschnitt „Adresse & Kontaktdaten“ **Siedlung Dadscheid 3**.
+- Cylex ist innerhalb desselben Eintrags uneinheitlich: im Kopfbereich **Siedlung Datscheid 3**, im Abschnitt „Adresse & Kontaktdaten“ **Siedlung Dadscheid 3**
 
-**Nicht automatisch ändern. Carmen soll die offizielle Schreibweise bestätigen.** Danach Website, strukturierte Daten und Google-Maps-Link gemeinsam aktualisieren.
+Daher wird die öffentliche Seite nicht automatisch auf eine andere Schreibweise umgestellt.
 
-### E-Mail
-Aktuell auf der Website: **eichhorn.c@t-online.de**
+## E-Mail
 
-Die Adresse stammt aus dem bisherigen Seitenbestand. Cylex weist zwar eine E-Mail-Adresse aus, stellt sie in der öffentlich auslesbaren Fassung jedoch maskiert dar; die konkrete Schreibweise konnte daher nicht unabhängig bestätigt werden.
+Aktuell auf der Website: **eichhorn.c@t-online.de**.
 
-**Mit Carmen bestätigen.**
+Die Adresse stammt aus dem bisherigen Seitenbestand. Cylex weist eine E-Mail-Adresse aus, stellt sie in der öffentlich auslesbaren Fassung jedoch maskiert dar. Die konkrete Schreibweise konnte deshalb nicht unabhängig bestätigt werden.
 
-### Facebook
-Aktuell verlinkt: Facebook-Gruppe mit der ID **403038393066632**.
+## Facebook
 
-Der Link stammt aus dem bisherigen Seitenbestand und konnte aktuell nicht unabhängig zweifelsfrei dem offiziellen Auftritt zugeordnet werden.
+Aktuell verlinkt ist die Facebook-Gruppe mit der ID **403038393066632**.
 
-**Mit Carmen bestätigen, ob diese Gruppe weiterhin der gewünschte öffentliche Facebook-Kanal ist.**
+Der Link stammt aus dem bisherigen Seitenbestand und konnte nicht unabhängig zweifelsfrei als weiterhin gewünschter offizieller Auftritt bestätigt werden.
 
 ## Freigaberegel
 
-Für die finale Veröffentlichung als Kunden-/Referenzseite gilt:
-
-- bestätigte Telefonnummern können unverändert bleiben;
-- Straße, E-Mail und Facebook erst nach direkter Bestätigung als endgültig freigeben;
-- bei einer Korrektur immer gleichzeitig Kontaktbereich, `mailto:`-/Maps-Link, strukturierte Daten und ggf. Social-Media-Hinweise aktualisieren.
+- bestätigte Telefonnummern bleiben unverändert;
+- Straße, E-Mail und Facebook erst nach Carmens direkter Bestätigung als endgültig freigeben;
+- bei einer Korrektur immer Kontaktbereich, `mailto:`-/Routenlink, strukturierte Daten, Impressum und Datenschutz gemeinsam aktualisieren.
