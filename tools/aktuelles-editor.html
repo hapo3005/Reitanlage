@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aktuelles-Editor · Eichhorn-Nels</title>
+<style>
+:root{--paper:#f4f0e7;--paper2:#ebe5d8;--ink:#1f2723;--green:#173027;--bronze:#8a6a4b;--muted:#66706b;--line:rgba(31,39,35,.16);font-family:Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}header,main{width:min(1120px,calc(100% - 32px));margin:auto}header{padding:42px 0 28px;border-bottom:1px solid var(--line)}h1,h2,h3{font-family:Georgia,serif;font-weight:400}h1{margin:0 0 10px;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1}p{color:var(--muted);line-height:1.6}.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}.btn,.file-label{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:0 14px;border:1px solid var(--green);background:transparent;color:var(--green);font:700 .8rem Arial,sans-serif;cursor:pointer}.btn.primary{background:var(--green);color:#fff}.btn.danger{border-color:#8b3d33;color:#8b3d33}.file-label input{display:none}.status{min-height:24px;margin:15px 0 0;font-size:.8rem;color:var(--bronze)}main{padding:34px 0 80px}.release{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:28px;align-items:end;padding-bottom:28px;border-bottom:1px solid var(--line)}label{display:block;color:var(--bronze);font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.field{margin-top:15px}.field:first-child{margin-top:0}input,textarea,select{width:100%;margin-top:7px;border:1px solid var(--line);border-radius:0;background:#fff;color:var(--ink);padding:11px 12px;font:inherit}textarea{min-height:96px;resize:vertical}.items{display:grid;gap:24px;margin-top:32px}.item{background:#eee8dc;border-top:2px solid var(--bronze);padding:24px}.item-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:22px}.item-head h2{margin:0;font-size:1.8rem}.item-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}.item-actions .btn{min-height:36px;padding:0 10px;font-size:.7rem}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px}.wide{grid-column:1/-1}.check{display:flex;align-items:center;gap:10px;margin-top:26px;color:var(--ink);font-size:.82rem;font-weight:700;letter-spacing:0;text-transform:none}.check input{width:auto;margin:0}.preview{grid-column:1/-1;margin-top:6px;padding:20px;background:var(--paper);border-left:2px solid var(--bronze)}.preview-meta{margin:0 0 7px;color:var(--bronze);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.preview h3{margin:0 0 9px;font-size:1.6rem}.preview p{margin:0 0 14px}.preview span{display:inline-block;padding:9px 12px;border:1px solid rgba(23,48,39,.28);font-size:.72rem;font-weight:800}.help{margin-top:38px;padding-top:24px;border-top:1px solid var(--line);font-size:.85rem}.help strong{color:var(--ink)}
+@media(max-width:760px){header,main{width:min(100% - 24px,1120px)}.release,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.item{padding:18px}.item-head{display:block}.item-actions{justify-content:flex-start;margin-top:14px}}
+</style>
+</head>
+<body>
+<header>
+<p style="margin:0 0 8px;color:#8a6a4b;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase">Interne Pflegehilfe</p>
+<h1>Aktuelles bearbeiten</h1>
+<p>Texte und Reihenfolge bequem ändern, anschließend eine fertige <code>aktuelles.json</code> herunterladen. Die Website selbst wird hier nicht verändert.</p>
+<div class="toolbar">
+<button class="btn primary" id="loadRepo" type="button">Aktuellen Stand laden</button>
+<label class="file-label">JSON-Datei öffnen<input id="fileInput" type="file" accept="application/json,.json"></label>
+<button class="btn" id="addItem" type="button">Neue Meldung</button>
+<button class="btn" id="copyJson" type="button">JSON kopieren</button>
+<button class="btn" id="downloadJson" type="button">aktuelles.json herunterladen</button>
+</div>
+<p class="status" id="status" aria-live="polite"></p>
+</header>
+<main>
+<div class="release">
+<div><h2 style="margin:0 0 8px;font-size:2rem">Veröffentlichungsstand</h2><p style="margin:0">Die oberste Meldung erscheint groß als Hauptmeldung. Alle weiteren Meldungen folgen als Nebenmeldungen.</p></div>
+<label>Aktualisiert am<input id="updated" type="date"></label>
+</div>
+<div class="items" id="items"></div>
+<div class="help"><strong>Danach:</strong> Die heruntergeladene Datei in GitHub als <code>aktuelles.json</code> ersetzen und committen. Der normale Deploy übernimmt Bildoptimierung und Veröffentlichung automatisch. Neue Bilder weiterhin zuerst in den Ordner <code>images</code> hochladen.</div>
+</main>
+<template id="itemTemplate">
+<article class="item">
+<div class="item-head"><div><p style="margin:0 0 5px;color:#8a6a4b;font-size:.67rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase">Meldung</p><h2 data-heading>Neue Meldung</h2></div><div class="item-actions"><button class="btn" type="button" data-up>Nach oben</button><button class="btn" type="button" data-down>Nach unten</button><button class="btn danger" type="button" data-delete>Entfernen</button></div></div>
+<div class="grid">
+<label>Kategorie<input data-key="category"></label>
+<label>Meta / Zusatzinfo<input data-key="meta"></label>
+<label class="wide">Überschrift<input data-key="title"></label>
+<label class="wide">Text<textarea data-key="text"></textarea></label>
+<label>Bildpfad<input data-key="image" placeholder="images/dateiname.png"></label>
+<label>Alt-Text<input data-key="alt"></label>
+<label>Link<input data-key="link" placeholder="#kontakt"></label>
+<label>CTA-Text<input data-key="linkText" placeholder="Unverbindlich anfragen"></label>
+<label>Bilddarstellung<select data-key="imageFit"><option value="cover">Foto zuschneiden</option><option value="contain">Ganzes Motiv / Flyer</option></select></label>
+<label>Bildposition<input data-key="imagePosition" placeholder="50% 50%"></label>
+<label>Bildposition mobil<input data-key="imagePositionMobile" placeholder="50% 50%"></label>
+<label class="check"><input type="checkbox" data-key="imageZoom"> Bild darf in Großansicht geöffnet werden</label>
+<div class="preview"><p class="preview-meta" data-preview-meta></p><h3 data-preview-title></h3><p data-preview-text></p><span data-preview-link></span></div>
+</div>
+</article>
+</template>
+<script>
+const state={updated:new Date().toISOString().slice(0,10),items:[]};
+const itemsEl=document.querySelector('#items');
+const updatedEl=document.querySelector('#updated');
+const statusEl=document.querySelector('#status');
+const template=document.querySelector('#itemTemplate');
+const defaults={category:'Aktuelles',meta:'',title:'Neue Meldung',text:'',image:'images/dateiname.png',alt:'',link:'#kontakt',linkText:'Unverbindlich anfragen',imageFit:'cover',imagePosition:'50% 50%',imagePositionMobile:'50% 50%',imageZoom:false};
+function status(text){statusEl.textContent=text}
+function normalize(data){return {updated:data?.updated||new Date().toISOString().slice(0,10),items:Array.isArray(data?.items)?data.items.map(x=>({...defaults,...x})):[]}}
+function setData(data){const next=normalize(data);state.updated=next.updated;state.items=next.items;updatedEl.value=state.updated;render();status(`${state.items.length} Meldung(en) geladen.`)}
+function makeItem(item,index){const node=template.content.firstElementChild.cloneNode(true);const heading=node.querySelector('[data-heading]');
+ node.querySelectorAll('[data-key]').forEach(el=>{const key=el.dataset.key;if(el.type==='checkbox')el.checked=Boolean(item[key]);else el.value=item[key]??'';el.addEventListener('input',()=>{item[key]=el.type==='checkbox'?el.checked:el.value;updatePreview(node,item)})});
+ node.querySelector('[data-up]').disabled=index===0;node.querySelector('[data-down]').disabled=index===state.items.length-1;
+ node.querySelector('[data-up]').onclick=()=>{[state.items[index-1],state.items[index]]=[state.items[index],state.items[index-1]];render()};
+ node.querySelector('[data-down]').onclick=()=>{[state.items[index+1],state.items[index]]=[state.items[index],state.items[index+1]];render()};
+ node.querySelector('[data-delete]').onclick=()=>{state.items.splice(index,1);render();status('Meldung entfernt. Noch nicht veröffentlicht.')};
+ function update(){heading.textContent=item.title||'Neue Meldung';updatePreview(node,item)};node.querySelector('[data-key="title"]').addEventListener('input',update);update();return node}
+function updatePreview(node,item){node.querySelector('[data-heading]').textContent=item.title||'Neue Meldung';node.querySelector('[data-preview-meta]').textContent=[item.category,item.meta].filter(Boolean).join(' · ');node.querySelector('[data-preview-title]').textContent=item.title||'Neue Meldung';node.querySelector('[data-preview-text]').textContent=item.text||'Hier erscheint der Meldungstext.';node.querySelector('[data-preview-link]').textContent=item.linkText||'CTA'}
+function render(){itemsEl.replaceChildren(...state.items.map(makeItem));updatedEl.value=state.updated}
+function output(){state.updated=updatedEl.value||new Date().toISOString().slice(0,10);return {updated:state.updated,items:state.items.map(item=>{const out={...item};if(!out.imageZoom)delete out.imageZoom;if(!out.imagePosition)delete out.imagePosition;if(!out.imagePositionMobile)delete out.imagePositionMobile;if(!out.imageFit)delete out.imageFit;return out})}}
+function jsonText(){return JSON.stringify(output(),null,2)+'\n'}
+async function loadRepo(){try{const r=await fetch('../aktuelles.json',{cache:'no-store'});if(!r.ok)throw new Error(r.status);setData(await r.json())}catch(e){status('Direktes Laden ist hier nicht möglich. Bitte „JSON-Datei öffnen“ wählen und aktuelles.json auswählen.')}}
+document.querySelector('#loadRepo').onclick=loadRepo;
+document.querySelector('#fileInput').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{setData(JSON.parse(await f.text()))}catch{status('Die ausgewählte Datei enthält kein gültiges JSON.')}};
+document.querySelector('#addItem').onclick=()=>{state.items.push({...defaults});render();status('Neue Meldung angelegt. Noch nicht veröffentlicht.')};
+document.querySelector('#copyJson').onclick=async()=>{try{await navigator.clipboard.writeText(jsonText());status('JSON wurde in die Zwischenablage kopiert.')}catch{status('Kopieren wurde vom Browser blockiert. Bitte stattdessen herunterladen.')}};
+document.querySelector('#downloadJson').onclick=()=>{const blob=new Blob([jsonText()],{type:'application/json;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='aktuelles.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);status('aktuelles.json wurde erstellt.')};
+updatedEl.addEventListener('input',()=>state.updated=updatedEl.value);
+setData({updated:new Date().toISOString().slice(0,10),items:[]});loadRepo();
+</script>
+</body>
+</html>
