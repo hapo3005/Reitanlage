@@ -1,0 +1,16 @@
+/* Global photo zoom — subtle, accessible, no decorative UI. */
+main img[data-photo-zoom="true"]{
+  cursor:zoom-in;
+  outline:none;
+}
+main img[data-photo-zoom="true"]:focus-visible{
+  outline:3px solid #8a6a4b;
+  outline-offset:4px;
+}
+@media(hover:hover){
+  main img[data-photo-zoom="true"]{transition:filter .2s ease,transform .2s ease}
+  main img[data-photo-zoom="true"]:hover{filter:brightness(.96)}
+}
+@media(prefers-reduced-motion:reduce){
+  main img[data-photo-zoom="true"]{transition:none}
+}
