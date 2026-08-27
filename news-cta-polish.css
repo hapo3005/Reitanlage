@@ -50,14 +50,13 @@
 
 @media(prefers-reduced-motion:reduce){.news-link{transition:none}}
 
-/* Desktop header art direction — the navigation belongs to the photography,
-   not to a floating app-style component. Higher specificity intentionally
-   keeps this editorial treatment authoritative over legacy hero rules. */
+/* Desktop header art direction — large, legible editorial navigation with
+   deliberate interaction instead of an app-style container. */
 @media(min-width:821px){
   body .header:not(.scrolled) nav.nav{
     display:flex!important;
     align-items:center!important;
-    gap:clamp(24px,1.65vw,34px)!important;
+    gap:clamp(30px,2vw,42px)!important;
     padding:0!important;
     border:0!important;
     border-radius:0!important;
@@ -65,88 +64,140 @@
     box-shadow:none!important;
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
-    font-size:clamp(.87rem,.88vw,.98rem)!important;
-    font-weight:760!important;
-    letter-spacing:.002em!important;
+    font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+    font-size:clamp(1rem,1.03vw,1.12rem)!important;
+    font-weight:650!important;
+    line-height:1!important;
+    letter-spacing:.008em!important;
   }
 
   body .header:not(.scrolled) nav.nav a{
     position:relative!important;
-    padding:11px 0 12px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    min-height:48px!important;
+    padding:13px 0 14px!important;
     border:0!important;
     border-radius:0!important;
     background:transparent!important;
-    color:#fff!important;
+    color:rgba(255,255,255,.96)!important;
     white-space:nowrap!important;
-    text-shadow:0 2px 12px rgba(5,13,10,.88),0 1px 3px rgba(5,13,10,.72)!important;
+    text-shadow:0 2px 14px rgba(5,13,10,.92),0 1px 4px rgba(5,13,10,.78)!important;
     box-shadow:none!important;
-    transform:none!important;
-    transition:color .2s ease,opacity .2s ease!important;
+    transform:translateY(0)!important;
+    transition:color .2s ease,transform .2s ease,text-shadow .2s ease!important;
   }
 
   body .header:not(.scrolled) nav.nav a:not(.nav-cta)::after{
     content:""!important;
     position:absolute!important;
-    left:0!important;
-    right:0!important;
+    left:50%!important;
+    right:auto!important;
     bottom:5px!important;
-    height:1px!important;
-    background:#ddb77f!important;
-    transform:scaleX(0)!important;
-    transform-origin:left center!important;
+    width:100%!important;
+    height:2px!important;
+    background:#e0b677!important;
+    opacity:.92!important;
+    transform:translateX(-50%) scaleX(0)!important;
+    transform-origin:center!important;
     transition:transform .22s ease!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover,
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta).active{
+    color:#ffe1b1!important;
+    transform:translateY(-2px)!important;
+    text-shadow:0 3px 16px rgba(5,13,10,.96),0 1px 4px rgba(5,13,10,.82)!important;
   }
 
   body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover::after,
   body .header:not(.scrolled) nav.nav a:not(.nav-cta).active::after{
-    transform:scaleX(1)!important;
-  }
-
-  body .header:not(.scrolled) nav.nav a:hover,
-  body .header:not(.scrolled) nav.nav a.active{
-    color:#fff8ec!important;
-    opacity:1!important;
+    transform:translateX(-50%) scaleX(1)!important;
   }
 
   body .header:not(.scrolled) nav.nav a.nav-cta{
-    margin-left:2px!important;
-    padding:11px 0 12px 22px!important;
+    margin-left:1px!important;
+    padding:13px 0 14px 28px!important;
     border:0!important;
-    border-left:1px solid rgba(255,255,255,.48)!important;
+    border-left:1px solid rgba(255,255,255,.55)!important;
     border-radius:0!important;
     background:transparent!important;
-    color:#fff4df!important;
+    color:#fff0d5!important;
     box-shadow:none!important;
-    text-shadow:0 2px 12px rgba(5,13,10,.9),0 1px 3px rgba(5,13,10,.72)!important;
+    text-shadow:0 2px 14px rgba(5,13,10,.94),0 1px 4px rgba(5,13,10,.78)!important;
   }
 
   body .header:not(.scrolled) nav.nav a.nav-cta::after{
     content:""!important;
     position:absolute!important;
-    left:22px!important;
+    left:28px!important;
     right:0!important;
     bottom:5px!important;
-    height:1px!important;
-    background:#ddb77f!important;
-    transform:scaleX(.34)!important;
+    height:2px!important;
+    background:#e0b677!important;
+    transform:scaleX(.28)!important;
     transform-origin:left center!important;
     transition:transform .22s ease!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a.nav-cta:hover{
+    color:#ffe1b1!important;
+    transform:translateY(-2px)!important;
   }
 
   body .header:not(.scrolled) nav.nav a.nav-cta:hover::after{
     transform:scaleX(1)!important;
   }
+
+  body .header.scrolled nav.nav{
+    gap:clamp(25px,1.7vw,34px)!important;
+    font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+    font-size:clamp(.94rem,.96vw,1.04rem)!important;
+    font-weight:650!important;
+    letter-spacing:.006em!important;
+  }
+
+  body .header.scrolled nav.nav a{
+    position:relative!important;
+    padding:10px 0!important;
+    border-bottom:0!important;
+    transition:color .18s ease,transform .18s ease!important;
+  }
+
+  body .header.scrolled nav.nav a:not(.nav-cta)::after{
+    content:""!important;
+    position:absolute!important;
+    left:50%!important;
+    bottom:3px!important;
+    width:100%!important;
+    height:2px!important;
+    background:#8a6a4b!important;
+    transform:translateX(-50%) scaleX(0)!important;
+    transform-origin:center!important;
+    transition:transform .2s ease!important;
+  }
+
+  body .header.scrolled nav.nav a:not(.nav-cta):hover,
+  body .header.scrolled nav.nav a:not(.nav-cta).active{
+    color:#8a6a4b!important;
+    transform:translateY(-1px)!important;
+  }
+
+  body .header.scrolled nav.nav a:not(.nav-cta):hover::after,
+  body .header.scrolled nav.nav a:not(.nav-cta).active::after{
+    transform:translateX(-50%) scaleX(1)!important;
+  }
 }
 
 @media(min-width:821px) and (max-width:1180px){
   body .header:not(.scrolled) nav.nav{
-    gap:17px!important;
-    font-size:.80rem!important;
+    gap:20px!important;
+    font-size:.92rem!important;
   }
   body .header:not(.scrolled) nav.nav a.nav-cta{
-    padding-left:16px!important;
+    padding-left:19px!important;
   }
   body .header:not(.scrolled) nav.nav a.nav-cta::after{
-    left:16px!important;
+    left:19px!important;
   }
 }
