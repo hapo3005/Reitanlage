@@ -1,19 +1,20 @@
-/* Taste × Emil Kowalski navigation pass.
-   The hero owns the heritage serif. Navigation stays modern, legible and functional,
-   with one restrained interaction idea and fast, interruptible feedback. */
+/* Taste × Emil Kowalski — warm frosted-glass navigation.
+   This file is appended after the production bundle. Selectors intentionally
+   outrank the older hero navigation rules so the glass treatment cannot be
+   partially overridden by legacy !important declarations. */
+
 @media (min-width:821px){
   body .header{
-    --nav-accent:#e5b777;
+    --nav-accent:#e8bd82;
     --nav-ease-out:cubic-bezier(.23,1,.32,1);
-    padding:25px 42px 20px!important;
+    padding:24px 42px 20px!important;
     align-items:center!important;
     overflow:visible!important;
   }
 
   body .header:not(.scrolled){
-    background:
-      linear-gradient(90deg,rgba(6,16,12,0) 0%,rgba(6,16,12,0) 34%,rgba(6,16,12,.07) 55%,rgba(6,16,12,.18) 100%),
-      linear-gradient(180deg,rgba(6,16,12,.19) 0%,rgba(6,16,12,.07) 56%,rgba(6,16,12,0) 100%)!important;
+    color:#fff!important;
+    background:linear-gradient(180deg,rgba(10,22,17,.12) 0%,rgba(10,22,17,.025) 62%,rgba(10,22,17,0) 100%)!important;
     border:0!important;
     box-shadow:none!important;
     backdrop-filter:none!important;
@@ -32,207 +33,228 @@
     letter-spacing:.17em!important;
   }
 
-  body .header nav.nav{
+  /* The actual glass object. Light enough to reveal the photograph, dark enough
+     to maintain contrast across both sky and horse. */
+  body .header:not(.scrolled) nav.nav{
     position:relative!important;
     display:flex!important;
     align-items:center!important;
-    gap:clamp(22px,1.5vw,30px)!important;
+    gap:clamp(19px,1.35vw,27px)!important;
     margin:0!important;
-    padding:15px 0 0!important;
-    border:0!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    backdrop-filter:none!important;
-    -webkit-backdrop-filter:none!important;
+    padding:8px 9px 8px 21px!important;
+    border:1px solid rgba(255,255,255,.31)!important;
+    border-radius:18px!important;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.07) 44%,rgba(15,34,27,.20) 100%)!important;
+    box-shadow:
+      0 18px 44px rgba(6,18,13,.14),
+      inset 0 1px 0 rgba(255,255,255,.24),
+      inset 0 -1px 0 rgba(255,255,255,.06)!important;
+    backdrop-filter:blur(22px) saturate(1.22)!important;
+    -webkit-backdrop-filter:blur(22px) saturate(1.22)!important;
     font-family:"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;
-    font-size:clamp(1.22rem,1.28vw,1.46rem)!important;
-    font-weight:620!important;
+    font-size:clamp(1.00rem,1.03vw,1.14rem)!important;
+    font-weight:650!important;
     line-height:1!important;
-    letter-spacing:-.028em!important;
-    font-variation-settings:"wght" 620,"opsz" 18;
+    letter-spacing:-.018em!important;
+    font-variation-settings:"wght" 650,"opsz" 18;
   }
 
-  /* A quiet editorial rail gives the navigation a static signature without a box. */
-  body .header nav.nav::before{
+  /* Fine top highlight: this is what makes the surface read as glass instead
+     of a translucent dark rectangle. */
+  body .header:not(.scrolled) nav.nav::before{
     content:""!important;
     position:absolute!important;
-    left:0!important;
-    right:0!important;
+    z-index:0!important;
+    left:18px!important;
+    right:18px!important;
     top:0!important;
     height:1px!important;
-    background:rgba(255,255,255,.30)!important;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.70) 28%,rgba(255,255,255,.30) 72%,transparent)!important;
     pointer-events:none!important;
   }
-  body .header nav.nav::after{
-    content:""!important;
-    position:absolute!important;
-    left:0!important;
-    top:-1px!important;
-    width:56px!important;
-    height:2px!important;
-    background:var(--nav-accent)!important;
-    pointer-events:none!important;
-  }
+  body .header:not(.scrolled) nav.nav::after{content:none!important}
 
-  body .header nav.nav a{
+  body .header:not(.scrolled) nav.nav a{
     position:relative!important;
+    z-index:1!important;
     display:inline-flex!important;
     align-items:center!important;
     justify-content:center!important;
-    min-height:58px!important;
-    padding:13px 0 14px!important;
+    min-height:54px!important;
+    padding:0!important;
     border:0!important;
     border-radius:0!important;
     background:transparent!important;
+    color:rgba(255,255,255,.97)!important;
+    -webkit-text-fill-color:currentColor!important;
+    background-image:none!important;
     white-space:nowrap!important;
     text-decoration:none!important;
+    text-shadow:0 2px 12px rgba(4,12,8,.58)!important;
     box-shadow:none!important;
-    color:#fff!important;
-    text-shadow:0 2px 14px rgba(3,10,7,.78),0 1px 3px rgba(3,10,7,.55)!important;
     transform:translateZ(0) scale(1)!important;
-    transition:color 160ms ease,transform 120ms var(--nav-ease-out)!important;
+    transition:color 160ms ease,opacity 160ms ease,transform 120ms var(--nav-ease-out)!important;
   }
 
-  /* One interaction idea: a quick bronze sweep. No bouncing, no decorative drift. */
-  body .header nav.nav a:not(.nav-cta)::after{
+  /* One interaction only: a short warm underline. */
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta)::before{content:none!important}
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta)::after{
     content:""!important;
     position:absolute!important;
     left:0!important;
     right:0!important;
     bottom:7px!important;
     height:2px!important;
+    border-radius:2px!important;
     background:var(--nav-accent)!important;
     clip-path:inset(0 100% 0 0)!important;
     transition:clip-path 180ms var(--nav-ease-out)!important;
   }
-
   body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover,
   body .header:not(.scrolled) nav.nav a:not(.nav-cta).active{
-    color:#eac48d!important;
+    color:#ffe0b4!important;
   }
-  body .header nav.nav a:not(.nav-cta):hover::after{
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover::after{
     clip-path:inset(0 0 0 0)!important;
   }
-  body .header nav.nav a:not(.nav-cta).active::after{
-    clip-path:inset(0 72% 0 0)!important;
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta).active::after{
+    clip-path:inset(0 68% 0 0)!important;
   }
-  body .header nav.nav a:active{
+
+  /* Contact remains part of the same glass object — no opaque cream tile. */
+  body .header:not(.scrolled) nav.nav .nav-cta{
+    position:relative!important;
+    min-height:54px!important;
+    margin-left:3px!important;
+    padding:0 22px!important;
+    border:1px solid rgba(255,255,255,.30)!important;
+    border-radius:12px!important;
+    background:rgba(255,255,255,.12)!important;
+    color:#fff6e8!important;
+    -webkit-text-fill-color:currentColor!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.13)!important;
+    backdrop-filter:blur(8px)!important;
+    -webkit-backdrop-filter:blur(8px)!important;
+    text-shadow:0 2px 10px rgba(4,12,8,.52)!important;
+    transition:background 160ms ease,border-color 160ms ease,color 160ms ease,transform 120ms var(--nav-ease-out)!important;
+  }
+  body .header:not(.scrolled) nav.nav .nav-cta::before{content:none!important}
+  body .header:not(.scrolled) nav.nav .nav-cta::after{content:"↗"!important;position:static!important;width:auto!important;height:auto!important;margin-left:9px!important;background:none!important;clip-path:none!important;font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;font-size:.78em!important;font-weight:400!important;line-height:1!important;opacity:.82!important;transform:translate(0,0)!important;transition:transform 160ms var(--nav-ease-out),opacity 160ms ease!important}
+  body .header:not(.scrolled) nav.nav .nav-cta:hover{
+    background:rgba(255,255,255,.20)!important;
+    border-color:rgba(255,255,255,.48)!important;
+    color:#fff!important;
+    transform:translateZ(0) translateY(-1px)!important;
+  }
+  body .header:not(.scrolled) nav.nav .nav-cta:hover::after{
+    opacity:1!important;
+    transform:translate(3px,-3px)!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a:active{
     transform:translateZ(0) scale(.985)!important;
     transition-duration:100ms!important;
   }
 
-  body .header nav.nav a.nav-cta{
-    margin-left:8px!important;
-    padding-left:24px!important;
-    padding-right:22px!important;
+  /* On scroll the same surface becomes warmer and more opaque for readability,
+     rather than switching to a completely different visual language. */
+  body .header.scrolled{
+    padding:11px 42px!important;
+    background:rgba(244,240,231,.72)!important;
+    border-bottom:1px solid rgba(255,255,255,.52)!important;
+    box-shadow:0 10px 34px rgba(15,29,23,.08)!important;
+    backdrop-filter:blur(20px) saturate(1.12)!important;
+    -webkit-backdrop-filter:blur(20px) saturate(1.12)!important;
+  }
+  body .header.scrolled nav.nav{
+    display:flex!important;
+    align-items:center!important;
+    gap:clamp(19px,1.3vw,26px)!important;
+    margin:0!important;
+    padding:6px 8px 6px 18px!important;
+    border:1px solid rgba(255,255,255,.62)!important;
+    border-radius:16px!important;
+    background:rgba(247,243,235,.46)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.70)!important;
+    backdrop-filter:blur(15px)!important;
+    -webkit-backdrop-filter:blur(15px)!important;
+    font-family:"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;
+    font-size:clamp(.98rem,.99vw,1.08rem)!important;
+    font-weight:650!important;
+    letter-spacing:-.016em!important;
+  }
+  body .header.scrolled nav.nav::before,
+  body .header.scrolled nav.nav::after{content:none!important}
+  body .header.scrolled nav.nav a{
+    min-height:48px!important;
+    padding:0!important;
     border:0!important;
-    border-left:1px solid rgba(255,255,255,.42)!important;
-    color:#f8e5c7!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#20322a!important;
+    -webkit-text-fill-color:currentColor!important;
+    background-image:none!important;
+    text-shadow:none!important;
+    box-shadow:none!important;
   }
-  body .header nav.nav a.nav-cta::before{
-    content:"↗"!important;
-    position:absolute!important;
-    right:0!important;
-    top:50%!important;
-    font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;
-    font-size:.72em!important;
-    font-weight:400!important;
-    line-height:1!important;
-    opacity:.86!important;
-    transform:translateY(-55%) translate(0,0)!important;
-    transition:transform 160ms var(--nav-ease-out),opacity 160ms ease!important;
-  }
-  body .header nav.nav a.nav-cta::after{
+  body .header.scrolled nav.nav a:not(.nav-cta)::before{content:none!important}
+  body .header.scrolled nav.nav a:not(.nav-cta)::after{
     content:""!important;
     position:absolute!important;
-    left:24px!important;
-    right:22px!important;
-    bottom:7px!important;
+    left:0!important;
+    right:0!important;
+    bottom:5px!important;
     height:2px!important;
-    background:var(--nav-accent)!important;
+    border-radius:2px!important;
+    background:#9a744f!important;
     clip-path:inset(0 100% 0 0)!important;
     transition:clip-path 180ms var(--nav-ease-out)!important;
   }
-  body .header:not(.scrolled) nav.nav a.nav-cta:hover{
-    color:var(--nav-accent)!important;
-  }
-  body .header nav.nav a.nav-cta:hover::before{
-    opacity:1!important;
-    transform:translateY(-55%) translate(3px,-3px)!important;
-  }
-  body .header nav.nav a.nav-cta:hover::after{
-    clip-path:inset(0 0 0 0)!important;
-  }
-
-  body .header.scrolled{
-    padding:12px 42px!important;
-    background:rgba(244,240,231,.965)!important;
-    border-bottom:1px solid rgba(31,39,35,.13)!important;
-    box-shadow:0 8px 28px rgba(15,29,23,.06)!important;
-    backdrop-filter:blur(14px)!important;
-    -webkit-backdrop-filter:blur(14px)!important;
-  }
-  body .header.scrolled nav.nav{
-    gap:clamp(20px,1.35vw,27px)!important;
-    padding-top:11px!important;
-    font-size:clamp(1.08rem,1.05vw,1.22rem)!important;
-  }
-  body .header.scrolled nav.nav::before{background:rgba(23,48,39,.18)!important}
-  body .header.scrolled nav.nav a{
-    min-height:48px!important;
-    padding:10px 0 12px!important;
-    color:#20322a!important;
-    text-shadow:none!important;
-  }
   body .header.scrolled nav.nav a:not(.nav-cta):hover,
-  body .header.scrolled nav.nav a:not(.nav-cta).active{
-    color:#8a6a4b!important;
-  }
-  body .header.scrolled nav.nav a.nav-cta{
+  body .header.scrolled nav.nav a:not(.nav-cta).active{color:#805f40!important}
+  body .header.scrolled nav.nav a:not(.nav-cta):hover::after{clip-path:inset(0 0 0 0)!important}
+  body .header.scrolled nav.nav a:not(.nav-cta).active::after{clip-path:inset(0 68% 0 0)!important}
+  body .header.scrolled nav.nav .nav-cta{
+    min-height:48px!important;
+    margin-left:3px!important;
+    padding:0 19px!important;
+    border:1px solid rgba(23,48,39,.16)!important;
+    border-radius:11px!important;
+    background:rgba(255,255,255,.36)!important;
     color:#173027!important;
-    border-left-color:rgba(23,48,39,.28)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;
   }
-  body .header.scrolled nav.nav a.nav-cta:hover{color:#8a6a4b!important}
+  body .header.scrolled nav.nav .nav-cta::before{content:none!important}
+  body .header.scrolled nav.nav .nav-cta::after{content:"↗"!important;position:static!important;width:auto!important;height:auto!important;margin-left:8px!important;background:none!important;clip-path:none!important;font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;font-size:.78em!important;opacity:.72!important}
+  body .header.scrolled nav.nav .nav-cta:hover{
+    background:rgba(255,255,255,.68)!important;
+    border-color:rgba(23,48,39,.24)!important;
+    color:#805f40!important;
+  }
 
   body .header nav.nav a:focus-visible{
     outline:2px solid var(--nav-accent)!important;
-    outline-offset:5px!important;
-  }
-}
-
-/* The color sweep is progressive enhancement; the plain color transition above is the fallback. */
-@media (min-width:1181px){
-  @supports ((-webkit-background-clip:text) or (background-clip:text)){
-    body .header:not(.scrolled) nav.nav a:not(.nav-cta){
-      color:transparent!important;
-      -webkit-text-fill-color:transparent!important;
-      background-image:linear-gradient(90deg,var(--nav-accent) 0 50%,#fff 50% 100%)!important;
-      background-size:200% 100%!important;
-      background-position:100% 50%!important;
-      -webkit-background-clip:text!important;
-      background-clip:text!important;
-      transition:background-position 180ms var(--nav-ease-out),transform 120ms var(--nav-ease-out)!important;
-    }
-    body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover,
-    body .header:not(.scrolled) nav.nav a:not(.nav-cta).active{
-      background-position:0 50%!important;
-    }
+    outline-offset:4px!important;
   }
 }
 
 @media (min-width:821px) and (max-width:1180px){
   body .header{padding-left:26px!important;padding-right:26px!important}
-  body .header nav.nav{
-    gap:14px!important;
-    padding-top:11px!important;
-    font-size:clamp(.94rem,1.46vw,1.05rem)!important;
-    letter-spacing:-.018em!important;
+  body .header:not(.scrolled) nav.nav{
+    gap:13px!important;
+    padding:6px 7px 6px 14px!important;
+    border-radius:15px!important;
+    font-size:clamp(.91rem,1.38vw,1.00rem)!important;
   }
-  body .header nav.nav::after{width:42px!important}
-  body .header nav.nav a{min-height:50px!important;padding-top:10px!important;padding-bottom:11px!important}
-  body .header nav.nav a.nav-cta{margin-left:2px!important;padding-left:15px!important;padding-right:17px!important}
-  body .header nav.nav a.nav-cta::after{left:15px!important;right:17px!important}
+  body .header:not(.scrolled) nav.nav a{min-height:49px!important}
+  body .header:not(.scrolled) nav.nav .nav-cta{min-height:49px!important;padding-left:15px!important;padding-right:15px!important}
+  body .header.scrolled nav.nav{gap:12px!important;font-size:.92rem!important}
+}
+
+@media (prefers-reduced-transparency:reduce){
+  body .header:not(.scrolled) nav.nav{background:rgba(19,39,31,.93)!important}
+  body .header.scrolled nav.nav{background:rgba(247,243,235,.96)!important}
 }
 
 @media (prefers-reduced-motion:reduce){
