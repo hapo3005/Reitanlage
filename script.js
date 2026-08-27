@@ -77,7 +77,7 @@ function newsLink(item){
   const a=document.createElement('a');
   a.className='news-link';
   a.href=item.link;
-  a.textContent=`${item.linkText} →`;
+  a.textContent=item.linkText;
   return a;
 }
 
