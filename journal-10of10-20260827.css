@@ -1,0 +1,345 @@
+/* Reitanlage Eichhorn-Nels — Hofjournal 10/10 composition pass, 2026-08-27.
+   Final authority for aktuelles.html. The goal is one coherent editorial system:
+   controlled headline widths, predictable section rhythm, no ornamental leftovers,
+   and the same quality on desktop and mobile. */
+
+.journal-page{
+  --journal-paper:#f4f0e7;
+  --journal-paper-2:#ebe5d8;
+  --journal-ink:#1f2924;
+  --journal-green:#17382d;
+  --journal-green-deep:#10291f;
+  --journal-bronze:#98714e;
+  --journal-sand:#d8c7aa;
+  --journal-muted:#68736d;
+  --journal-line:rgba(31,41,36,.14);
+}
+
+/* Kill inherited decorative fragments around journal headings. These were the
+   source of stray vertical rules and inconsistent framing. */
+.journal-page .journal-section-head,
+.journal-page .journal-section-head>div,
+.journal-page .journal-section-head h2{
+  border-left:0!important;
+  border-right:0!important;
+  box-shadow:none!important;
+}
+.journal-page .journal-section-head::before,
+.journal-page .journal-section-head::after,
+.journal-page .journal-section-head>div::before,
+.journal-page .journal-section-head>div::after,
+.journal-page .journal-section-head h2::before,
+.journal-page .journal-section-head h2::after{
+  content:none!important;
+  display:none!important;
+}
+
+@media (min-width:821px){
+  html{scroll-padding-top:116px!important}
+  .journal-page main{overflow:clip}
+
+  /* One width and one rhythm for every journal chapter. */
+  .journal-page .journal-section{
+    padding:clamp(82px,6.4vw,104px) max(48px,calc((100vw - 1520px)/2))!important;
+  }
+  .journal-page .journal-section-head{
+    display:grid!important;
+    grid-template-columns:repeat(12,minmax(0,1fr))!important;
+    column-gap:24px!important;
+    row-gap:16px!important;
+    align-items:end!important;
+    min-height:0!important;
+    margin:0 0 48px!important;
+  }
+  .journal-page .journal-section-head>div{
+    grid-column:1 / 8!important;
+    min-width:0!important;
+    max-width:820px!important;
+  }
+  .journal-page .journal-section-head>.kicker,
+  .journal-page .journal-section-head>div>.kicker{
+    margin-bottom:14px!important;
+  }
+  .journal-page .journal-section-head h2{
+    max-width:none!important;
+    margin:0!important;
+    font-size:clamp(3.15rem,4.05vw,4.6rem)!important;
+    line-height:.98!important;
+    letter-spacing:-.043em!important;
+    text-wrap:balance!important;
+  }
+  .journal-page .journal-section-head>p{
+    grid-column:9 / 13!important;
+    align-self:end!important;
+    max-width:38ch!important;
+    margin:0 0 5px!important;
+    color:var(--journal-muted)!important;
+    font-size:.98rem!important;
+    line-height:1.66!important;
+  }
+
+  /* Hero: retain the photographic opening, but keep headline scale under control. */
+  .journal-page .journal-hero{
+    grid-template-columns:minmax(420px,.82fr) minmax(0,1.18fr)!important;
+    min-height:760px!important;
+    padding-top:0!important;
+  }
+  .journal-page .journal-hero-copy{
+    padding:clamp(150px,12vw,196px) clamp(56px,6vw,96px) clamp(76px,6vw,102px)!important;
+  }
+  .journal-page .journal-hero h1{
+    max-width:9.6ch!important;
+    margin:13px 0 25px!important;
+    font-size:clamp(4.4rem,6.15vw,6.85rem)!important;
+    line-height:.91!important;
+  }
+  .journal-page .journal-hero-copy>p:last-of-type{
+    max-width:34rem!important;
+    font-size:1rem!important;
+    line-height:1.68!important;
+  }
+  .journal-page .journal-hero-media{min-height:760px!important}
+
+  /* Current news: dense editorial spread instead of an oversized card field. */
+  .journal-page .journal-current{background:var(--journal-paper-2)!important}
+  .journal-page .journal-current-grid{
+    grid-template-columns:minmax(0,1.18fr) minmax(360px,.82fr)!important;
+    border-color:var(--journal-line)!important;
+  }
+  .journal-page .journal-current-main{
+    grid-template-columns:minmax(260px,.9fr) minmax(0,1.1fr)!important;
+    min-height:430px!important;
+  }
+  .journal-page .journal-current-copy{padding:clamp(34px,3.2vw,50px)!important}
+  .journal-page .journal-current-copy h3{
+    font-size:clamp(2.35rem,3.1vw,3.65rem)!important;
+    line-height:.98!important;
+  }
+  .journal-page .journal-current-side{margin:0 26px!important;padding:23px 0!important}
+  .journal-page .journal-current-side figure{height:132px!important}
+
+  /* Ferienkurs story: image and copy have equal visual weight. */
+  .journal-page .journal-story{
+    grid-template-columns:minmax(0,1.02fr) minmax(390px,.78fr)!important;
+    gap:clamp(54px,5.8vw,92px)!important;
+    align-items:center!important;
+  }
+  .journal-page .journal-story-media{
+    grid-template-columns:1fr .58fr!important;
+    gap:10px!important;
+  }
+  .journal-page .journal-story-media .story-main{min-height:560px!important}
+  .journal-page .journal-story-media .story-small{min-height:268px!important}
+  .journal-page .journal-story-copy h2{
+    max-width:10.5ch!important;
+    font-size:clamp(3.15rem,4.25vw,4.8rem)!important;
+    line-height:.96!important;
+  }
+  .journal-page .journal-story-copy p{max-width:36rem!important}
+
+  /* Hofmomente: this was the broken section. The intro now reads as one spread,
+     not a giant six-line headline plus a detached paragraph. */
+  .journal-page .journal-photoessay{
+    padding-top:clamp(80px,6vw,96px)!important;
+    padding-bottom:clamp(84px,6.4vw,104px)!important;
+  }
+  .journal-page .journal-photoessay .journal-section-head{
+    margin-bottom:42px!important;
+  }
+  .journal-page .journal-photoessay .journal-section-head>div{
+    grid-column:1 / 8!important;
+    max-width:790px!important;
+  }
+  .journal-page .journal-photoessay .journal-section-head>p{
+    grid-column:9 / 13!important;
+    max-width:39ch!important;
+    color:rgba(244,240,231,.70)!important;
+  }
+  .journal-page .journal-photoessay .journal-section-head h2{
+    max-width:12ch!important;
+    color:var(--journal-paper)!important;
+    font-size:clamp(3.45rem,4.45vw,5rem)!important;
+    line-height:.96!important;
+  }
+  .journal-page .journal-mosaic{
+    grid-template-columns:1.28fr .76fr .86fr!important;
+    grid-template-rows:300px 270px!important;
+    gap:10px!important;
+  }
+  .journal-page .journal-mosaic figure{min-width:0!important}
+
+  /* Rückblicke: long headline gets room horizontally instead of growing vertically. */
+  .journal-page .journal-archive .journal-section-head>div{
+    grid-column:1 / 9!important;
+    max-width:940px!important;
+  }
+  .journal-page .journal-archive .journal-section-head>p{
+    grid-column:9 / 13!important;
+  }
+  .journal-page .journal-archive .journal-section-head h2{
+    max-width:16ch!important;
+    font-size:clamp(3.15rem,3.9vw,4.45rem)!important;
+  }
+  .journal-page .journal-year{
+    grid-template-columns:100px minmax(230px,.66fr) minmax(0,1.34fr)!important;
+    gap:clamp(26px,3vw,46px)!important;
+    padding:27px 0!important;
+  }
+  .journal-page .journal-year time{font-size:1.95rem!important}
+  .journal-page .journal-year h3{font-size:1.62rem!important}
+  .journal-page .journal-year p{max-width:54rem!important}
+  .journal-page .journal-archive-gallery{
+    gap:18px!important;
+    margin-top:54px!important;
+  }
+  .journal-page .journal-archive-gallery figure{min-height:0!important}
+  .journal-page .journal-archive-gallery figure.is-contain img{
+    width:100%!important;
+    height:auto!important;
+    max-height:720px!important;
+  }
+
+  /* Closing chapter: compact and obviously connected to the footer. */
+  .journal-page .journal-close{
+    grid-template-columns:minmax(0,1.08fr) minmax(330px,.58fr)!important;
+    gap:clamp(64px,7vw,118px)!important;
+    padding:clamp(60px,4.8vw,76px) max(48px,calc((100vw - 1520px)/2))!important;
+  }
+  .journal-page .journal-close h2{
+    max-width:16ch!important;
+    font-size:clamp(2.9rem,3.6vw,4rem)!important;
+    line-height:.99!important;
+  }
+  .journal-page .journal-close-actions{
+    padding-left:clamp(26px,2.8vw,42px)!important;
+  }
+  .journal-page .footer{
+    padding-left:max(48px,calc((100vw - 1520px)/2))!important;
+    padding-right:max(48px,calc((100vw - 1520px)/2))!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1120px){
+  .journal-page .journal-section{
+    padding-left:38px!important;
+    padding-right:38px!important;
+  }
+  .journal-page .journal-section-head>div,
+  .journal-page .journal-photoessay .journal-section-head>div,
+  .journal-page .journal-archive .journal-section-head>div{grid-column:1 / 8!important}
+  .journal-page .journal-section-head>p,
+  .journal-page .journal-photoessay .journal-section-head>p,
+  .journal-page .journal-archive .journal-section-head>p{grid-column:8 / 13!important}
+  .journal-page .journal-section-head h2{font-size:clamp(2.9rem,4.7vw,3.8rem)!important}
+  .journal-page .journal-hero{grid-template-columns:.9fr 1.1fr!important}
+  .journal-page .journal-hero h1{font-size:clamp(3.8rem,6.6vw,5.4rem)!important}
+  .journal-page .journal-story{grid-template-columns:.95fr 1.05fr!important;gap:44px!important}
+  .journal-page .journal-mosaic{grid-template-rows:260px 235px!important}
+}
+
+@media (max-width:820px){
+  .journal-page .journal-section{
+    padding:64px 20px!important;
+  }
+  .journal-page .journal-section-head{
+    display:block!important;
+    min-height:0!important;
+    margin:0 0 34px!important;
+  }
+  .journal-page .journal-section-head>div{max-width:none!important}
+  .journal-page .journal-section-head h2{
+    max-width:12ch!important;
+    margin:0!important;
+    font-size:clamp(2.55rem,11.2vw,3.55rem)!important;
+    line-height:.99!important;
+    letter-spacing:-.04em!important;
+  }
+  .journal-page .journal-section-head>p{
+    max-width:34ch!important;
+    margin:18px 0 0!important;
+    font-size:.96rem!important;
+    line-height:1.62!important;
+  }
+
+  .journal-page .journal-hero-copy{
+    padding:112px 20px 48px!important;
+  }
+  .journal-page .journal-hero h1{
+    max-width:8.8ch!important;
+    font-size:clamp(3.15rem,14vw,4.45rem)!important;
+    line-height:.93!important;
+  }
+  .journal-page .journal-hero-media{
+    height:58vh!important;
+    min-height:410px!important;
+    max-height:560px!important;
+  }
+
+  .journal-page .journal-current-main{display:block!important;min-height:0!important}
+  .journal-page .journal-current-main figure img{aspect-ratio:4/3!important}
+  .journal-page .journal-current-copy{padding:28px 0!important}
+  .journal-page .journal-current-copy h3{font-size:clamp(2rem,9vw,2.75rem)!important}
+  .journal-page .journal-current-side{margin:0!important;padding:22px 0!important}
+
+  .journal-page .journal-story{display:block!important}
+  .journal-page .journal-story-media{margin-bottom:36px!important}
+  .journal-page .journal-story-media .story-main{min-height:360px!important}
+  .journal-page .journal-story-media .story-small{min-height:176px!important}
+  .journal-page .journal-story-copy h2{
+    max-width:10ch!important;
+    font-size:clamp(2.7rem,11.5vw,3.65rem)!important;
+  }
+
+  .journal-page .journal-photoessay{
+    padding-top:62px!important;
+    padding-bottom:68px!important;
+  }
+  .journal-page .journal-photoessay .journal-section-head h2{
+    max-width:11ch!important;
+    font-size:clamp(2.75rem,12vw,3.65rem)!important;
+  }
+  .journal-page .journal-photoessay .journal-section-head>p{
+    color:rgba(244,240,231,.70)!important;
+  }
+  .journal-page .journal-mosaic{
+    grid-template-columns:1fr 1fr!important;
+    grid-template-rows:280px 175px 210px!important;
+    gap:8px!important;
+  }
+
+  .journal-page .journal-archive .journal-section-head h2{
+    max-width:12ch!important;
+  }
+  .journal-page .journal-year{
+    grid-template-columns:62px 1fr!important;
+    gap:12px!important;
+    padding:22px 0!important;
+  }
+  .journal-page .journal-year time{font-size:1.42rem!important}
+  .journal-page .journal-year h3{font-size:1.34rem!important}
+  .journal-page .journal-year p{
+    grid-column:2!important;
+    font-size:.9rem!important;
+    line-height:1.58!important;
+  }
+  .journal-page .journal-archive-gallery{margin-top:42px!important}
+
+  .journal-page .journal-close{
+    padding:52px 20px 56px!important;
+  }
+  .journal-page .journal-close h2{
+    max-width:13ch!important;
+    font-size:clamp(2.3rem,10.2vw,3rem)!important;
+  }
+}
+
+@media (max-width:520px){
+  .journal-page .journal-section{padding-left:18px!important;padding-right:18px!important}
+  .journal-page .journal-section-head h2{font-size:clamp(2.4rem,11.5vw,3.15rem)!important}
+  .journal-page .journal-photoessay .journal-section-head h2{font-size:clamp(2.55rem,11.8vw,3.25rem)!important}
+  .journal-page .journal-mosaic{grid-template-rows:250px 155px 190px!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .journal-page .journal-mosaic img{transition:none!important}
+}
