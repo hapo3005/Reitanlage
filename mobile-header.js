@@ -11,10 +11,17 @@
   let downDistance = 0;
   let ticking = false;
 
+  const syncCompactState = () => {
+    const y = window.scrollY || window.pageYOffset || 0;
+    header.classList.toggle('scrolled', y > 20);
+  };
+
   const update = () => {
     const y = window.scrollY || window.pageYOffset || 0;
     const menuOpen = nav?.classList.contains('open') || menu?.getAttribute('aria-expanded') === 'true';
     const delta = y - lastY;
+
+    syncCompactState();
 
     if (!mobile.matches || menuOpen || y <= 24) {
       header.classList.remove('header-hidden');
@@ -44,6 +51,16 @@
     requestAnimationFrame(update);
   };
 
+  const resyncAfterBrowserRestore = () => {
+    requestAnimationFrame(() => {
+      syncCompactState();
+      requestAnimationFrame(() => {
+        syncCompactState();
+        lastY = window.scrollY || window.pageYOffset || 0;
+      });
+    });
+  };
+
   const normalizeOpenMenu = () => {
     if (!nav || !menu) return;
     const opening = nav.classList.contains('open') || menu.getAttribute('aria-expanded') === 'true';
@@ -62,6 +79,9 @@
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', scheduleUpdate, { passive: true });
   window.addEventListener('orientationchange', scheduleUpdate, { passive: true });
+  window.addEventListener('pageshow', resyncAfterBrowserRestore, { passive: true });
+  window.addEventListener('load', resyncAfterBrowserRestore, { passive: true });
+  window.addEventListener('hashchange', resyncAfterBrowserRestore, { passive: true });
 
   menu?.addEventListener('click', normalizeOpenMenu);
 
@@ -72,6 +92,7 @@
     upDistance = 0;
     downDistance = 0;
     lastY = window.scrollY;
+    requestAnimationFrame(syncCompactState);
   });
 
   mobile.addEventListener?.('change', () => {
@@ -80,7 +101,11 @@
     upDistance = 0;
     downDistance = 0;
     lastY = window.scrollY;
+    syncCompactState();
   });
 
   update();
+  resyncAfterBrowserRestore();
+  setTimeout(syncCompactState, 180);
+  setTimeout(syncCompactState, 520);
 })();
