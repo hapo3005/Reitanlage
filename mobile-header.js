@@ -32,9 +32,17 @@
     }
   }, { passive: true });
 
-  menu?.addEventListener('click', () => header.classList.remove('header-hidden'));
+  menu?.addEventListener('click', () => {
+    header.classList.remove('header-hidden');
+    requestAnimationFrame(() => {
+      const opening = nav?.classList.contains('open') || menu.getAttribute('aria-expanded') === 'true';
+      if (opening && nav) nav.scrollTop = 0;
+    });
+  });
+
   mobile.addEventListener?.('change', () => {
     header.classList.remove('header-hidden');
+    if (nav) nav.scrollTop = 0;
     lastY = window.scrollY;
   });
 })();
