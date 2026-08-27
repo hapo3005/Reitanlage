@@ -125,7 +125,7 @@ function ensureNewsLightbox(){
 function openNewsLightbox(item,trigger){
   ensureNewsLightbox();
   lightboxReturnFocus=trigger||document.activeElement;
-  lightboxImage.src=item.image;
+  lightboxImage.src=item.zoomImage||item.image;
   lightboxImage.alt=item.alt||item.title||'Foto der Reitanlage Eichhorn-Nels';
   lightboxCaption.textContent=item.title||item.alt||'Reitanlage Eichhorn-Nels';
   lightbox.hidden=false;
@@ -150,7 +150,7 @@ function photoCaption(img){
 
 function openPhotoLightbox(img){
   openNewsLightbox({
-    image:img.currentSrc||img.src,
+    image:img.dataset.zoomSrc||img.currentSrc||img.src,
     alt:img.alt||'Foto der Reitanlage Eichhorn-Nels',
     title:photoCaption(img)
   },img);
@@ -192,10 +192,11 @@ function createNewsMedia(item,featured){
   if(item.imageFit==='contain')wrap.classList.add('is-contain');
 
   const img=document.createElement('img');
-  img.src=item.image;
+  img.src=featured?item.image:(item.thumbnailImage||item.image);
   img.alt=item.alt||'Aktuelles von der Reitanlage Eichhorn-Nels';
-  img.loading=featured?'eager':'lazy';
+  img.loading='lazy';
   img.decoding='async';
+  img.fetchPriority='low';
   img.style.setProperty('--image-fit',item.imageFit==='contain'?'contain':'cover');
   img.style.setProperty('--image-position',item.imagePosition||'50% 50%');
   img.style.setProperty('--image-position-mobile',item.imagePositionMobile||item.imagePosition||'50% 50%');
