@@ -21,6 +21,13 @@ css_marker = '/* ===== homepage-final-20260827.css ===== */'
 css = css_path.read_text(encoding='utf-8')
 assert css_marker not in css
 css += '\n\n' + css_marker + '\n' + Path('homepage-final-20260827.css').read_text(encoding='utf-8').rstrip() + '\n'
+
+# Consolidated large-desktop geometry pass. This is intentionally appended
+# after the homepage layer so legacy section rules cannot reintroduce the
+# spacing/grid defects caught during the final visual audit.
+desktop_marker = '/* ===== desktop-composition-final-20260827.css ===== */'
+assert desktop_marker not in css
+css += '\n\n' + desktop_marker + '\n' + Path('desktop-composition-final-20260827.css').read_text(encoding='utf-8').rstrip() + '\n'
 css_path.write_text(css, encoding='utf-8')
 
 # The legacy observer can leave the previous chapter active near the bottom of
@@ -44,7 +51,10 @@ assert 'melden Sie sich <em>gern bei mir.</em>' in index
 assert index.count('class="hero-signature"') == 1
 assert 'Schön, dass Sie da sind.' not in index
 assert css_marker in final_css
+assert desktop_marker in final_css
 assert js_marker in final_js
 assert ('height:560px!important' in final_css) or ('desktop-contact-v3' in final_css)
+assert 'grid-template-columns:176px minmax(0,1fr)!important' in final_css
+assert 'height:auto!important' in final_css
 assert 'document.documentElement.scrollHeight-4' in final_js
-print('Applied strict Carmen voice, hero personality and final homepage presentation pass.')
+print('Applied strict Carmen voice, hero personality and final homepage/desktop composition passes.')
