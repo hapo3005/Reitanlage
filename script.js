@@ -81,6 +81,19 @@ function newsLink(item){
   return a;
 }
 
+function newsFacts(item){
+  if(!Array.isArray(item.details)||!item.details.filter(Boolean).length)return null;
+  const list=document.createElement('ul');
+  list.className='news-facts';
+  list.setAttribute('aria-label','Auf einen Blick');
+  item.details.filter(Boolean).forEach(value=>{
+    const li=document.createElement('li');
+    li.textContent=value;
+    list.appendChild(li);
+  });
+  return list;
+}
+
 let lightbox=null;
 let lightboxImage=null;
 let lightboxCaption=null;
@@ -229,6 +242,9 @@ function newsItem(item,featured=false){
   const p=document.createElement('p');
   p.textContent=item.text;
   copy.appendChild(p);
+
+  const facts=newsFacts(item);
+  if(facts)copy.appendChild(facts);
 
   const a=newsLink(item);
   if(a)copy.appendChild(a);
