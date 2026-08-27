@@ -61,6 +61,10 @@ html = html.replace('href="#datenschutz">Datenschutz</a>', 'href="datenschutz.ht
 # Keep the social contact label explicit and concise.
 html = html.replace('<span>Mehr Einblicke</span><a href="https://www.facebook.com/groups/403038393066632/"', '<span>Facebook</span><a href="https://www.facebook.com/groups/403038393066632/"')
 
+# Clear hero CTA hierarchy and more inviting language.
+html = html.replace('>Reitstunde anfragen</a>', '>Unverbindlich anfragen</a>', 1)
+html = html.replace('>WhatsApp schreiben</a>', '>Per WhatsApp schreiben</a>', 1)
+
 # One production stylesheet. Remove the old loader/direct override links first.
 html = re.sub(r'<link rel="stylesheet" href="[^"]+\.css(?:\?v=[^"]*)?">', '', html)
 preload = '<link rel="preload" as="image" href="images/reitbeteiligung1.png">'
