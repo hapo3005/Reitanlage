@@ -18,6 +18,7 @@ CSS_PARTS = [
     'photo-zoom.css',
     'ui-polish.css',
     'ui-refine.css',
+    'news-zoom-polish.css',
 ]
 
 IMAGE_META = {
