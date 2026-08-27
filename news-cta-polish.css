@@ -1,0 +1,77 @@
+/* Editorial news CTAs: concrete, quiet and intentionally rectangular. */
+.news-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:max-content;
+  max-width:100%;
+  min-height:42px;
+  margin-top:16px;
+  padding:0 15px;
+  border:1px solid rgba(23,48,39,.28);
+  background:transparent;
+  color:#173027;
+  font-size:.72rem!important;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:.015em;
+  text-decoration:none!important;
+  text-transform:none;
+  white-space:nowrap;
+  box-shadow:none;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+}
+.news-link::before,
+.news-link::after{content:none!important}
+.news-link:hover{
+  background:#173027;
+  color:#f4f0e7;
+  border-color:#173027;
+}
+.news-link:focus-visible{
+  outline:2px solid #8a6a4b;
+  outline-offset:3px;
+}
+
+/* The leading story gets a slightly stronger action; secondary stories stay quieter. */
+.news-feature .news-link{
+  min-height:44px;
+  margin-top:19px;
+  padding-inline:18px;
+  background:#173027;
+  color:#f4f0e7;
+  border-color:#173027;
+}
+.news-feature .news-link:hover{
+  background:#244437;
+  border-color:#244437;
+}
+.news-list .news-link{
+  margin-top:10px;
+  background:transparent;
+}
+
+@media(max-width:900px){
+  .news-link{
+    min-height:41px;
+    padding-inline:14px;
+    font-size:.71rem!important;
+  }
+  .news-feature .news-link{
+    min-height:43px;
+    margin-top:17px;
+  }
+}
+
+@media(max-width:540px){
+  .news-link{
+    min-height:40px;
+    padding-inline:13px;
+    font-size:.69rem!important;
+  }
+  .news-list .news-link{margin-top:8px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .news-link{transition:none}
+}
