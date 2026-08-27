@@ -27,36 +27,79 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Build production site
-        run: python build-site.py
+      - name: Install image tooling
+        run: python -m pip install --disable-pip-version-check "Pillow>=11,<13"
+
+      - name: Build production release
+        run: python build-release.py
 
       - name: Verify production artifact
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+          from PIL import Image
+          import json
 
-          html = Path('index.html').read_text(encoding='utf-8')
+          out = Path('_site')
+          html = (out / 'index.html').read_text(encoding='utf-8')
+          news = json.loads((out / 'aktuelles.json').read_text(encoding='utf-8'))
+
           assert '<section class="legal"' not in html
           assert 'href="impressum.html">Impressum</a>' in html
           assert 'href="datenschutz.html">Datenschutz</a>' in html
+          assert 'Facebook-Gruppe ↗' not in html
+          assert 'Nach oben ↑' not in html
           assert html.count('rel="stylesheet"') == 1
           assert 'site.css?v=' in html
           assert 'site.js?v=' in html
-          assert 'property="og:url"' in html
+          assert 'favicon.svg' in html
+          assert 'site.webmanifest' in html
+          assert 'social-preview.jpg' in html
+          assert 'property="og:image:width" content="1200"' in html
+          assert 'property="og:image:height" content="630"' in html
           assert 'loading="lazy"' in html
-          assert Path('site.css').stat().st_size > 50000
-          assert Path('site.js').stat().st_size > 5000
-          assert Path('robots.txt').exists()
-          assert Path('sitemap.xml').exists()
-          print('Production artifact checks passed.')
+          assert '.webp' in html
+          assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
+          assert (out / 'site.css').stat().st_size > 50000
+          assert (out / 'site.js').stat().st_size > 5000
+          assert (out / 'images/reitbeteiligung1-480.webp').stat().st_size < 150_000
+          assert (out / 'images/flyerferienreitkurs.webp').stat().st_size < 1_100_000
+          assert Image.open(out / 'social-preview.jpg').size == (1200, 630)
+          assert (out / 'robots.txt').exists()
+          assert (out / 'sitemap.xml').exists()
+          assert (out / '404.html').exists()
+          assert not list(out.glob('*.py'))
+          assert not list(out.glob('*.md'))
+          total = sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
+          assert total < 5_000_000, total
+          print(f'Production artifact checks passed: {total / 1024 / 1024:.2f} MiB.')
           PY
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy production site
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify live release
+        shell: bash
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          token="${GITHUB_SHA:0:12}"
+          for attempt in {1..12}; do
+            page="$(curl -fsSL "${PAGE_URL}?v=${GITHUB_SHA}" || true)"
+            if grep -q "site.css?v=${token}" <<<"$page"; then
+              curl -fsSL "${PAGE_URL}social-preview.jpg" -o /tmp/social-preview.jpg
+              test -s /tmp/social-preview.jpg
+              echo "Live release ${token} verified."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Live release verification timed out." >&2
+          exit 1
