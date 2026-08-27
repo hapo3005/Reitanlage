@@ -3,6 +3,10 @@ const menu=document.querySelector('[data-menu]');
 const nav=document.querySelector('[data-nav]');
 const year=document.querySelector('[data-year]');
 if(year) year.textContent=new Date().getFullYear();
+const imprintLink=document.querySelector('.footer a[href="#impressum"]');
+const privacyLink=document.querySelector('.footer a[href="#datenschutz"]');
+if(imprintLink) imprintLink.href='impressum.html';
+if(privacyLink) privacyLink.href='datenschutz.html';
 
 let raf=null;
 function onScroll(){
