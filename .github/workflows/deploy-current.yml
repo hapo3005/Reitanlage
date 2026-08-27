@@ -33,6 +33,8 @@ jobs:
       - name: Build production release
         run: |
           python build-release.py
+          printf '\n\n/* ===== header-signature.css ===== */\n' >> _site/site.css
+          cat header-signature.css >> _site/site.css
           python build-journal.py
           printf '\n\n/* ===== journal-finish.css ===== */\n' >> _site/site.css
           cat journal-finish.css >> _site/site.css
