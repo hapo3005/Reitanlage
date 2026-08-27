@@ -1,9 +1,9 @@
-/* Reitanlage Eichhorn-Nels — final mobile QA corrections, 2026-08-27.
-   Intentionally appended after all other visual layers. */
+/* Reitanlage Eichhorn-Nels — canonical mobile QA layer, 2026-08-27.
+   This file is appended last in production and owns the final mobile UI states.
+   MOBILE-CLOSING-V3 is the single authoritative closing-scene definition. */
 
 @media (max-width:820px){
-  /* Keep the glass navigation, but make the scrolled state genuinely compact.
-     Explicit border-box sizing prevents padding from silently adding height. */
+  /* Compact sticky header. */
   body .header.scrolled,
   body.journal-page .header.scrolled{
     box-sizing:border-box!important;
@@ -15,9 +15,7 @@
     border-radius:14px!important;
     box-shadow:0 8px 24px rgba(10,29,21,.11),inset 0 1px 0 rgba(255,255,255,.94)!important;
   }
-  body .header.scrolled .wordmark{
-    max-width:calc(100% - 46px)!important;
-  }
+  body .header.scrolled .wordmark{max-width:calc(100% - 46px)!important}
   body .header.scrolled .wordmark strong{
     font-size:1.02rem!important;
     line-height:1!important;
@@ -34,7 +32,7 @@
   body .header.scrolled nav.nav{top:64px!important}
   body .header.header-hidden{transform:translateY(calc(-100% - 20px))!important}
 
-  /* Open navigation is a dedicated UI state. */
+  /* Open navigation is a dedicated, opaque-enough glass state. */
   body.nav-open{overflow:hidden!important}
   body.nav-open::before{
     content:""!important;
@@ -124,44 +122,117 @@
   html{scroll-padding-top:82px!important}
   main section[id]{scroll-margin-top:82px!important}
 
-  /* Lago Maggiore: keep head and neck inside the narrow portrait crop on phones. */
-  body:not(.journal-page) .horse-ledger article:nth-child(2) figure img{
-    object-position:8% 50%!important;
+  /* Lago Maggiore: keep head and neck in the portrait crop. */
+  body:not(.journal-page) .horse-ledger article:nth-child(2) figure img{object-position:8% 50%!important}
+
+  /* Pricing -> contact: no artificial dark void. */
+  body:not(.journal-page) .pricing{padding-bottom:20px!important}
+  body:not(.journal-page) .pricing + .contact.contact-editorial{
+    margin:0!important;
+    padding-top:0!important;
   }
 
-  /* Pricing -> contact: tight but deliberate transition. */
-  body:not(.journal-page) .pricing{padding-bottom:24px!important}
-  body:not(.journal-page) .pricing + .contact.contact-editorial{margin-top:0!important;padding-top:0!important}
-  body:not(.journal-page) .contact.contact-editorial .contact-image{margin-top:0!important;margin-bottom:0!important}
-
-  /* Closing scene v2: the paper card must remain visually framed by green and must not merge into the footer. */
+  /* MOBILE-CLOSING-V3 — one deterministic closing module.
+     The green border-bottom is structural: it cannot collapse like a margin. */
   body:not(.journal-page) .contact.contact-editorial{
+    --closing-green:#17382d;
+    --closing-paper:#f4f0e7;
     box-sizing:border-box!important;
-    padding:0 0 28px!important;
-    background:var(--m-green,#17382d)!important;
+    display:block!important;
+    position:relative!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    background:var(--closing-green)!important;
+    border:0!important;
+    border-bottom:24px solid var(--closing-green)!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image{
+    position:relative!important;
+    width:100%!important;
+    height:270px!important;
+    min-height:270px!important;
+    max-height:270px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    background:#24372f!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image img{
+    position:static!important;
+    display:block!important;
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:50% 58%!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image figcaption{
+    left:18px!important;
+    bottom:44px!important;
+    font-size:.54rem!important;
   }
   body:not(.journal-page) .contact.contact-editorial .contact-copy{
     box-sizing:border-box!important;
-    width:calc(100% - (var(--m-gutter) * 2))!important;
+    display:block!important;
+    position:relative!important;
+    z-index:2!important;
+    width:calc(100% - 32px)!important;
     max-width:none!important;
-    margin:-28px auto 0!important;
-    padding:26px 18px 18px!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:-24px auto 0!important;
+    padding:24px 18px 16px!important;
+    transform:none!important;
+    background:var(--closing-paper)!important;
+    color:#1f2723!important;
   }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy::before{
+    top:0!important;
+    left:0!important;
+    width:58px!important;
+    height:2px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy .kicker{margin:0 0 13px!important}
   body:not(.journal-page) .contact.contact-editorial .contact-copy h2{
     width:100%!important;
     max-width:none!important;
-    margin-bottom:16px!important;
-    font-size:clamp(1.88rem,8.4vw,2.12rem)!important;
+    margin:0 0 15px!important;
+    font-size:clamp(1.86rem,8.2vw,2.06rem)!important;
     line-height:1.01!important;
-    letter-spacing:-.032em!important;
+    letter-spacing:-.034em!important;
   }
-  body:not(.journal-page) .contact.contact-editorial .contact-actions{margin:20px 0 18px!important}
+  body:not(.journal-page) .contact.contact-editorial .contact-copy>p:not(.kicker){
+    width:100%!important;
+    max-width:34ch!important;
+    margin:0!important;
+    font-size:.90rem!important;
+    line-height:1.50!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    width:100%!important;
+    margin:18px 0 16px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-actions a{
+    box-sizing:border-box!important;
+    min-height:48px!important;
+    padding:10px 14px!important;
+    font-size:.80rem!important;
+  }
+
   body:not(.journal-page) .contact.contact-editorial address{
     display:block!important;
     width:100%!important;
     min-width:0!important;
     margin:0!important;
-    padding-top:15px!important;
+    padding:13px 0 0!important;
+    border-top:1px solid rgba(31,39,35,.13)!important;
+    font-style:normal!important;
   }
   body:not(.journal-page) .contact.contact-editorial address p,
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(2),
@@ -169,56 +240,102 @@
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(4),
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(5){
     box-sizing:border-box!important;
+    position:relative!important;
+    display:block!important;
+    grid-column:auto!important;
+    min-width:0!important;
     min-height:0!important;
     margin:0!important;
-    padding:11px 0 11px 30px!important;
-    border-bottom:1px solid rgba(31,39,35,.10)!important;
+    padding:9px 0 9px 28px!important;
+    border:0!important;
+    border-bottom:1px solid rgba(31,39,35,.095)!important;
   }
   body:not(.journal-page) .contact.contact-editorial address p:first-child{
-    padding:0 0 14px!important;
+    padding:0 0 12px!important;
     margin:0!important;
   }
   body:not(.journal-page) .contact.contact-editorial address p:last-child{border-bottom:0!important}
   body:not(.journal-page) .contact.contact-editorial address p:not(:first-child)::before{
-    top:13px!important;
-    width:16px!important;
-    height:16px!important;
-    background-size:16px 16px!important;
+    left:0!important;
+    top:11px!important;
+    width:15px!important;
+    height:15px!important;
+    background-size:15px 15px!important;
   }
-  body:not(.journal-page) .contact.contact-editorial address p span{margin-bottom:3px!important}
-  body:not(.journal-page) .contact.contact-editorial address p,
+  body:not(.journal-page) .contact.contact-editorial address p span{
+    margin:0 0 2px!important;
+    font-size:.57rem!important;
+    line-height:1.2!important;
+    letter-spacing:.10em!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p:first-child span{
+    margin:0 0 3px!important;
+    font-size:1.16rem!important;
+    line-height:1.12!important;
+    letter-spacing:-.025em!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p strong{
+    font-size:.72rem!important;
+    line-height:1.3!important;
+  }
   body:not(.journal-page) .contact.contact-editorial address a{
+    display:inline!important;
+    max-width:100%!important;
     min-width:0!important;
+    font-size:.84rem!important;
+    line-height:1.34!important;
     overflow-wrap:anywhere!important;
   }
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(4) a::after{
+    font-size:.67rem!important;
+    white-space:normal!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p:last-child{opacity:.78!important}
 
-  /* Footer is a separate closing module, not an extension of the contact card. */
+  /* Footer is intentionally separate from the paper card. */
   body:not(.journal-page) .footer{
     box-sizing:border-box!important;
-    padding:30px var(--m-gutter) 26px!important;
-    row-gap:22px!important;
-    border-top:1px solid rgba(31,39,35,.10)!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+    margin:0!important;
+    padding:26px 18px 22px!important;
+    gap:18px!important;
+    background:#ede8de!important;
+    border-top:0!important;
+  }
+  body:not(.journal-page) .footer .footer-mark strong{font-size:1.16rem!important}
+  body:not(.journal-page) .footer .footer-mark span{
+    margin-top:4px!important;
+    font-size:.57rem!important;
   }
   body:not(.journal-page) .footer nav{
     display:grid!important;
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
     width:100%!important;
-    gap:8px!important;
+    gap:6px!important;
     align-items:center!important;
     justify-content:stretch!important;
-    font-size:.70rem!important;
   }
   body:not(.journal-page) .footer nav a{
     grid-column:auto!important;
     min-width:0!important;
     margin:0!important;
     padding:3px 0!important;
+    font-size:.70rem!important;
+    line-height:1.2!important;
     white-space:nowrap!important;
   }
   body:not(.journal-page) .footer nav a:nth-child(1){justify-self:start!important;text-align:left!important}
   body:not(.journal-page) .footer nav a:nth-child(2){justify-self:center!important;text-align:center!important}
   body:not(.journal-page) .footer nav a:nth-child(3){justify-self:end!important;text-align:right!important}
-  body:not(.journal-page) .footer>p{margin-top:0!important;padding-top:16px!important}
+  body:not(.journal-page) .footer>p{
+    width:100%!important;
+    margin:0!important;
+    padding-top:14px!important;
+    font-size:.66rem!important;
+    line-height:1.35!important;
+  }
 }
 
 @media (max-width:430px){
@@ -238,26 +355,35 @@
     top:calc(100% + 7px)!important;
     padding:7px 12px 9px!important;
   }
-  body:not(.journal-page) .pricing{padding-bottom:20px!important}
-  body:not(.journal-page) .contact.contact-editorial{padding-bottom:22px!important}
+  body:not(.journal-page) .contact.contact-editorial{border-bottom-width:22px!important}
+  body:not(.journal-page) .contact.contact-editorial .contact-image{
+    height:258px!important;
+    min-height:258px!important;
+    max-height:258px!important;
+  }
   body:not(.journal-page) .contact.contact-editorial .contact-copy{
-    width:calc(100% - 32px)!important;
-    margin-top:-24px!important;
-    padding:23px 17px 17px!important;
+    width:calc(100% - 28px)!important;
+    margin-top:-22px!important;
+    padding:22px 16px 15px!important;
   }
   body:not(.journal-page) .contact.contact-editorial .contact-copy h2{
-    width:100%!important;
-    max-width:none!important;
-    font-size:clamp(1.82rem,8.45vw,2rem)!important;
-    line-height:1.01!important;
+    font-size:clamp(1.78rem,8.35vw,1.98rem)!important;
   }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy>p:not(.kicker){font-size:.88rem!important}
   body:not(.journal-page) .contact.contact-editorial address p,
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(2),
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(3),
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(4),
   body:not(.journal-page) .contact.contact-editorial address p:nth-child(5){
-    padding-top:10px!important;
-    padding-bottom:10px!important;
+    padding-top:8px!important;
+    padding-bottom:8px!important;
   }
-  body:not(.journal-page) .footer nav{gap:6px!important;font-size:.66rem!important}
+  body:not(.journal-page) .footer{padding-left:16px!important;padding-right:16px!important}
+  body:not(.journal-page) .footer nav a{font-size:.66rem!important}
+}
+
+@media (max-width:370px){
+  body:not(.journal-page) .contact.contact-editorial .contact-copy{width:calc(100% - 24px)!important}
+  body:not(.journal-page) .contact.contact-editorial .contact-copy h2{font-size:1.72rem!important}
+  body:not(.journal-page) .footer nav a{font-size:.62rem!important}
 }
