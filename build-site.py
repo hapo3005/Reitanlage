@@ -41,7 +41,12 @@ css_chunks = []
 for name in CSS_PARTS:
     path = ROOT / name
     css_chunks.append(f'/* ===== {name} ===== */\n{path.read_text(encoding="utf-8").rstrip()}\n')
-css_chunks.append('/* ===== final inline adjustments ===== */\n.hero-image img{object-position:52% 48%}\n@media(max-width:820px){.hero-copy,.hero-copy h1{color:#fff}.hero-copy .kicker,.hero-copy h1 em{color:#eadbc2}}\n')
+css_chunks.append(
+    '/* ===== final inline adjustments ===== */\n'
+    '.hero-image img{object-position:52% 48%}\n'
+    '.contact.contact-editorial address p:nth-child(4) a::after{content:"  ·  Route öffnen"!important}\n'
+    '@media(max-width:820px){.hero-copy,.hero-copy h1{color:#fff}.hero-copy .kicker,.hero-copy h1 em{color:#eadbc2}}\n'
+)
 (ROOT / 'site.css').write_text('\n'.join(css_chunks), encoding='utf-8')
 
 # Bundle the site's JS and the final keyboard/focus safeguards.
@@ -62,6 +67,10 @@ html = html.replace('href="#datenschutz">Datenschutz</a>', 'href="datenschutz.ht
 
 # Keep the social contact label explicit and concise.
 html = html.replace('<span>Mehr Einblicke</span><a href="https://www.facebook.com/groups/403038393066632/"', '<span>Facebook</span><a href="https://www.facebook.com/groups/403038393066632/"')
+
+# Remove legacy arrow glyphs from contact/footer actions.
+html = html.replace('Facebook-Gruppe ↗', 'Facebook-Gruppe')
+html = html.replace('Nach oben ↑', 'Nach oben')
 
 # Clear hero CTA hierarchy and more inviting language.
 html = html.replace('>Reitstunde anfragen</a>', '>Unverbindlich anfragen</a>', 1)
