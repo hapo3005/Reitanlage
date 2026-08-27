@@ -1,235 +1,248 @@
-/* Taste × Emil Kowalski — warm frosted-glass navigation.
-   This file is appended after the production bundle. Selectors intentionally
-   outrank the older hero navigation rules so the glass treatment cannot be
-   partially overridden by legacy !important declarations. */
+/* Full-width glass header — logo and navigation are one composition.
+   Desktop only; the existing mobile menu remains untouched. */
 
 @media (min-width:821px){
   body .header{
     --nav-accent:#e8bd82;
-    --nav-ease-out:cubic-bezier(.23,1,.32,1);
-    padding:24px 42px 20px!important;
-    align-items:center!important;
-    overflow:visible!important;
-  }
-
-  body .header:not(.scrolled){
-    color:#fff!important;
-    background:linear-gradient(180deg,rgba(10,22,17,.12) 0%,rgba(10,22,17,.025) 62%,rgba(10,22,17,0) 100%)!important;
-    border:0!important;
-    box-shadow:none!important;
-    backdrop-filter:none!important;
-    -webkit-backdrop-filter:none!important;
-  }
-
-  body .header:not(.scrolled)::after{content:none!important}
-
-  body .header .wordmark strong{
-    font-size:1.52rem!important;
-    letter-spacing:-.04em!important;
-  }
-  body .header .wordmark span{
-    margin-top:7px!important;
-    font-size:.66rem!important;
-    letter-spacing:.17em!important;
-  }
-
-  /* The actual glass object. Light enough to reveal the photograph, dark enough
-     to maintain contrast across both sky and horse. */
-  body .header:not(.scrolled) nav.nav{
-    position:relative!important;
+    --nav-ease:cubic-bezier(.23,1,.32,1);
+    position:fixed!important;
+    top:18px!important;
+    left:24px!important;
+    right:24px!important;
+    width:auto!important;
+    min-height:88px!important;
+    padding:13px 15px 13px 22px!important;
     display:flex!important;
     align-items:center!important;
-    gap:clamp(19px,1.35vw,27px)!important;
-    margin:0!important;
-    padding:8px 9px 8px 21px!important;
-    border:1px solid rgba(255,255,255,.31)!important;
-    border-radius:18px!important;
+    justify-content:space-between!important;
+    gap:36px!important;
+    border:1px solid rgba(255,255,255,.30)!important;
+    border-radius:22px!important;
+    color:#fff!important;
     background:
-      linear-gradient(135deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.07) 44%,rgba(15,34,27,.20) 100%)!important;
+      linear-gradient(115deg,rgba(255,255,255,.17) 0%,rgba(255,255,255,.09) 38%,rgba(20,41,33,.18) 100%)!important;
     box-shadow:
-      0 18px 44px rgba(6,18,13,.14),
-      inset 0 1px 0 rgba(255,255,255,.24),
-      inset 0 -1px 0 rgba(255,255,255,.06)!important;
-    backdrop-filter:blur(22px) saturate(1.22)!important;
-    -webkit-backdrop-filter:blur(22px) saturate(1.22)!important;
-    font-family:"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;
-    font-size:clamp(1.00rem,1.03vw,1.14rem)!important;
-    font-weight:650!important;
-    line-height:1!important;
-    letter-spacing:-.018em!important;
-    font-variation-settings:"wght" 650,"opsz" 18;
+      0 22px 58px rgba(5,17,12,.13),
+      inset 0 1px 0 rgba(255,255,255,.29),
+      inset 0 -1px 0 rgba(255,255,255,.05)!important;
+    backdrop-filter:blur(24px) saturate(1.24)!important;
+    -webkit-backdrop-filter:blur(24px) saturate(1.24)!important;
+    text-shadow:none!important;
+    overflow:visible!important;
+    transition:
+      top 180ms var(--nav-ease),
+      left 180ms var(--nav-ease),
+      right 180ms var(--nav-ease),
+      min-height 180ms var(--nav-ease),
+      padding 180ms var(--nav-ease),
+      background 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease!important;
   }
 
-  /* Fine top highlight: this is what makes the surface read as glass instead
-     of a translucent dark rectangle. */
-  body .header:not(.scrolled) nav.nav::before{
+  /* highlight running across the complete glass surface */
+  body .header::after{
     content:""!important;
     position:absolute!important;
-    z-index:0!important;
-    left:18px!important;
-    right:18px!important;
+    left:24px!important;
+    right:24px!important;
     top:0!important;
     height:1px!important;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.70) 28%,rgba(255,255,255,.30) 72%,transparent)!important;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.76) 18%,rgba(255,255,255,.34) 66%,transparent)!important;
     pointer-events:none!important;
   }
-  body .header:not(.scrolled) nav.nav::after{content:none!important}
 
-  body .header:not(.scrolled) nav.nav a{
+  body .header .wordmark{
     position:relative!important;
-    z-index:1!important;
-    display:inline-flex!important;
+    z-index:2!important;
+    flex:0 0 auto!important;
+    min-width:238px!important;
+    padding:7px 12px 7px 0!important;
+    color:#fff!important;
+    text-decoration:none!important;
+  }
+  body .header .wordmark strong{
+    display:block!important;
+    color:#fff!important;
+    font-size:1.62rem!important;
+    line-height:1!important;
+    letter-spacing:-.045em!important;
+    text-shadow:0 2px 13px rgba(3,11,7,.45)!important;
+  }
+  body .header .wordmark span{
+    display:block!important;
+    margin-top:8px!important;
+    color:rgba(255,255,255,.88)!important;
+    font-size:.67rem!important;
+    font-weight:760!important;
+    line-height:1!important;
+    letter-spacing:.18em!important;
+    text-transform:uppercase!important;
+    text-shadow:0 2px 10px rgba(3,11,7,.38)!important;
+  }
+
+  /* nav itself is no longer a box — the header is the glass object */
+  body .header nav.nav,
+  body .header:not(.scrolled) nav.nav,
+  body .header.scrolled nav.nav{
+    position:relative!important;
+    z-index:2!important;
+    flex:0 1 auto!important;
+    display:flex!important;
     align-items:center!important;
-    justify-content:center!important;
-    min-height:54px!important;
+    justify-content:flex-end!important;
+    gap:clamp(25px,1.7vw,38px)!important;
+    margin:0!important;
     padding:0!important;
     border:0!important;
     border-radius:0!important;
     background:transparent!important;
-    color:rgba(255,255,255,.97)!important;
-    -webkit-text-fill-color:currentColor!important;
+    box-shadow:none!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    font-family:"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;
+    font-size:clamp(1.05rem,1.08vw,1.22rem)!important;
+    font-weight:660!important;
+    line-height:1!important;
+    letter-spacing:-.022em!important;
+    font-variation-settings:"wght" 660,"opsz" 18;
+  }
+  body .header nav.nav::before,
+  body .header nav.nav::after{content:none!important}
+
+  body .header nav.nav a,
+  body .header:not(.scrolled) nav.nav a,
+  body .header.scrolled nav.nav a{
+    position:relative!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-height:58px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
     background-image:none!important;
+    color:rgba(255,255,255,.96)!important;
+    -webkit-text-fill-color:currentColor!important;
     white-space:nowrap!important;
     text-decoration:none!important;
-    text-shadow:0 2px 12px rgba(4,12,8,.58)!important;
+    text-shadow:0 2px 12px rgba(3,11,7,.46)!important;
     box-shadow:none!important;
-    transform:translateZ(0) scale(1)!important;
-    transition:color 160ms ease,opacity 160ms ease,transform 120ms var(--nav-ease-out)!important;
+    transform:translateZ(0)!important;
+    transition:color 160ms ease,transform 120ms var(--nav-ease),opacity 160ms ease!important;
   }
 
-  /* One interaction only: a short warm underline. */
-  body .header:not(.scrolled) nav.nav a:not(.nav-cta)::before{content:none!important}
-  body .header:not(.scrolled) nav.nav a:not(.nav-cta)::after{
+  body .header nav.nav a:not(.nav-cta)::before{content:none!important}
+  body .header nav.nav a:not(.nav-cta)::after{
     content:""!important;
     position:absolute!important;
     left:0!important;
     right:0!important;
-    bottom:7px!important;
+    bottom:6px!important;
     height:2px!important;
     border-radius:2px!important;
     background:var(--nav-accent)!important;
     clip-path:inset(0 100% 0 0)!important;
-    transition:clip-path 180ms var(--nav-ease-out)!important;
+    transition:clip-path 180ms var(--nav-ease)!important;
   }
-  body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover,
-  body .header:not(.scrolled) nav.nav a:not(.nav-cta).active{
-    color:#ffe0b4!important;
+  body .header nav.nav a:not(.nav-cta):hover,
+  body .header nav.nav a:not(.nav-cta).active{
+    color:#ffe1b6!important;
   }
-  body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover::after{
+  body .header nav.nav a:not(.nav-cta):hover::after{
     clip-path:inset(0 0 0 0)!important;
   }
-  body .header:not(.scrolled) nav.nav a:not(.nav-cta).active::after{
+  body .header nav.nav a:not(.nav-cta).active::after{
     clip-path:inset(0 68% 0 0)!important;
   }
 
-  /* Contact remains part of the same glass object — no opaque cream tile. */
-  body .header:not(.scrolled) nav.nav .nav-cta{
-    position:relative!important;
-    min-height:54px!important;
+  body .header nav.nav .nav-cta,
+  body .header:not(.scrolled) nav.nav .nav-cta,
+  body .header.scrolled nav.nav .nav-cta{
+    min-height:58px!important;
     margin-left:3px!important;
     padding:0 22px!important;
-    border:1px solid rgba(255,255,255,.30)!important;
-    border-radius:12px!important;
-    background:rgba(255,255,255,.12)!important;
-    color:#fff6e8!important;
+    border:1px solid rgba(255,255,255,.32)!important;
+    border-radius:13px!important;
+    background:rgba(255,255,255,.11)!important;
+    color:#fff7eb!important;
     -webkit-text-fill-color:currentColor!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.13)!important;
-    backdrop-filter:blur(8px)!important;
-    -webkit-backdrop-filter:blur(8px)!important;
-    text-shadow:0 2px 10px rgba(4,12,8,.52)!important;
-    transition:background 160ms ease,border-color 160ms ease,color 160ms ease,transform 120ms var(--nav-ease-out)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.15)!important;
+    backdrop-filter:blur(9px)!important;
+    -webkit-backdrop-filter:blur(9px)!important;
+    text-shadow:0 2px 10px rgba(3,11,7,.42)!important;
+    transition:background 160ms ease,border-color 160ms ease,color 160ms ease,transform 120ms var(--nav-ease)!important;
   }
-  body .header:not(.scrolled) nav.nav .nav-cta::before{content:none!important}
-  body .header:not(.scrolled) nav.nav .nav-cta::after{content:"↗"!important;position:static!important;width:auto!important;height:auto!important;margin-left:9px!important;background:none!important;clip-path:none!important;font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;font-size:.78em!important;font-weight:400!important;line-height:1!important;opacity:.82!important;transform:translate(0,0)!important;transition:transform 160ms var(--nav-ease-out),opacity 160ms ease!important}
-  body .header:not(.scrolled) nav.nav .nav-cta:hover{
+  body .header nav.nav .nav-cta::before{content:none!important}
+  body .header nav.nav .nav-cta::after{
+    content:"↗"!important;
+    position:static!important;
+    width:auto!important;
+    height:auto!important;
+    margin-left:9px!important;
+    background:none!important;
+    clip-path:none!important;
+    font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;
+    font-size:.78em!important;
+    font-weight:400!important;
+    line-height:1!important;
+    opacity:.82!important;
+    transform:translate(0,0)!important;
+    transition:transform 160ms var(--nav-ease),opacity 160ms ease!important;
+  }
+  body .header nav.nav .nav-cta:hover{
     background:rgba(255,255,255,.20)!important;
-    border-color:rgba(255,255,255,.48)!important;
+    border-color:rgba(255,255,255,.52)!important;
     color:#fff!important;
-    transform:translateZ(0) translateY(-1px)!important;
+    transform:translateY(-1px)!important;
   }
-  body .header:not(.scrolled) nav.nav .nav-cta:hover::after{
+  body .header nav.nav .nav-cta:hover::after{
     opacity:1!important;
     transform:translate(3px,-3px)!important;
   }
-
-  body .header:not(.scrolled) nav.nav a:active{
-    transform:translateZ(0) scale(.985)!important;
-    transition-duration:100ms!important;
+  body .header nav.nav a:active{
+    transform:scale(.985)!important;
+    transition-duration:90ms!important;
   }
 
-  /* On scroll the same surface becomes warmer and more opaque for readability,
-     rather than switching to a completely different visual language. */
+  /* same full-width object on scroll, just warmer/denser */
   body .header.scrolled{
-    padding:11px 42px!important;
-    background:rgba(244,240,231,.72)!important;
-    border-bottom:1px solid rgba(255,255,255,.52)!important;
-    box-shadow:0 10px 34px rgba(15,29,23,.08)!important;
-    backdrop-filter:blur(20px) saturate(1.12)!important;
-    -webkit-backdrop-filter:blur(20px) saturate(1.12)!important;
+    top:10px!important;
+    left:16px!important;
+    right:16px!important;
+    min-height:76px!important;
+    padding:9px 12px 9px 20px!important;
+    border-color:rgba(255,255,255,.58)!important;
+    background:rgba(242,237,227,.72)!important;
+    box-shadow:0 16px 44px rgba(15,29,23,.10),inset 0 1px 0 rgba(255,255,255,.72)!important;
+    backdrop-filter:blur(24px) saturate(1.12)!important;
+    -webkit-backdrop-filter:blur(24px) saturate(1.12)!important;
   }
+  body .header.scrolled .wordmark strong{color:#173027!important;text-shadow:none!important;font-size:1.46rem!important}
+  body .header.scrolled .wordmark span{color:rgba(23,48,39,.66)!important;text-shadow:none!important}
   body .header.scrolled nav.nav{
-    display:flex!important;
-    align-items:center!important;
-    gap:clamp(19px,1.3vw,26px)!important;
-    margin:0!important;
-    padding:6px 8px 6px 18px!important;
-    border:1px solid rgba(255,255,255,.62)!important;
-    border-radius:16px!important;
-    background:rgba(247,243,235,.46)!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.70)!important;
-    backdrop-filter:blur(15px)!important;
-    -webkit-backdrop-filter:blur(15px)!important;
-    font-family:"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;
-    font-size:clamp(.98rem,.99vw,1.08rem)!important;
-    font-weight:650!important;
-    letter-spacing:-.016em!important;
+    gap:clamp(23px,1.55vw,34px)!important;
+    font-size:clamp(1rem,1.01vw,1.14rem)!important;
   }
-  body .header.scrolled nav.nav::before,
-  body .header.scrolled nav.nav::after{content:none!important}
   body .header.scrolled nav.nav a{
-    min-height:48px!important;
-    padding:0!important;
-    border:0!important;
-    border-radius:0!important;
-    background:transparent!important;
+    min-height:52px!important;
     color:#20322a!important;
-    -webkit-text-fill-color:currentColor!important;
-    background-image:none!important;
     text-shadow:none!important;
-    box-shadow:none!important;
-  }
-  body .header.scrolled nav.nav a:not(.nav-cta)::before{content:none!important}
-  body .header.scrolled nav.nav a:not(.nav-cta)::after{
-    content:""!important;
-    position:absolute!important;
-    left:0!important;
-    right:0!important;
-    bottom:5px!important;
-    height:2px!important;
-    border-radius:2px!important;
-    background:#9a744f!important;
-    clip-path:inset(0 100% 0 0)!important;
-    transition:clip-path 180ms var(--nav-ease-out)!important;
   }
   body .header.scrolled nav.nav a:not(.nav-cta):hover,
   body .header.scrolled nav.nav a:not(.nav-cta).active{color:#805f40!important}
-  body .header.scrolled nav.nav a:not(.nav-cta):hover::after{clip-path:inset(0 0 0 0)!important}
-  body .header.scrolled nav.nav a:not(.nav-cta).active::after{clip-path:inset(0 68% 0 0)!important}
+  body .header.scrolled nav.nav a:not(.nav-cta)::after{background:#9a744f!important}
   body .header.scrolled nav.nav .nav-cta{
-    min-height:48px!important;
-    margin-left:3px!important;
-    padding:0 19px!important;
-    border:1px solid rgba(23,48,39,.16)!important;
-    border-radius:11px!important;
+    min-height:52px!important;
+    border-color:rgba(23,48,39,.18)!important;
     background:rgba(255,255,255,.36)!important;
     color:#173027!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;
+    text-shadow:none!important;
   }
-  body .header.scrolled nav.nav .nav-cta::before{content:none!important}
-  body .header.scrolled nav.nav .nav-cta::after{content:"↗"!important;position:static!important;width:auto!important;height:auto!important;margin-left:8px!important;background:none!important;clip-path:none!important;font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;font-size:.78em!important;opacity:.72!important}
   body .header.scrolled nav.nav .nav-cta:hover{
-    background:rgba(255,255,255,.68)!important;
-    border-color:rgba(23,48,39,.24)!important;
+    background:rgba(255,255,255,.64)!important;
+    border-color:rgba(23,48,39,.26)!important;
     color:#805f40!important;
   }
 
@@ -239,25 +252,38 @@
   }
 }
 
-@media (min-width:821px) and (max-width:1180px){
-  body .header{padding-left:26px!important;padding-right:26px!important}
-  body .header:not(.scrolled) nav.nav{
-    gap:13px!important;
-    padding:6px 7px 6px 14px!important;
-    border-radius:15px!important;
-    font-size:clamp(.91rem,1.38vw,1.00rem)!important;
+@media (min-width:821px) and (max-width:1240px){
+  body .header{
+    left:16px!important;
+    right:16px!important;
+    padding-left:18px!important;
+    padding-right:10px!important;
+    gap:18px!important;
   }
-  body .header:not(.scrolled) nav.nav a{min-height:49px!important}
-  body .header:not(.scrolled) nav.nav .nav-cta{min-height:49px!important;padding-left:15px!important;padding-right:15px!important}
-  body .header.scrolled nav.nav{gap:12px!important;font-size:.92rem!important}
+  body .header .wordmark{min-width:190px!important}
+  body .header .wordmark strong{font-size:1.38rem!important}
+  body .header .wordmark span{font-size:.58rem!important;letter-spacing:.14em!important}
+  body .header nav.nav,
+  body .header:not(.scrolled) nav.nav,
+  body .header.scrolled nav.nav{
+    gap:clamp(12px,1.25vw,19px)!important;
+    font-size:clamp(.88rem,1.2vw,1.00rem)!important;
+  }
+  body .header nav.nav .nav-cta,
+  body .header:not(.scrolled) nav.nav .nav-cta,
+  body .header.scrolled nav.nav .nav-cta{
+    padding-left:15px!important;
+    padding-right:15px!important;
+  }
 }
 
-@media (prefers-reduced-transparency:reduce){
-  body .header:not(.scrolled) nav.nav{background:rgba(19,39,31,.93)!important}
-  body .header.scrolled nav.nav{background:rgba(247,243,235,.96)!important}
+@media (prefers-reduced-transparency:reduce) and (min-width:821px){
+  body .header{background:rgba(24,44,36,.94)!important}
+  body .header.scrolled{background:rgba(244,240,231,.96)!important}
 }
 
 @media (prefers-reduced-motion:reduce){
+  body .header,
   body .header nav.nav a,
   body .header nav.nav a::before,
   body .header nav.nav a::after{transition:none!important}
