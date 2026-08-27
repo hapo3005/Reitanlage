@@ -135,6 +135,7 @@
   /* MOBILE-CLOSING-V3 — one deterministic closing module.
      The green border-bottom is structural: it cannot collapse like a margin. */
   body:not(.journal-page) .contact.contact-editorial{
+    --m-gutter:16px;
     --closing-green:#17382d;
     --closing-paper:#f4f0e7;
     box-sizing:border-box!important;
@@ -179,7 +180,7 @@
     display:block!important;
     position:relative!important;
     z-index:2!important;
-    width:calc(100% - 32px)!important;
+    width:calc(100% - (var(--m-gutter) * 2))!important;
     max-width:none!important;
     height:auto!important;
     min-height:0!important;
@@ -362,7 +363,7 @@
     max-height:258px!important;
   }
   body:not(.journal-page) .contact.contact-editorial .contact-copy{
-    width:calc(100% - 28px)!important;
+    width:calc(100% - (var(--m-gutter) * 2))!important;
     margin-top:-22px!important;
     padding:22px 16px 15px!important;
   }
@@ -383,7 +384,7 @@
 }
 
 @media (max-width:370px){
-  body:not(.journal-page) .contact.contact-editorial .contact-copy{width:calc(100% - 24px)!important}
+  body:not(.journal-page) .contact.contact-editorial{--m-gutter:12px}
   body:not(.journal-page) .contact.contact-editorial .contact-copy h2{font-size:1.72rem!important}
   body:not(.journal-page) .footer nav a{font-size:.62rem!important}
 }
