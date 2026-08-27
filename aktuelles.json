@@ -13,7 +13,7 @@
       "imagePosition": "50% 50%",
       "imagePositionMobile": "50% 50%",
       "link": "#kontakt",
-      "linkText": "Termin erfragen"
+      "linkText": "Kursplatz anfragen"
     },
     {
       "category": "Reitbeteiligungen",
@@ -26,7 +26,7 @@
       "imagePosition": "50% 36%",
       "imagePositionMobile": "50% 32%",
       "link": "#kontakt",
-      "linkText": "Anfragen"
+      "linkText": "Reitbeteiligung anfragen"
     },
     {
       "category": "Besuche & Termine",
@@ -39,7 +39,7 @@
       "imagePosition": "50% 42%",
       "imagePositionMobile": "50% 38%",
       "link": "#kontakt",
-      "linkText": "Kontakt aufnehmen"
+      "linkText": "Besuch abstimmen"
     }
   ]
 }
