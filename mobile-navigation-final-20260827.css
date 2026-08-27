@@ -1,26 +1,26 @@
 /* Reitanlage Eichhorn-Nels — final mobile navigation, 2026-08-27.
-   True translucent glass, compact heritage typography, no legacy full-screen menu spacing. */
+   Milky warm glass: image atmosphere remains visible without letting page copy compete with navigation. */
 
 @media (max-width:820px){
-  /* Closed header: visibly translucent over photography, never a cream slab. */
+  /* Header stays glassy, but never becomes visually weak over bright photography. */
   body .header,
   body .header:not(.scrolled),
   body .header.scrolled,
   body.journal-page .header,
   body:not(.journal-page) .header:not(.scrolled){
-    background:linear-gradient(112deg,rgba(251,249,244,.58),rgba(238,242,236,.42))!important;
-    border-color:rgba(255,255,255,.72)!important;
-    box-shadow:0 9px 28px rgba(8,25,18,.10),inset 0 1px 0 rgba(255,255,255,.78)!important;
-    backdrop-filter:blur(25px) saturate(1.16)!important;
-    -webkit-backdrop-filter:blur(25px) saturate(1.16)!important;
+    background:linear-gradient(112deg,rgba(250,247,240,.82),rgba(239,240,232,.72))!important;
+    border-color:rgba(255,255,255,.86)!important;
+    box-shadow:0 9px 28px rgba(8,25,18,.11),inset 0 1px 0 rgba(255,255,255,.90)!important;
+    backdrop-filter:blur(24px) saturate(1.12)!important;
+    -webkit-backdrop-filter:blur(24px) saturate(1.12)!important;
   }
 
   body.nav-open .header,
   body.nav-open .header:not(.scrolled),
   body.nav-open:not(.journal-page) .header:not(.scrolled){
     color:#17382d!important;
-    background:linear-gradient(112deg,rgba(251,249,244,.64),rgba(238,242,236,.48))!important;
-    border-color:rgba(255,255,255,.78)!important;
+    background:linear-gradient(112deg,rgba(250,247,240,.88),rgba(239,240,232,.80))!important;
+    border-color:rgba(255,255,255,.90)!important;
   }
   body.nav-open .header .wordmark strong,
   body.nav-open .header:not(.scrolled) .wordmark strong{color:#17382d!important}
@@ -31,15 +31,15 @@
   body .header:not(.scrolled) .menu,
   body .header.scrolled .menu,
   body.nav-open .header:not(.scrolled) .menu{
-    background:rgba(255,255,255,.18)!important;
+    background:rgba(255,255,255,.34)!important;
     border-color:rgba(23,56,45,.22)!important;
     color:#17382d!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.46)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.62)!important;
     backdrop-filter:blur(12px)!important;
     -webkit-backdrop-filter:blur(12px)!important;
   }
 
-  /* High-specificity reset: defeats the old full-screen mobile nav (104px top padding / opaque paper). */
+  /* Explicit mobile menu geometry. High specificity intentionally defeats legacy full-screen rules. */
   body.nav-open .header nav.nav,
   body.nav-open .header:not(.scrolled) nav.nav,
   body.nav-open:not(.journal-page) .header:not(.scrolled) nav.nav,
@@ -65,14 +65,17 @@
     margin:0!important;
     padding:7px 14px 9px!important;
     overflow:auto!important;
-    border:1px solid rgba(255,255,255,.68)!important;
+    overscroll-behavior:contain!important;
+    border:1px solid rgba(255,255,255,.88)!important;
     border-radius:17px!important;
-    background:linear-gradient(118deg,rgba(251,249,243,.54),rgba(232,238,230,.38))!important;
-    box-shadow:0 17px 42px rgba(8,24,17,.14),inset 0 1px 0 rgba(255,255,255,.66)!important;
-    backdrop-filter:blur(30px) saturate(1.18)!important;
-    -webkit-backdrop-filter:blur(30px) saturate(1.18)!important;
+    background:linear-gradient(118deg,rgba(249,246,238,.94),rgba(238,237,227,.89))!important;
+    background-clip:padding-box!important;
+    box-shadow:0 18px 46px rgba(8,24,17,.16),inset 0 1px 0 rgba(255,255,255,.92)!important;
+    backdrop-filter:blur(26px) saturate(1.10)!important;
+    -webkit-backdrop-filter:blur(26px) saturate(1.10)!important;
     opacity:1!important;
     visibility:visible!important;
+    isolation:isolate!important;
     font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif!important;
     font-size:1rem!important;
     font-weight:500!important;
@@ -117,9 +120,7 @@
   body.nav-open .header nav.nav a::before,
   body.nav-open .header nav.nav a::after,
   body.nav-open .header nav.nav .nav-cta::before,
-  body.nav-open .header nav.nav .nav-cta::after{
-    content:none!important;
-  }
+  body.nav-open .header nav.nav .nav-cta::after{content:none!important}
 
   body.nav-open .header nav.nav .nav-cta,
   body.nav-open .header:not(.scrolled) nav.nav .nav-cta,
@@ -176,16 +177,14 @@
   }
 }
 
-/* Safe fallback when a browser cannot blur translucent surfaces. */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   @media (max-width:820px){
-    body.nav-open .header nav.nav{
-      background:linear-gradient(118deg,rgba(249,246,238,.74),rgba(241,233,220,.62))!important;
-    }
+    body .header{background:rgba(248,244,236,.95)!important}
+    body.nav-open .header nav.nav{background:rgba(248,244,236,.98)!important}
   }
 }
 
 @media (prefers-reduced-transparency:reduce){
   body .header,
-  body.nav-open .header nav.nav{background:rgba(248,244,236,.96)!important}
+  body.nav-open .header nav.nav{background:rgba(248,244,236,.98)!important}
 }
