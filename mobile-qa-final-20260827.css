@@ -116,6 +116,11 @@
   html{scroll-padding-top:96px!important}
   main section[id]{scroll-margin-top:96px!important}
 
+  /* Lago Maggiore: keep head and neck inside the narrow portrait crop on phones. */
+  body:not(.journal-page) .horse-ledger article:nth-child(2) figure img{
+    object-position:8% 50%!important;
+  }
+
   /* Contact card: equal gutters on both sides, no right-edge bleed. */
   body:not(.journal-page) .contact.contact-editorial .contact-copy{
     box-sizing:border-box!important;
