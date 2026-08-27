@@ -1,0 +1,280 @@
+/* Final refinement — contact, lightbox, captions, mobile type, pricing and footer. */
+
+/* ---------- Contact: quieter rhythm and more intentional details ---------- */
+.contact.contact-editorial .contact-copy > p:not(.kicker){
+  text-wrap:pretty;
+}
+.contact.contact-editorial address p{
+  border-color:rgba(31,39,35,.095);
+}
+.contact.contact-editorial address p:not(:first-child){
+  padding-top:17px;
+  padding-bottom:17px;
+}
+.contact.contact-editorial address p:not(:first-child)::before{top:20px}
+.contact.contact-editorial address a{
+  text-decoration-thickness:1px;
+  text-decoration-color:transparent;
+  transition:color .18s ease,text-decoration-color .18s ease;
+}
+.contact.contact-editorial address a:hover{
+  color:#8a6a4b;
+  text-decoration-color:currentColor;
+}
+.contact.contact-editorial address p:nth-child(4) a::after{
+  margin-left:4px;
+  letter-spacing:.01em;
+}
+.contact.contact-editorial address p:last-child a{
+  color:#5f6863;
+}
+
+/* ---------- Image captions: consistent editorial treatment ---------- */
+.hero-image figcaption,
+.cinematic figcaption,
+.contact.contact-editorial .contact-image figcaption{
+  font-weight:700;
+  letter-spacing:.115em;
+  line-height:1.45;
+  text-shadow:0 2px 14px rgba(0,0,0,.42);
+}
+.hero-image figcaption{opacity:.9}
+.cinematic figcaption{
+  padding-top:9px;
+  border-top:1px solid rgba(255,255,255,.5);
+}
+.contact.contact-editorial .contact-image figcaption{opacity:.9}
+
+/* ---------- Lightbox: calmer chrome, image remains the focus ---------- */
+.news-lightbox{
+  padding:clamp(14px,2.6vw,36px);
+  background:rgba(7,15,11,.965);
+}
+.news-lightbox-inner{
+  width:min(1240px,100%);
+}
+.news-lightbox img{
+  max-height:calc(100dvh - 72px);
+  background:#eee9df;
+  box-shadow:0 24px 80px rgba(0,0,0,.5);
+}
+.news-lightbox-close{
+  top:max(14px,env(safe-area-inset-top));
+  right:14px;
+  width:46px;
+  height:46px;
+  border-color:rgba(255,255,255,.35);
+  background:rgba(13,27,21,.86);
+  font-size:0;
+  backdrop-filter:blur(8px);
+}
+.news-lightbox-close::before,
+.news-lightbox-close::after{
+  content:"";
+  position:absolute;
+  width:19px;
+  height:1.5px;
+  border-radius:2px;
+  background:#fff;
+}
+.news-lightbox-close::before{transform:rotate(45deg)}
+.news-lightbox-close::after{transform:rotate(-45deg)}
+.news-lightbox-close:hover{background:rgba(29,53,43,.94)}
+.news-lightbox-caption{
+  left:20px;
+  bottom:max(15px,env(safe-area-inset-bottom));
+  max-width:min(70vw,720px);
+  color:rgba(255,255,255,.72);
+  font-size:.68rem;
+  letter-spacing:.055em;
+}
+
+/* ---------- Pricing: less table-like, more editorial ---------- */
+.price-highlight div{
+  padding-top:20px;
+  padding-bottom:20px;
+}
+.price-highlight dt{
+  font-weight:700;
+  letter-spacing:.005em;
+}
+.price-highlight dd{
+  line-height:1;
+  white-space:nowrap;
+}
+.price-highlight span{
+  margin-top:3px;
+  line-height:1.45;
+}
+.price-details summary{
+  position:relative;
+  min-height:64px;
+  padding:20px 0;
+  transition:color .18s ease;
+}
+.price-details summary:hover{color:#dfcfb6}
+.price-details summary > span:last-child{
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  margin-left:18px;
+  border:1px solid rgba(255,255,255,.24);
+  font-family:var(--sans);
+  font-size:1rem;
+  font-weight:400;
+  line-height:1;
+  transition:transform .2s ease,border-color .2s ease;
+}
+.price-details[open] summary > span:last-child{
+  transform:rotate(45deg);
+  border-color:rgba(223,207,182,.7);
+}
+.price-details table tbody tr{
+  transition:background .18s ease;
+}
+.price-details table tbody tr:hover{background:rgba(255,255,255,.025)}
+.price-notes{
+  border-top-color:rgba(255,255,255,.12);
+}
+.price-notes p{line-height:1.6}
+
+/* ---------- Footer: stronger finish without becoming a new section ---------- */
+.footer{
+  row-gap:22px!important;
+}
+.footer .footer-mark{
+  width:max-content;
+}
+.footer nav a{
+  text-underline-offset:4px;
+  transition:color .18s ease,border-color .18s ease;
+}
+.footer > p{
+  margin-bottom:0;
+  letter-spacing:.015em;
+}
+
+/* ---------- Mobile typography and spacing ---------- */
+@media(max-width:820px){
+  h2,
+  .contact.contact-editorial .contact-copy h2,
+  .stable h2,
+  .pricing h2,
+  .sport-story h2,
+  .news-feature h3{
+    text-wrap:balance;
+  }
+  .chapter-head h2,
+  .philosophy-copy h2,
+  .stable h2,
+  .pricing h2,
+  .sport-story h2{
+    line-height:1.015;
+    letter-spacing:-.038em;
+  }
+  .chapter-head > p,
+  .stable-copy > p:not(.kicker),
+  .pricing-intro > p:last-child,
+  .sport-story > div > p:not(.kicker){
+    text-wrap:pretty;
+  }
+
+  .contact.contact-editorial .contact-copy{
+    padding-top:35px;
+    padding-bottom:34px;
+  }
+  .contact.contact-editorial .contact-copy h2{
+    margin-bottom:20px;
+    line-height:1.005;
+    letter-spacing:-.038em;
+  }
+  .contact.contact-editorial address p:not(:first-child){
+    padding-top:16px;
+    padding-bottom:16px;
+  }
+  .contact.contact-editorial address p:not(:first-child)::before{top:19px}
+  .contact.contact-editorial address p:nth-child(4) a::after{
+    display:block;
+    margin:4px 0 0;
+    white-space:normal;
+  }
+
+  .news-lightbox{padding:8px}
+  .news-lightbox img{max-height:calc(100dvh - 58px)}
+  .news-lightbox-close{
+    top:max(10px,env(safe-area-inset-top));
+    right:10px;
+    width:44px;
+    height:44px;
+  }
+  .news-lightbox-caption{display:none}
+
+  .price-highlight div{
+    padding-top:18px;
+    padding-bottom:18px;
+  }
+  .price-details summary{
+    min-height:60px;
+    padding:18px 0;
+  }
+  .price-details summary > span:first-child{line-height:1.35}
+  .price-details summary > span:last-child{
+    flex:0 0 29px;
+    width:29px;
+    height:29px;
+  }
+  .price-details tr{
+    padding-top:17px;
+    padding-bottom:17px;
+  }
+  .price-details td{line-height:1.5}
+
+  .cinematic figcaption{
+    left:15px;
+    right:15px;
+    bottom:14px;
+    padding-top:7px;
+    font-size:.56rem;
+    letter-spacing:.1em;
+  }
+
+  .footer{
+    padding-top:28px!important;
+    padding-bottom:30px!important;
+  }
+  .footer .footer-mark strong{font-size:1.18rem}
+  .footer nav{
+    padding-top:2px;
+    gap:13px 21px;
+  }
+  .footer > p{
+    padding-top:17px!important;
+    font-size:.66rem;
+  }
+}
+
+@media(max-width:540px){
+  .contact.contact-editorial .contact-copy h2{
+    font-size:clamp(2.45rem,10.6vw,3.05rem);
+  }
+  .contact.contact-editorial .contact-copy > p:not(.kicker){
+    font-size:.92rem;
+    line-height:1.57;
+  }
+  .contact.contact-editorial address p:first-child span{
+    font-size:1.23rem;
+  }
+  .contact.contact-editorial address a{
+    font-size:.9rem;
+  }
+  .price-highlight dt{font-size:.96rem}
+  .price-highlight dd{font-size:1.28rem}
+  .footer nav a{font-size:.74rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .price-details summary > span:last-child,
+  .contact.contact-editorial address a,
+  .footer nav a{transition:none}
+}
