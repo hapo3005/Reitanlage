@@ -93,14 +93,17 @@ jobs:
           assert 'navigation-final-20260827.css' in css
           assert 'mobile-system-20260827.css' in css
           assert 'mobile-navigation-final-20260827.css' in css
-          assert css.count('/* ===== navigation-final-20260827.css ===== */') == 1
-          assert css.count('/* ===== mobile-system-20260827.css ===== */') == 1
-          assert css.count('/* ===== mobile-navigation-final-20260827.css ===== */') == 1
+          nav_marker = '/* ===== navigation-final-20260827.css ===== */'
+          mobile_marker = '/* ===== mobile-system-20260827.css ===== */'
+          mobile_nav_marker = '/* ===== mobile-navigation-final-20260827.css ===== */'
+          assert css.count(nav_marker) == 1
+          assert css.count(mobile_marker) == 1
+          assert css.count(mobile_nav_marker) == 1
           assert 'header-signature.css' not in css
-          assert css.rfind('above-fold-direction.css') > css.rfind('architecture-v2.css')
-          assert css.rfind('navigation-final-20260827.css') > css.rfind('above-fold-direction.css')
-          assert css.rfind('mobile-system-20260827.css') > css.rfind('navigation-final-20260827.css')
-          assert css.rfind('mobile-navigation-final-20260827.css') > css.rfind('mobile-system-20260827.css')
+          assert css.rfind('/* ===== above-fold-direction.css ===== */') > css.rfind('/* ===== architecture-v2.css ===== */')
+          assert css.rfind(nav_marker) > css.rfind('/* ===== above-fold-direction.css ===== */')
+          assert css.rfind(mobile_marker) > css.rfind(nav_marker)
+          assert css.rfind(mobile_nav_marker) > css.rfind(mobile_marker)
           assert 'grid-template-columns:repeat(7,minmax(0,1fr))!important' in css
           assert 'grid-template-columns:auto auto auto!important' in css
           assert 'background:linear-gradient(118deg,rgba(249,246,238,.74),rgba(241,233,220,.62))!important' in css
