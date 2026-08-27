@@ -26,6 +26,7 @@ CSS_PARTS = [
     'ui-refine.css',
     'news-zoom-polish.css',
     'news-cta-polish.css',
+    'hero-premium-20260827.css',
 ]
 
 IMAGE_META = {
