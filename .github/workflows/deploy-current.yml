@@ -48,6 +48,8 @@ jobs:
           out = Path('_site')
           html = (out / 'index.html').read_text(encoding='utf-8')
           journal = (out / 'aktuelles.html').read_text(encoding='utf-8')
+          imprint = (out / 'impressum.html').read_text(encoding='utf-8')
+          privacy = (out / 'datenschutz.html').read_text(encoding='utf-8')
           sitemap = (out / 'sitemap.xml').read_text(encoding='utf-8')
           news = json.loads((out / 'aktuelles.json').read_text(encoding='utf-8'))
 
@@ -80,6 +82,25 @@ jobs:
           assert 'site.css?v=' in journal
           assert 'site.js?v=' in journal
           assert 'aktuelles.html' in sitemap
+
+          # Legal/source-of-truth checks. These guard against accidentally
+          # restoring obsolete boilerplate from the former website.
+          assert '§ 5 DDG' in imprint
+          assert '§ 18 Abs. 2 MStV' in imprint
+          assert '§ 5 TMG' not in imprint
+          assert 'Steuer-Nr.' not in imprint
+          assert '43/035/40822' not in imprint
+          assert 'Verbraucherstreitbeilegung' in imprint
+          assert 'Urheberrecht' in imprint
+
+          assert 'GitHub Pages' in privacy
+          assert 'Art. 6 Abs. 1 lit. f DSGVO' in privacy
+          assert 'WhatsApp Ireland Limited' in privacy
+          assert 'Hintere Bleiche 34' in privacy
+          assert 'Cookies, Endgerätespeicher und Reichweitenmessung' in privacy
+          assert 'Automatisierte Entscheidungen' in privacy
+          assert 'Google+' not in privacy
+          assert 'Facebook-Plugin' not in privacy
 
           assert (out / 'site.css').stat().st_size > 60000
           assert (out / 'site.js').stat().st_size > 5000
@@ -123,10 +144,19 @@ jobs:
           for attempt in {1..12}; do
             page="$(curl -fsSL "${PAGE_URL}?v=${GITHUB_SHA}" || true)"
             journal="$(curl -fsSL "${PAGE_URL}aktuelles.html?v=${GITHUB_SHA}" || true)"
-            if grep -q "site.css?v=${token}" <<<"$page" && grep -q "site.css?v=${token}" <<<"$journal" && grep -q "Sommerferien auf dem Hof" <<<"$journal" && grep -q "Das PM-Mobil zu Gast" <<<"$journal"; then
+            imprint="$(curl -fsSL "${PAGE_URL}impressum.html?v=${GITHUB_SHA}" || true)"
+            privacy="$(curl -fsSL "${PAGE_URL}datenschutz.html?v=${GITHUB_SHA}" || true)"
+            if grep -q "site.css?v=${token}" <<<"$page" \
+              && grep -q "site.css?v=${token}" <<<"$journal" \
+              && grep -q "Sommerferien auf dem Hof" <<<"$journal" \
+              && grep -q "Das PM-Mobil zu Gast" <<<"$journal" \
+              && grep -q "§ 5 DDG" <<<"$imprint" \
+              && grep -q "§ 18 Abs. 2 MStV" <<<"$imprint" \
+              && grep -q "GitHub Pages" <<<"$privacy" \
+              && grep -q "WhatsApp Ireland Limited" <<<"$privacy"; then
               curl -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
               test -s /tmp/journal-hero.webp
-              echo "Live release ${token}, including Hofjournal and enhanced imagery, verified."
+              echo "Live release ${token}, including legal pages and Hofjournal, verified."
               exit 0
             fi
             sleep 3
