@@ -57,12 +57,6 @@ jobs:
         with:
           path: .
 
-      # Temporary compatibility wait while the repository still has the legacy
-      # source-based Pages publisher enabled. Remove this step after switching
-      # Settings > Pages > Build and deployment > Source to GitHub Actions.
-      - name: Let legacy source Pages finish first
-        run: sleep 50
-
-      - name: Deploy production site last
+      - name: Deploy production site
         id: deployment
         uses: actions/deploy-pages@v4
