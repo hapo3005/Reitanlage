@@ -90,7 +90,7 @@ function ensureNewsLightbox(){
   lightbox.hidden=true;
   lightbox.setAttribute('role','dialog');
   lightbox.setAttribute('aria-modal','true');
-  lightbox.setAttribute('aria-label','Vergrößerte Flyeransicht');
+  lightbox.setAttribute('aria-label','Vergrößerte Bildansicht');
 
   const inner=document.createElement('div');
   inner.className='news-lightbox-inner';
@@ -122,8 +122,8 @@ function openNewsLightbox(item,trigger){
   ensureNewsLightbox();
   lightboxReturnFocus=trigger||document.activeElement;
   lightboxImage.src=item.image;
-  lightboxImage.alt=item.alt||item.title||'Flyer der Reitanlage Eichhorn-Nels';
-  lightboxCaption.textContent=item.title||'Aktuelles von der Reitanlage Eichhorn-Nels';
+  lightboxImage.alt=item.alt||item.title||'Foto der Reitanlage Eichhorn-Nels';
+  lightboxCaption.textContent=item.title||item.alt||'Reitanlage Eichhorn-Nels';
   lightbox.hidden=false;
   document.body.classList.add('news-lightbox-open');
   requestAnimationFrame(()=>lightboxClose.focus());
@@ -136,6 +136,43 @@ function closeNewsLightbox(){
   document.body.classList.remove('news-lightbox-open');
   lightboxReturnFocus?.focus?.();
   lightboxReturnFocus=null;
+}
+
+function photoCaption(img){
+  const figure=img.closest('figure');
+  const figcaption=figure?.querySelector(':scope > figcaption');
+  return figcaption?.textContent?.trim()||img.alt?.trim()||'Reitanlage Eichhorn-Nels';
+}
+
+function openPhotoLightbox(img){
+  openNewsLightbox({
+    image:img.currentSrc||img.src,
+    alt:img.alt||'Foto der Reitanlage Eichhorn-Nels',
+    title:photoCaption(img)
+  },img);
+}
+
+function initPhotoZoom(root=document){
+  root.querySelectorAll('main img').forEach(img=>{
+    if(img.dataset.photoZoomReady==='true')return;
+    if(img.closest('.news-media-button'))return;
+    if(img.closest('a,button'))return;
+    if(img.hasAttribute('data-no-zoom'))return;
+
+    img.dataset.photoZoomReady='true';
+    img.dataset.photoZoom='true';
+    img.tabIndex=0;
+    img.setAttribute('role','button');
+    img.setAttribute('aria-label',`${img.alt||'Foto'} groß ansehen`);
+    img.title='Bild vergrößern';
+    img.addEventListener('click',()=>openPhotoLightbox(img));
+    img.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        openPhotoLightbox(img);
+      }
+    });
+  });
 }
 
 function createNewsMedia(item,featured){
@@ -225,9 +262,12 @@ async function loadNews(){
       if(!Number.isNaN(d.getTime()))updated.textContent=`Redaktionell aktualisiert am ${d.toLocaleDateString('de-DE')}`;
     }
     host.querySelectorAll('[data-reveal]').forEach(el=>el.classList.add('visible'));
+    initPhotoZoom(host);
   }catch(err){
     console.error('Aktuelles konnte nicht geladen werden',err);
     host.innerHTML='<p>Die aktuellen Meldungen konnten nicht geladen werden. Termine bitte direkt telefonisch oder per WhatsApp erfragen.</p>';
   }
 }
+
+initPhotoZoom();
 loadNews();
