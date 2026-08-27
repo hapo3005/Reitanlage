@@ -53,6 +53,8 @@ jobs:
           cat mobile-composition-20260827.css >> _site/site.css
           printf '\n\n/* ===== final-10of10-20260827.css ===== */\n' >> _site/site.css
           cat final-10of10-20260827.css >> _site/site.css
+          printf '\n\n/* ===== mobile-qa-final-20260827.css ===== */\n' >> _site/site.css
+          cat mobile-qa-final-20260827.css >> _site/site.css
           printf '\n\n/* ===== mobile-header.js ===== */\n' >> _site/site.js
           cat mobile-header.js >> _site/site.js
           python carmen-index.py
@@ -107,16 +109,19 @@ jobs:
           assert 'mobile-navigation-final-20260827.css' in css
           assert 'mobile-composition-20260827.css' in css
           assert 'final-10of10-20260827.css' in css
+          assert 'mobile-qa-final-20260827.css' in css
           nav_marker = '/* ===== navigation-final-20260827.css ===== */'
           mobile_marker = '/* ===== mobile-system-20260827.css ===== */'
           mobile_nav_marker = '/* ===== mobile-navigation-final-20260827.css ===== */'
           mobile_comp_marker = '/* ===== mobile-composition-20260827.css ===== */'
           final_marker = '/* ===== final-10of10-20260827.css ===== */'
+          mobile_qa_marker = '/* ===== mobile-qa-final-20260827.css ===== */'
           assert css.count(nav_marker) == 1
           assert css.count(mobile_marker) == 1
           assert css.count(mobile_nav_marker) == 1
           assert css.count(mobile_comp_marker) == 1
           assert css.count(final_marker) == 1
+          assert css.count(mobile_qa_marker) == 1
           assert 'header-signature.css' not in css
           assert css.rfind('/* ===== above-fold-direction.css ===== */') > css.rfind('/* ===== architecture-v2.css ===== */')
           assert css.rfind(nav_marker) > css.rfind('/* ===== above-fold-direction.css ===== */')
@@ -124,8 +129,11 @@ jobs:
           assert css.rfind(mobile_nav_marker) > css.rfind(mobile_marker)
           assert css.rfind(mobile_comp_marker) > css.rfind(mobile_nav_marker)
           assert css.rfind(final_marker) > css.rfind(mobile_comp_marker)
+          assert css.rfind(mobile_qa_marker) > css.rfind(final_marker)
           assert 'grid-template-columns:repeat(7,minmax(0,1fr))!important' in css
           assert 'grid-template-columns:auto auto auto!important' in css
+          assert 'grid-template-columns:repeat(3,minmax(0,1fr))!important' in css
+          assert 'width:calc(100% - (var(--m-gutter) * 2))!important' in css
           assert 'background:linear-gradient(118deg,rgba(249,246,238,.74),rgba(241,233,220,.62))!important' in css
           assert 'font-size:1.02rem!important' in css
           assert 'font-size:clamp(2.18rem,9.6vw,2.78rem)!important' in css
@@ -134,6 +142,7 @@ jobs:
           assert '.footer nav a:last-child{grid-column:1/-1!important;margin-top:4px!important}' not in css
           assert 'body:not(.journal-page) .hero-copy' in css
           assert 'header-hidden' in js
+          assert 'upDistance >= 84' in js
           assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
 
           assert '<body class="journal-page">' in journal
@@ -208,7 +217,7 @@ jobs:
           assert not list(out.glob('*.md'))
           total = sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
           assert total < 7_000_000, total
-          print(f'Production artifact and security checks passed: {total / 1024 / 1024:.2f} MiB.')
+          print(f'Production artifact, mobile QA and security checks passed: {total / 1024 / 1024:.2f} MiB.')
           PY
 
       - name: Archive static site
@@ -246,16 +255,20 @@ jobs:
             imprint="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}impressum.html?v=${GITHUB_SHA}" || true)"
             privacy="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}datenschutz.html?v=${GITHUB_SHA}" || true)"
             runtime="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}site.js?v=${GITHUB_SHA}" || true)"
+            stylesheet="$(curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}site.css?v=${GITHUB_SHA}" || true)"
             if grep -q "site.css?v=${token}" <<<"$page" \
               && grep -q "Reiten beginnt für mich mit <em>Vertrauen.</em>" <<<"$page" \
               && grep -q "Was mir beim Reiten <em>wichtig ist.</em>" <<<"$page" \
               && grep -q 'Content-Security-Policy' <<<"$page" \
               && grep -q 'name="referrer" content="no-referrer"' <<<"$page" \
+              && grep -q 'mobile-qa-final-20260827.css' <<<"$stylesheet" \
+              && grep -q 'grid-template-columns:repeat(3,minmax(0,1fr))!important' <<<"$stylesheet" \
               && grep -q "site.css?v=${token}" <<<"$journal" \
               && grep -q "Sommerferien auf dem Hof" <<<"$journal" \
               && grep -q "Das PM-Mobil zu Gast" <<<"$journal" \
               && grep -q 'Content-Security-Policy' <<<"$journal" \
               && grep -q "safeNewsHref" <<<"$runtime" \
+              && grep -q "upDistance >= 84" <<<"$runtime" \
               && ! grep -q "innerHTML" <<<"$runtime" \
               && grep -q "§ 5 DDG" <<<"$imprint" \
               && grep -q "§ 18 Abs. 2 MStV" <<<"$imprint" \
@@ -265,7 +278,7 @@ jobs:
               && grep -q 'Content-Security-Policy' <<<"$privacy"; then
               curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
               test -s /tmp/journal-hero.webp
-              echo "Live release ${token}, including CSP, referrer protection, safe dynamic URLs, hardened JavaScript and pinned deployment actions, verified."
+              echo "Live release ${token}, including final mobile QA, CSP, referrer protection, safe dynamic URLs, hardened JavaScript and pinned deployment actions, verified."
               exit 0
             fi
             sleep 3
