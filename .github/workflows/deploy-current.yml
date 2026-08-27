@@ -34,6 +34,8 @@ jobs:
         run: |
           python build-release.py
           python build-journal.py
+          printf '\n\n/* ===== journal-finish.css ===== */\n' >> _site/site.css
+          cat journal-finish.css >> _site/site.css
 
       - name: Verify production artifact
         shell: bash
@@ -70,21 +72,26 @@ jobs:
 
           assert '<body class="journal-page">' in journal
           assert 'Aktuelles &amp; Hofleben' in journal or 'Aktuelles & Hofleben' in journal
+          assert 'Sommerferien auf dem Hof' in journal
           assert 'Das PM-Mobil zu Gast' in journal
           assert 'Ferienreitkurs im März' in journal
-          assert 'images/reistunde1' in journal and '.webp' in journal
+          assert 'images/eventbild1' in journal and '.webp' in journal
           assert 'srcset=' in journal
           assert 'site.css?v=' in journal
           assert 'site.js?v=' in journal
           assert 'aktuelles.html' in sitemap
 
-          assert (out / 'site.css').stat().st_size > 55000
+          assert (out / 'site.css').stat().st_size > 60000
           assert (out / 'site.js').stat().st_size > 5000
           assert (out / 'images/reitbeteiligung1-480.webp').stat().st_size < 150_000
           assert (out / 'images/flyerferienreitkurs.webp').stat().st_size < 1_100_000
-          assert (out / 'images/reistunde1.webp').exists()
+          assert (out / 'images/eventbild1-480.webp').exists()
+          assert (out / 'images/eventbild1-800.webp').exists()
+          assert (out / 'images/eventbild1-1200.webp').exists()
           assert (out / 'images/flyerferienreitskurs2.webp').exists()
           assert (out / 'images/frohefeiertage.webp').exists()
+          assert Image.open(out / 'images/eventbild1.webp').width >= 1600
+          assert Image.open(out / 'images/eventbild2.webp').width >= 1600
           assert Image.open(out / 'images/eventbild4.webp').width >= 400
           assert Image.open(out / 'images/schulpferd1.webp').width >= 400
           assert Image.open(out / 'social-preview.jpg').size == (1200, 630)
@@ -94,7 +101,7 @@ jobs:
           assert not list(out.glob('*.py'))
           assert not list(out.glob('*.md'))
           total = sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
-          assert total < 7_500_000, total
+          assert total < 7_000_000, total
           print(f'Production artifact checks passed: {total / 1024 / 1024:.2f} MiB.')
           PY
 
@@ -116,10 +123,10 @@ jobs:
           for attempt in {1..12}; do
             page="$(curl -fsSL "${PAGE_URL}?v=${GITHUB_SHA}" || true)"
             journal="$(curl -fsSL "${PAGE_URL}aktuelles.html?v=${GITHUB_SHA}" || true)"
-            if grep -q "site.css?v=${token}" <<<"$page" && grep -q "site.css?v=${token}" <<<"$journal" && grep -q "Das PM-Mobil zu Gast" <<<"$journal"; then
-              curl -fsSL "${PAGE_URL}social-preview.jpg" -o /tmp/social-preview.jpg
-              test -s /tmp/social-preview.jpg
-              echo "Live release ${token}, including Hofjournal, verified."
+            if grep -q "site.css?v=${token}" <<<"$page" && grep -q "site.css?v=${token}" <<<"$journal" && grep -q "Sommerferien auf dem Hof" <<<"$journal" && grep -q "Das PM-Mobil zu Gast" <<<"$journal"; then
+              curl -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
+              test -s /tmp/journal-hero.webp
+              echo "Live release ${token}, including Hofjournal and enhanced imagery, verified."
               exit 0
             fi
             sleep 3
