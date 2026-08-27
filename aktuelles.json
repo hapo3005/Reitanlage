@@ -6,6 +6,11 @@
       "meta": "Termine auf Anfrage",
       "title": "Ferienzeit mit Pferden",
       "text": "In meinen Ferienkursen wird natürlich geritten. Genauso wichtig sind mir aber der Umgang mit dem Pferd, das Putzen, ein bisschen Theorie und die gemeinsame Zeit im Stall. Wenn Sie wissen möchten, wann der nächste Kurs stattfindet oder ob noch ein Platz frei ist, melden Sie sich gern bei mir.",
+      "details": [
+        "Für Kinder & Jugendliche",
+        "Reiten · Pflege · Theorie · Stallzeit",
+        "Aktuelle Termine direkt erfragen"
+      ],
       "image": "images/flyerferienreitkurs.png",
       "alt": "Ferienreitkurs auf der Reitanlage Eichhorn-Nels",
       "imageFit": "contain",
