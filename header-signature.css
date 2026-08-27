@@ -1,0 +1,233 @@
+/* Signature desktop navigation — scaled to the cinematic hero, with a full-width
+   editorial header field rather than a floating widget. Mobile keeps its own menu. */
+@media (min-width:821px){
+  body .header{
+    padding:27px 42px 24px!important;
+    overflow:visible!important;
+  }
+
+  body .header:not(.scrolled){
+    background:linear-gradient(180deg,rgba(7,18,13,.24) 0%,rgba(7,18,13,.10) 48%,rgba(7,18,13,0) 100%)!important;
+    border:0!important;
+    box-shadow:none!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+
+  body .header:not(.scrolled)::after{
+    content:"";
+    position:absolute;
+    left:42px;
+    right:42px;
+    bottom:0;
+    height:1px;
+    pointer-events:none;
+    background:linear-gradient(90deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.12) 42%,rgba(222,179,113,.58) 72%,rgba(222,179,113,.12) 100%);
+  }
+
+  body .header:not(.scrolled) .wordmark strong{
+    font-size:1.48rem!important;
+  }
+
+  body .header:not(.scrolled) .wordmark span{
+    margin-top:7px!important;
+    font-size:.66rem!important;
+    letter-spacing:.17em!important;
+  }
+
+  body .header nav.nav{
+    display:flex!important;
+    align-items:center!important;
+    gap:clamp(34px,2.35vw,52px)!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif!important;
+    font-size:clamp(1.16rem,1.18vw,1.34rem)!important;
+    font-weight:600!important;
+    line-height:1!important;
+    letter-spacing:-.018em!important;
+  }
+
+  body .header nav.nav a{
+    position:relative!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-height:58px!important;
+    padding:17px 3px 18px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    white-space:nowrap!important;
+    text-decoration:none!important;
+    box-shadow:none!important;
+    transform:translateX(0)!important;
+    transition:color .24s ease,transform .28s cubic-bezier(.2,.75,.2,1),text-shadow .24s ease!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a{
+    color:rgba(255,255,255,.98)!important;
+    text-shadow:0 2px 15px rgba(2,9,6,.96),0 1px 4px rgba(2,9,6,.86)!important;
+  }
+
+  /* A bronze editorial marker arrives from the left; the word gives it room. */
+  body .header nav.nav a:not(.nav-cta)::before{
+    content:""!important;
+    position:absolute!important;
+    left:-18px!important;
+    top:50%!important;
+    width:11px!important;
+    height:2px!important;
+    background:#e0b475!important;
+    opacity:0!important;
+    transform:translateY(-50%) scaleX(.15)!important;
+    transform-origin:right center!important;
+    transition:opacity .2s ease,transform .26s cubic-bezier(.2,.75,.2,1)!important;
+  }
+
+  body .header nav.nav a:not(.nav-cta)::after{
+    content:""!important;
+    position:absolute!important;
+    left:3px!important;
+    right:3px!important;
+    bottom:7px!important;
+    height:1px!important;
+    background:#e0b475!important;
+    opacity:0!important;
+    transform:scaleX(.22)!important;
+    transform-origin:left center!important;
+    transition:opacity .2s ease,transform .28s cubic-bezier(.2,.75,.2,1)!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta):hover,
+  body .header:not(.scrolled) nav.nav a:not(.nav-cta).active{
+    color:#f5d6a5!important;
+    transform:translateX(6px)!important;
+    text-shadow:0 3px 18px rgba(2,9,6,.98),0 1px 5px rgba(2,9,6,.9)!important;
+  }
+
+  body .header nav.nav a:not(.nav-cta):hover::before,
+  body .header nav.nav a:not(.nav-cta).active::before{
+    opacity:1!important;
+    transform:translateY(-50%) scaleX(1)!important;
+  }
+
+  body .header nav.nav a:not(.nav-cta):hover::after,
+  body .header nav.nav a:not(.nav-cta).active::after{
+    opacity:.95!important;
+    transform:scaleX(1)!important;
+  }
+
+  body .header nav.nav a.nav-cta{
+    margin-left:4px!important;
+    padding:17px 31px 18px 30px!important;
+    border:0!important;
+    border-left:1px solid rgba(255,255,255,.48)!important;
+    background:transparent!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a.nav-cta{
+    color:#f6dfbd!important;
+    text-shadow:0 2px 15px rgba(2,9,6,.98),0 1px 4px rgba(2,9,6,.86)!important;
+  }
+
+  body .header nav.nav a.nav-cta::before{
+    content:""!important;
+    position:absolute!important;
+    left:29px!important;
+    bottom:7px!important;
+    width:28px!important;
+    height:1px!important;
+    background:#e0b475!important;
+    transform:scaleX(.42)!important;
+    transform-origin:left center!important;
+    transition:width .28s cubic-bezier(.2,.75,.2,1),transform .28s cubic-bezier(.2,.75,.2,1)!important;
+  }
+
+  body .header nav.nav a.nav-cta::after{
+    content:"↗"!important;
+    position:absolute!important;
+    right:7px!important;
+    top:50%!important;
+    font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;
+    font-size:.72em!important;
+    font-weight:400!important;
+    line-height:1!important;
+    opacity:.86!important;
+    transform:translateY(-52%) translate(0,0)!important;
+    transition:transform .25s cubic-bezier(.2,.75,.2,1),opacity .2s ease!important;
+  }
+
+  body .header:not(.scrolled) nav.nav a.nav-cta:hover{
+    color:#f2c984!important;
+    transform:translateX(4px)!important;
+  }
+
+  body .header nav.nav a.nav-cta:hover::before{
+    width:calc(100% - 60px)!important;
+    transform:scaleX(1)!important;
+  }
+
+  body .header nav.nav a.nav-cta:hover::after{
+    opacity:1!important;
+    transform:translateY(-52%) translate(4px,-4px)!important;
+  }
+
+  body .header.scrolled{
+    padding:15px 42px!important;
+    background:rgba(244,240,231,.975)!important;
+    border-bottom:1px solid rgba(31,39,35,.14)!important;
+    box-shadow:0 8px 30px rgba(21,36,29,.06)!important;
+  }
+
+  body .header.scrolled nav.nav{
+    gap:clamp(30px,2vw,44px)!important;
+    font-size:clamp(1.05rem,1.08vw,1.20rem)!important;
+  }
+
+  body .header.scrolled nav.nav a{
+    min-height:50px!important;
+    padding-top:14px!important;
+    padding-bottom:14px!important;
+    color:#24342d!important;
+    text-shadow:none!important;
+  }
+
+  body .header.scrolled nav.nav a:not(.nav-cta):hover,
+  body .header.scrolled nav.nav a:not(.nav-cta).active,
+  body .header.scrolled nav.nav a.nav-cta:hover{
+    color:#8a6a4b!important;
+  }
+
+  body .header.scrolled nav.nav a.nav-cta{
+    border-left-color:rgba(23,48,39,.28)!important;
+    color:#173027!important;
+  }
+
+  body .header nav.nav a:focus-visible{
+    outline:1px solid currentColor!important;
+    outline-offset:5px!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1280px){
+  body .header{padding-left:28px!important;padding-right:28px!important}
+  body .header:not(.scrolled)::after{left:28px;right:28px}
+  body .header nav.nav{gap:20px!important;font-size:.98rem!important}
+  body .header nav.nav a{min-height:52px!important;padding-top:14px!important;padding-bottom:15px!important}
+  body .header nav.nav a.nav-cta{padding-left:20px!important;padding-right:24px!important}
+  body .header nav.nav a.nav-cta::before{left:19px!important}
+  body .header nav.nav a.nav-cta::after{right:3px!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  body .header nav.nav a,
+  body .header nav.nav a::before,
+  body .header nav.nav a::after{transition:none!important}
+}
