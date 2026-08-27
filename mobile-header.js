@@ -44,24 +44,31 @@
     requestAnimationFrame(update);
   };
 
+  const normalizeOpenMenu = () => {
+    if (!nav || !menu) return;
+    const opening = nav.classList.contains('open') || menu.getAttribute('aria-expanded') === 'true';
+    if (!opening) return;
+    header.classList.remove('header-hidden');
+    upDistance = 0;
+    downDistance = 0;
+    nav.scrollTop = 0;
+    requestAnimationFrame(() => {
+      nav.scrollTop = 0;
+      requestAnimationFrame(() => { nav.scrollTop = 0; });
+    });
+    lastY = window.scrollY;
+  };
+
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', scheduleUpdate, { passive: true });
   window.addEventListener('orientationchange', scheduleUpdate, { passive: true });
 
-  menu?.addEventListener('click', () => {
-    header.classList.remove('header-hidden');
-    upDistance = 0;
-    downDistance = 0;
-    requestAnimationFrame(() => {
-      const opening = nav?.classList.contains('open') || menu.getAttribute('aria-expanded') === 'true';
-      if (opening && nav) nav.scrollTop = 0;
-      lastY = window.scrollY;
-    });
-  });
+  menu?.addEventListener('click', normalizeOpenMenu);
 
   nav?.addEventListener('click', event => {
     if (!event.target.closest('a')) return;
     header.classList.remove('header-hidden');
+    nav.scrollTop = 0;
     upDistance = 0;
     downDistance = 0;
     lastY = window.scrollY;
