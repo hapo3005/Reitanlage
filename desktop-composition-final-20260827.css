@@ -1,0 +1,144 @@
+/* Reitanlage Eichhorn-Nels — final desktop composition corrections, 2026-08-27.
+   Only large desktop geometry. Mobile/tablet remain untouched. */
+
+@media (min-width:1200px){
+  /* Anlage: restore the intended two-column editorial structure. */
+  body:not(.journal-page) .stable{
+    display:grid!important;
+    grid-template-columns:minmax(0,.92fr) minmax(430px,.72fr)!important;
+    column-gap:clamp(70px,6vw,104px)!important;
+    row-gap:64px!important;
+    align-items:start!important;
+  }
+  body:not(.journal-page) .stable-copy{
+    grid-column:1!important;
+    grid-row:1!important;
+    max-width:650px!important;
+  }
+  body:not(.journal-page) .stable-copy h2{
+    max-width:680px!important;
+    font-size:clamp(3.6rem,4.2vw,4.65rem)!important;
+    line-height:.98!important;
+  }
+  body:not(.journal-page) .stable-copy>p:not(.kicker){max-width:570px!important}
+  body:not(.journal-page) .stable-specs{
+    grid-column:2!important;
+    grid-row:1!important;
+    align-self:start!important;
+    width:100%!important;
+    margin:58px 0 0!important;
+  }
+  body:not(.journal-page) .stable-gallery{
+    grid-column:1/-1!important;
+    grid-row:2!important;
+    margin-top:0!important;
+  }
+  body:not(.journal-page) .terrain{
+    grid-column:1/-1!important;
+    grid-row:3!important;
+  }
+
+  /* Lehrpferde: headline and intro read as one composition, not two islands. */
+  body:not(.journal-page) .horses .chapter-head.narrow{
+    grid-template-columns:repeat(12,minmax(0,1fr))!important;
+    column-gap:24px!important;
+    row-gap:16px!important;
+    align-items:end!important;
+    margin-bottom:48px!important;
+  }
+  body:not(.journal-page) .horses .chapter-head.narrow>.kicker{
+    grid-column:1/6!important;
+    grid-row:1!important;
+  }
+  body:not(.journal-page) .horses .chapter-head.narrow>h2{
+    grid-column:1/8!important;
+    grid-row:2!important;
+    max-width:760px!important;
+    font-size:clamp(3.35rem,4vw,4.35rem)!important;
+    line-height:.97!important;
+  }
+  body:not(.journal-page) .horses .chapter-head.narrow>p:not(.kicker){
+    grid-column:9/13!important;
+    grid-row:2!important;
+    align-self:end!important;
+    max-width:360px!important;
+    margin:0 0 5px!important;
+    font-size:.97rem!important;
+    line-height:1.62!important;
+  }
+
+  /* No dead zone between Turniersport and Aktuelles. */
+  body:not(.journal-page) .horses{padding-bottom:52px!important}
+  body:not(.journal-page) .news{
+    padding-top:64px!important;
+    padding-bottom:96px!important;
+  }
+  body:not(.journal-page) .news .news-head{margin-bottom:40px!important}
+
+  /* Aktuelles: feature + compact editorial list. */
+  body:not(.journal-page) .news-layout{
+    grid-template-columns:minmax(0,1.16fr) minmax(430px,.84fr)!important;
+    gap:clamp(50px,4.5vw,72px)!important;
+    align-items:start!important;
+  }
+  body:not(.journal-page) .news-list article{
+    display:grid!important;
+    grid-template-columns:176px minmax(0,1fr)!important;
+    gap:24px!important;
+    align-items:start!important;
+    padding:26px 0!important;
+  }
+  body:not(.journal-page) .news-list .news-thumb{
+    width:176px!important;
+    max-width:176px!important;
+    aspect-ratio:4/3!important;
+    align-self:start!important;
+  }
+  body:not(.journal-page) .news-list .news-copy{min-width:0!important}
+  body:not(.journal-page) .news-list h3{
+    max-width:20ch!important;
+    margin:0 0 9px!important;
+    font-size:1.55rem!important;
+    line-height:1.05!important;
+  }
+  body:not(.journal-page) .news-list p{
+    max-width:43ch!important;
+    margin-bottom:11px!important;
+    font-size:.9rem!important;
+    line-height:1.55!important;
+  }
+  body:not(.journal-page) .news-list .news-link{
+    min-height:38px!important;
+    margin-top:8px!important;
+    padding-inline:13px!important;
+    font-size:.68rem!important;
+  }
+
+  /* Contact: both halves always share one exact grid-row height. */
+  body:not(.journal-page) .contact.contact-editorial{
+    align-items:stretch!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image{
+    position:relative!important;
+    align-self:stretch!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image img{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:50% 47%!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy{
+    align-self:stretch!important;
+    min-height:0!important;
+    height:auto!important;
+    margin:0!important;
+    transform:none!important;
+  }
+}
