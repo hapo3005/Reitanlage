@@ -19,6 +19,7 @@ CSS_PARTS = [
     'ui-polish.css',
     'ui-refine.css',
     'news-zoom-polish.css',
+    'news-cta-polish.css',
 ]
 
 IMAGE_META = {
