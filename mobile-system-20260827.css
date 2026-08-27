@@ -16,8 +16,7 @@
   main{overflow-x:clip!important}
   main section[id]{scroll-margin-top:88px!important}
 
-  /* Compact floating mobile header. It stays available, but no longer masks
-     a quarter of the viewport. JS hides it while scrolling down. */
+  /* Compact floating mobile header. */
   body .header,
   body .header:not(.scrolled),
   body .header.scrolled,
@@ -78,103 +77,70 @@
     margin-top:6px!important;
     color:rgba(23,56,45,.62)!important;
     font-size:.52rem!important;
-    font-weight:760!important;
-    line-height:1!important;
+    font-weight:700!important;
+    line-height:1.1!important;
     letter-spacing:.15em!important;
     text-shadow:none!important;
   }
-
   body .header .menu,
   body .header:not(.scrolled) .menu,
   body .header.scrolled .menu{
-    position:relative!important;
-    z-index:302!important;
-    flex:0 0 46px!important;
     display:block!important;
+    flex:0 0 46px!important;
     width:46px!important;
     height:46px!important;
     padding:0!important;
     border:1px solid rgba(23,56,45,.28)!important;
-    border-radius:12px!important;
-    background:rgba(255,255,255,.32)!important;
+    border-radius:13px!important;
+    background:rgba(255,255,255,.38)!important;
     color:var(--m-green)!important;
     box-shadow:none!important;
   }
-  body .header .menu span:not(.sr-only){width:19px!important;height:1.5px!important;margin:5px auto!important;background:currentColor!important}
+  body .header .menu span:not(.sr-only){width:20px!important;height:1.5px!important;background:currentColor!important}
 
-  /* Mobile menu becomes a compact sheet beneath the header instead of a
-     full-screen typographic takeover. */
-  body .header nav.nav,
-  body .header:not(.scrolled) nav.nav,
-  body .header.scrolled nav.nav,
-  body.journal-page .header nav.nav{
+  body .header nav.nav{
     position:fixed!important;
     z-index:301!important;
-    top:88px!important;
+    top:90px!important;
     left:12px!important;
     right:12px!important;
     bottom:auto!important;
     width:auto!important;
-    max-height:calc(100dvh - 102px)!important;
-    margin:0!important;
-    padding:10px 16px 14px!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    justify-content:flex-start!important;
-    gap:0!important;
+    max-height:calc(100dvh - 104px)!important;
+    padding:10px 16px 16px!important;
+    display:none!important;
     overflow:auto!important;
-    border:1px solid rgba(255,255,255,.78)!important;
-    border-radius:17px!important;
-    background:rgba(248,244,236,.985)!important;
-    box-shadow:0 18px 46px rgba(10,29,21,.16)!important;
-    backdrop-filter:blur(18px)!important;
-    -webkit-backdrop-filter:blur(18px)!important;
+    border:1px solid rgba(255,255,255,.9)!important;
+    border-radius:16px!important;
+    background:rgba(248,244,236,.98)!important;
+    box-shadow:0 18px 50px rgba(8,24,17,.18)!important;
+    backdrop-filter:blur(20px)!important;
+    -webkit-backdrop-filter:blur(20px)!important;
     font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif!important;
-    font-size:1.28rem!important;
-    font-weight:500!important;
-    line-height:1.1!important;
-    opacity:0!important;
-    visibility:hidden!important;
-    transform:translateY(-8px)!important;
-    pointer-events:none!important;
-    transition:opacity 160ms ease,transform 180ms cubic-bezier(.2,.8,.2,1),visibility 160ms ease!important;
+    font-size:1.30rem!important;
+    line-height:1.12!important;
   }
-  body .header nav.nav.open{
-    opacity:1!important;
-    visibility:visible!important;
-    transform:translateY(0)!important;
-    pointer-events:auto!important;
-  }
+  body .header nav.nav.open{display:block!important}
   body .header nav.nav a,
-  body .header:not(.scrolled) nav.nav a,
-  body .header.scrolled nav.nav a{
+  body .header nav.nav .nav-cta{
+    display:block!important;
     width:100%!important;
     min-height:0!important;
+    margin:0!important;
     padding:13px 2px!important;
     border:0!important;
     border-bottom:1px solid var(--m-line)!important;
     border-radius:0!important;
     background:transparent!important;
     color:var(--m-green)!important;
+    font-weight:500!important;
     text-shadow:none!important;
-    transform:none!important;
   }
-  body .header nav.nav a::before,
-  body .header nav.nav a::after{content:none!important}
-  body .header nav.nav .nav-cta,
-  body .header:not(.scrolled) nav.nav .nav-cta,
-  body .header.scrolled nav.nav .nav-cta{
-    margin:8px 0 0!important;
-    padding:13px 15px!important;
-    border:1px solid var(--m-green)!important;
-    border-radius:11px!important;
-    background:var(--m-green)!important;
-    color:#fffaf0!important;
-  }
+  body .header nav.nav a:last-child{border-bottom:0!important;color:var(--m-bronze)!important}
 
-  /* Hero keeps the strong image-led composition while accounting for the
-     smaller header. */
+  /* Hero: image-led, with enough room for the compact header. */
+  body:not(.journal-page) .hero{min-height:100svh!important}
+  body:not(.journal-page) .hero-image img{object-position:64% 48%!important}
   body:not(.journal-page) .hero-copy{
     min-height:100svh!important;
     justify-content:flex-end!important;
@@ -333,7 +299,24 @@
     gap:22px!important;
   }
   .footer .wordmark strong{font-size:1.38rem!important}
-  .footer nav{display:grid!important;grid-template-columns:1fr 1fr auto!important;gap:12px!important;font-size:.74rem!important}
+  .footer nav{
+    display:grid!important;
+    grid-template-columns:auto auto auto!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    width:100%!important;
+    gap:10px!important;
+    font-size:.74rem!important;
+  }
+  .footer nav a{
+    min-width:0!important;
+    margin:0!important;
+    padding:2px 0!important;
+    white-space:nowrap!important;
+  }
+  .footer nav a:nth-child(1){justify-self:start!important;text-align:left!important}
+  .footer nav a:nth-child(2){justify-self:center!important;text-align:center!important}
+  .footer nav a:nth-child(3){justify-self:end!important;text-align:right!important}
   .footer>p{padding-top:18px!important;font-size:.68rem!important}
 }
 
@@ -366,8 +349,13 @@
   .contact.contact-editorial .contact-copy{padding:28px 18px 22px!important}
   .contact.contact-editorial .contact-copy h2{font-size:clamp(2.55rem,12vw,2.95rem)!important}
 
-  .footer nav{grid-template-columns:1fr 1fr!important}
-  .footer nav a:last-child{grid-column:1/-1!important;margin-top:4px!important}
+  .footer nav{grid-template-columns:auto auto auto!important;gap:8px!important}
+  .footer nav a{font-size:.71rem!important}
+}
+
+@media (max-width:350px){
+  .footer nav{grid-template-columns:1fr 1fr!important;row-gap:12px!important}
+  .footer nav a:last-child{grid-column:1/-1!important;justify-self:start!important;text-align:left!important}
 }
 
 @media (prefers-reduced-motion:reduce){
