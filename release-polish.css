@@ -1,0 +1,28 @@
+/* Final release polish: fix the narrow intermediate news layout without changing mobile or wide desktop. */
+.news-meta span{min-width:0}
+
+@media(min-width:901px) and (max-width:1120px){
+  .news-layout{
+    display:block!important;
+    grid-template-columns:none!important;
+  }
+  .news-list{
+    margin-top:56px;
+  }
+  .news-list article{
+    grid-template-columns:132px minmax(0,1fr);
+    gap:24px;
+    padding:26px 0;
+  }
+  .news-list h3{
+    font-size:1.5rem;
+  }
+  .news-list p{
+    max-width:58ch;
+    font-size:.95rem;
+    line-height:1.62;
+  }
+  .news-list .news-link{
+    margin-top:3px;
+  }
+}
