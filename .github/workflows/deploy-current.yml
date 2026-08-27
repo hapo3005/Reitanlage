@@ -66,6 +66,8 @@ jobs:
           assert '<section class="legal"' not in html
           assert 'href="impressum.html">Impressum</a>' in html
           assert 'href="datenschutz.html">Datenschutz</a>' in html
+          assert html.count('<footer class="footer">') == 1
+          assert html.count('>Nach oben</a>') == 1
           assert 'Facebook-Gruppe ↗' not in html
           assert 'Nach oben ↑' not in html
           assert html.count('rel="stylesheet"') == 1
@@ -85,9 +87,12 @@ jobs:
           assert 'Schreiben Sie Carmen gern' not in html
           assert 'above-fold-direction.css' in css
           assert 'mobile-system-20260827.css' in css
+          assert css.count('/* ===== mobile-system-20260827.css ===== */') == 1
           assert 'header-signature.css' not in css
           assert css.rfind('above-fold-direction.css') > css.rfind('architecture-v2.css')
           assert css.rfind('mobile-system-20260827.css') > css.rfind('above-fold-direction.css')
+          assert 'grid-template-columns:auto auto auto!important' in css
+          assert '.footer nav a:last-child{grid-column:1/-1!important;margin-top:4px!important}' not in css
           assert 'body:not(.journal-page) .hero-copy' in css
           assert 'header-hidden' in js
           assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
