@@ -16,6 +16,7 @@ CSS_PARTS = [
     'news-expanded.css',
     'footer-fix.css',
     'photo-zoom.css',
+    'ui-polish.css',
 ]
 
 IMAGE_META = {
