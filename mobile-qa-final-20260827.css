@@ -121,6 +121,19 @@
     object-position:8% 50%!important;
   }
 
+  /* Pricing -> contact: one continuous closing composition, without a dead green band. */
+  body:not(.journal-page) .pricing{
+    padding-bottom:24px!important;
+  }
+  body:not(.journal-page) .pricing + .contact.contact-editorial{
+    margin-top:0!important;
+    padding-top:0!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image{
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+
   /* Contact card: equal gutters on both sides, no right-edge bleed. */
   body:not(.journal-page) .contact.contact-editorial .contact-copy{
     box-sizing:border-box!important;
@@ -130,9 +143,9 @@
     padding:26px 18px 22px!important;
   }
   body:not(.journal-page) .contact.contact-editorial .contact-copy h2{
-    max-width:11.4ch!important;
+    max-width:12.2ch!important;
     margin-bottom:15px!important;
-    font-size:clamp(2.12rem,9.7vw,2.62rem)!important;
+    font-size:clamp(2.02rem,9.15vw,2.42rem)!important;
     line-height:.98!important;
   }
   body:not(.journal-page) .contact.contact-editorial .contact-actions{
@@ -193,13 +206,15 @@
     top:calc(100% + 7px)!important;
     padding:7px 12px 9px!important;
   }
+  body:not(.journal-page) .pricing{padding-bottom:20px!important}
   body:not(.journal-page) .contact.contact-editorial .contact-copy{
     width:calc(100% - 32px)!important;
     margin-top:-26px!important;
     padding:24px 17px 21px!important;
   }
   body:not(.journal-page) .contact.contact-editorial .contact-copy h2{
-    font-size:clamp(2rem,10vw,2.46rem)!important;
+    max-width:12.4ch!important;
+    font-size:clamp(1.96rem,9.55vw,2.30rem)!important;
   }
   body:not(.journal-page) .footer nav{
     gap:6px!important;
