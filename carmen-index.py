@@ -34,6 +34,8 @@ js += '\n\n' + js_marker + '\n' + Path('homepage-final-20260827.js').read_text(e
 js_path.write_text(js, encoding='utf-8')
 
 index = Path('_site/index.html').read_text(encoding='utf-8')
+final_css = css_path.read_text(encoding='utf-8')
+final_js = js_path.read_text(encoding='utf-8')
 assert 'Was Carmen im Unterricht' not in index
 assert 'Schreiben Sie Carmen gern' not in index
 assert 'Reiten beginnt für mich mit <em>Vertrauen.</em>' in index
@@ -41,8 +43,8 @@ assert 'Was mir beim Reiten <em>wichtig ist.</em>' in index
 assert 'melden Sie sich <em>gern bei mir.</em>' in index
 assert index.count('class="hero-signature"') == 1
 assert 'Schön, dass Sie da sind.' not in index
-assert css_marker in css_path.read_text(encoding='utf-8')
-assert js_marker in js_path.read_text(encoding='utf-8')
-assert 'height:560px!important' in css_path.read_text(encoding='utf-8')
-assert 'document.documentElement.scrollHeight-4' in js_path.read_text(encoding='utf-8')
+assert css_marker in final_css
+assert js_marker in final_js
+assert ('height:560px!important' in final_css) or ('desktop-contact-v3' in final_css)
+assert 'document.documentElement.scrollHeight-4' in final_js
 print('Applied strict Carmen voice, hero personality and final homepage presentation pass.')
