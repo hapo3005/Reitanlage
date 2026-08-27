@@ -9,5 +9,6 @@
 @import url("footer-fix.css?v=20260827-footer1");
 @import url("photo-zoom.css?v=20260827-zoom1");
 @import url("legal-cleanup.css?v=20260827-legal1");
+@import url("hero-premium-20260827.css?v=20260827-premium1");
 .hero-image img{object-position:52% 48%}
 @media(max-width:820px){.hero-copy,.hero-copy h1{color:#fff}.hero-copy .kicker,.hero-copy h1 em{color:#eadbc2}}
