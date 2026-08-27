@@ -23,40 +23,46 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Prepare current asset versions
+
+      - name: Build production site
+        run: python build-site.py
+
+      - name: Verify production artifact
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-          import os, re
 
-          token = os.environ["GITHUB_SHA"][:12]
-
-          index = Path("index.html")
-          html = index.read_text(encoding="utf-8")
-          html = re.sub(r'<link rel="stylesheet" href="contact-finish\.css\?v=[^"]+">', '', html)
-          html = re.sub(r'<link rel="stylesheet" href="mobile-final-20260826\.css\?v=[^"]+">', '', html)
-          html = re.sub(
-              r'<link rel="stylesheet" href="rebuild\.css\?v=[^"]+">',
-              f'<link rel="stylesheet" href="rebuild.css?v={token}"><link rel="stylesheet" href="mobile-final-20260826.css?v={token}">',
-              html,
-          )
-          html = re.sub(r'script\.js\?v=[^"\']+', f'script.js?v={token}', html)
-          index.write_text(html, encoding="utf-8")
-
-          rebuild = Path("rebuild.css")
-          css = rebuild.read_text(encoding="utf-8")
-          css = re.sub(r'\?v=[^"\)]+', f'?v={token}', css)
-          rebuild.write_text(css, encoding="utf-8")
+          html = Path('index.html').read_text(encoding='utf-8')
+          assert '<section class="legal"' not in html
+          assert 'href="impressum.html">Impressum</a>' in html
+          assert 'href="datenschutz.html">Datenschutz</a>' in html
+          assert html.count('rel="stylesheet"') == 1
+          assert 'site.css?v=' in html
+          assert 'site.js?v=' in html
+          assert 'property="og:url"' in html
+          assert 'loading="lazy"' in html
+          assert Path('site.css').stat().st_size > 50000
+          assert Path('site.js').stat().st_size > 5000
+          assert Path('robots.txt').exists()
+          assert Path('sitemap.xml').exists()
+          print('Production artifact checks passed.')
           PY
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-      - name: Let source Pages finish first
+
+      # Temporary compatibility wait while the repository still has the legacy
+      # source-based Pages publisher enabled. Remove this step after switching
+      # Settings > Pages > Build and deployment > Source to GitHub Actions.
+      - name: Let legacy source Pages finish first
         run: sleep 50
-      - name: Deploy fresh site last
+
+      - name: Deploy production site last
         id: deployment
         uses: actions/deploy-pages@v4
