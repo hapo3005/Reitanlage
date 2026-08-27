@@ -7,6 +7,8 @@
 
   const mobile = window.matchMedia('(max-width: 820px)');
   let lastY = window.scrollY;
+  let upDistance = 0;
+  let downDistance = 0;
   let ticking = false;
 
   const update = () => {
@@ -14,12 +16,22 @@
     const menuOpen = nav?.classList.contains('open') || menu?.getAttribute('aria-expanded') === 'true';
     const delta = y - lastY;
 
-    if (!mobile.matches || menuOpen || y <= 16) {
+    if (!mobile.matches || menuOpen || y <= 24) {
       header.classList.remove('header-hidden');
-    } else if (delta > 10 && y > 140) {
-      header.classList.add('header-hidden');
-    } else if (delta < -10) {
-      header.classList.remove('header-hidden');
+      upDistance = 0;
+      downDistance = 0;
+    } else if (delta > 0) {
+      downDistance += delta;
+      upDistance = 0;
+      if (y > 140 && downDistance >= 26) header.classList.add('header-hidden');
+    } else if (delta < 0) {
+      upDistance += -delta;
+      downDistance = 0;
+      /* Do not pop the large navigation back in for tiny corrective scrolls. */
+      if (upDistance >= 84) {
+        header.classList.remove('header-hidden');
+        upDistance = 0;
+      }
     }
 
     lastY = y;
@@ -38,6 +50,8 @@
 
   menu?.addEventListener('click', () => {
     header.classList.remove('header-hidden');
+    upDistance = 0;
+    downDistance = 0;
     requestAnimationFrame(() => {
       const opening = nav?.classList.contains('open') || menu.getAttribute('aria-expanded') === 'true';
       if (opening && nav) nav.scrollTop = 0;
@@ -48,12 +62,16 @@
   nav?.addEventListener('click', event => {
     if (!event.target.closest('a')) return;
     header.classList.remove('header-hidden');
+    upDistance = 0;
+    downDistance = 0;
     lastY = window.scrollY;
   });
 
   mobile.addEventListener?.('change', () => {
     header.classList.remove('header-hidden');
     if (nav) nav.scrollTop = 0;
+    upDistance = 0;
+    downDistance = 0;
     lastY = window.scrollY;
   });
 
