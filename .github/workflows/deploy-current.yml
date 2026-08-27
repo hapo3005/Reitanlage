@@ -38,6 +38,7 @@ jobs:
           python build-journal.py
           printf '\n\n/* ===== journal-finish.css ===== */\n' >> _site/site.css
           cat journal-finish.css >> _site/site.css
+          python carmen-voice.py
 
       - name: Verify production artifact
         shell: bash
@@ -72,6 +73,9 @@ jobs:
           assert '.webp' in html
           assert 'href="aktuelles.html">Aktuelles</a>' in html
           assert 'Alle Neuigkeiten &amp; Rückblicke' in html
+          assert 'Reiten beginnt für mich mit <em>Vertrauen.</em>' in html
+          assert 'Was mir beim Reiten <em>wichtig ist.</em>' in html
+          assert 'Schreiben Sie Carmen gern' not in html
           assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
 
           assert '<body class="journal-page">' in journal
@@ -79,6 +83,7 @@ jobs:
           assert 'Sommerferien auf dem Hof' in journal
           assert 'Das PM-Mobil zu Gast' in journal
           assert 'Ferienreitkurs im März' in journal
+          assert 'Hier nehme ich Sie ein bisschen ausführlicher mit in unseren Hofalltag' in journal
           assert 'images/eventbild1' in journal and '.webp' in journal
           assert 'srcset=' in journal
           assert 'site.css?v=' in journal
@@ -149,6 +154,8 @@ jobs:
             imprint="$(curl -fsSL "${PAGE_URL}impressum.html?v=${GITHUB_SHA}" || true)"
             privacy="$(curl -fsSL "${PAGE_URL}datenschutz.html?v=${GITHUB_SHA}" || true)"
             if grep -q "site.css?v=${token}" <<<"$page" \
+              && grep -q "Reiten beginnt für mich mit <em>Vertrauen.</em>" <<<"$page" \
+              && grep -q "Was mir beim Reiten <em>wichtig ist.</em>" <<<"$page" \
               && grep -q "site.css?v=${token}" <<<"$journal" \
               && grep -q "Sommerferien auf dem Hof" <<<"$journal" \
               && grep -q "Das PM-Mobil zu Gast" <<<"$journal" \
@@ -158,7 +165,7 @@ jobs:
               && grep -q "WhatsApp Ireland Limited" <<<"$privacy"; then
               curl -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
               test -s /tmp/journal-hero.webp
-              echo "Live release ${token}, including legal pages and Hofjournal, verified."
+              echo "Live release ${token}, including Carmen voice, legal pages and Hofjournal, verified."
               exit 0
             fi
             sleep 3
