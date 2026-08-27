@@ -57,6 +57,9 @@ html = re.sub(r'<section class="legal" id="impressum">.*?</section>', '', html, 
 html = html.replace('href="#impressum">Impressum</a>', 'href="impressum.html">Impressum</a>')
 html = html.replace('href="#datenschutz">Datenschutz</a>', 'href="datenschutz.html">Datenschutz</a>')
 
+# Keep the social contact label explicit and concise.
+html = html.replace('<span>Mehr Einblicke</span><a href="https://www.facebook.com/groups/403038393066632/"', '<span>Facebook</span><a href="https://www.facebook.com/groups/403038393066632/"')
+
 # One production stylesheet. Remove the old loader/direct override links first.
 html = re.sub(r'<link rel="stylesheet" href="[^"]+\.css(?:\?v=[^"]*)?">', '', html)
 preload = '<link rel="preload" as="image" href="images/reitbeteiligung1.png">'
