@@ -34,6 +34,13 @@
   .chapter-head>p:not(.kicker){font-size:.95rem!important;line-height:1.54!important}
 
   /* Philosophy and training: tighter cadence, clearer editorial grouping. */
+  .philosophy-copy .lead{max-width:31ch!important}
+  .philosophy-copy .copy-columns p{font-size:.94rem!important;line-height:1.58!important}
+  .philosophy-copy .copy-columns p+p{
+    margin-top:18px!important;
+    padding-top:18px!important;
+    border-top:1px solid rgba(31,41,36,.12)!important;
+  }
   .philosophy-copy blockquote{margin-top:28px!important;margin-bottom:28px!important}
   .training-grid article,
   .training-grid article:nth-child(odd),
@@ -48,14 +55,21 @@
   .service-ribbon p{margin:0!important;font-size:.93rem!important;line-height:1.58!important}
   .cinematic{margin-top:30px!important;height:64vw!important;max-height:330px!important}
 
-  /* Stable area: remove the long dead zone before content and gallery. */
+  /* Stable area: shorter reading blocks with a visible pause before the second detail paragraph. */
+  .stable-copy .lead{max-width:31ch!important}
   .stable-copy>p{margin-bottom:18px!important}
+  .stable-copy>p:not(.kicker):not(.lead){font-size:.94rem!important;line-height:1.58!important}
+  .stable-copy>p:nth-of-type(4){
+    margin-top:22px!important;
+    padding-top:20px!important;
+    border-top:1px solid rgba(235,226,208,.20)!important;
+  }
   .stable-specs{margin-top:24px!important}
   .stable-specs div{padding:15px 0!important}
   .stable-gallery{margin-top:28px!important}
   .terrain{margin-top:24px!important;padding-top:22px!important}
 
-  /* Teaching horses: equal image windows and stronger visual presence. */
+  /* Teaching horses: equal image windows and one restrained photographic treatment. */
   .horse-ledger article,
   .horse-ledger article+article{
     grid-template-columns:122px minmax(0,1fr)!important;
@@ -68,8 +82,19 @@
     aspect-ratio:4/5!important;
     overflow:hidden!important;
     margin:0!important;
+    background:#e8e1d4!important;
+    box-shadow:0 0 0 1px rgba(31,41,36,.10)!important;
   }
-  .horse-ledger figure img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+  .horse-ledger figure img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:center!important;
+    filter:saturate(.94) contrast(1.015)!important;
+  }
+  .horse-ledger article:nth-child(1) figure img{object-position:50% 42%!important}
+  .horse-ledger article:nth-child(2) figure img{object-position:48% 50%!important}
+  .horse-ledger article:nth-child(3) figure img{object-position:48% 50%!important}
   .horse-ledger h3{font-size:1.45rem!important;margin:3px 0 7px!important}
   .horse-ledger article p:last-child{font-size:.91rem!important;line-height:1.48!important}
   .horse-note{margin-top:20px!important}
@@ -81,7 +106,7 @@
   .results{margin-top:20px!important}
   .results div{padding:11px 0!important}
 
-  /* Hofjournal: less empty space, flyer becomes a visual teaser rather than a page inside the page. */
+  /* Hofjournal: flyer is a compact, clickable original; dependable facts live as real web text. */
   .news-head{margin-bottom:22px!important}
   .news-feature-image{
     aspect-ratio:4/3!important;
@@ -89,8 +114,44 @@
     overflow:hidden!important;
   }
   .news-feature-image img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 18%!important}
+  .news-feature-image.is-contain{
+    width:min(78vw,320px)!important;
+    aspect-ratio:1/1!important;
+    max-height:none!important;
+    margin:0 auto 18px!important;
+    background:#efe9de!important;
+    box-shadow:0 8px 28px rgba(31,41,36,.10)!important;
+  }
+  .news-feature-image.is-contain img{
+    object-fit:contain!important;
+    object-position:center!important;
+  }
+  .news-feature-image.is-contain .news-zoom-hint{
+    left:10px!important;
+    right:10px!important;
+    bottom:10px!important;
+    width:auto!important;
+  }
   .news-feature-copy{padding-top:16px!important}
   .news-feature h3{font-size:clamp(1.85rem,8.4vw,2.28rem)!important}
+  .news-facts{
+    list-style:none!important;
+    margin:18px 0 4px!important;
+    padding:0!important;
+    border-top:1px solid rgba(31,41,36,.14)!important;
+    border-bottom:1px solid rgba(31,41,36,.14)!important;
+  }
+  .news-facts li{
+    margin:0!important;
+    padding:9px 0!important;
+    color:#70543d!important;
+    font-size:.68rem!important;
+    font-weight:700!important;
+    line-height:1.35!important;
+    letter-spacing:.07em!important;
+    text-transform:uppercase!important;
+  }
+  .news-facts li+li{border-top:1px solid rgba(31,41,36,.10)!important}
   .news-list{margin-top:28px!important}
   .news-list article{padding:24px 0!important}
   .news-list h3{font-size:1.54rem!important}
@@ -102,7 +163,7 @@
   .pricing-intro p:last-child{font-size:.94rem!important;line-height:1.55!important}
   .price-highlight div{padding:14px 0!important}
 
-  /* Contact: more invitation, less wall of text. */
+  /* Contact: WhatsApp/mobile remain primary; directory details become visibly secondary. */
   .contact.contact-editorial .contact-image{height:270px!important}
   .contact.contact-editorial .contact-copy{
     margin:-34px var(--m-gutter) 0!important;
@@ -117,6 +178,8 @@
   .contact.contact-editorial .contact-copy>p:not(.kicker){font-size:.92rem!important;line-height:1.52!important;max-width:34ch!important}
   .contact.contact-editorial .contact-actions{margin:20px 0 20px!important;gap:7px!important}
   .contact.contact-editorial .contact-actions a{min-height:49px!important}
+  .contact.contact-editorial .contact-actions a:first-child{font-weight:750!important}
+  .contact.contact-editorial .contact-actions a:last-child{background:transparent!important}
   .contact.contact-editorial address{padding-top:12px!important}
   .contact.contact-editorial address p,
   .contact.contact-editorial address p:nth-child(2),
@@ -124,7 +187,11 @@
   .contact.contact-editorial address p:nth-child(4),
   .contact.contact-editorial address p:nth-child(5){padding:11px 0 11px 30px!important}
   .contact.contact-editorial address p:first-child{padding:0 0 13px!important}
-  .contact.contact-editorial address a{font-size:.88rem!important}
+  .contact.contact-editorial address p:not(:first-child){color:rgba(31,39,35,.74)!important}
+  .contact.contact-editorial address p:not(:first-child) strong,
+  .contact.contact-editorial address p:not(:first-child) span:first-child{font-size:.66rem!important;letter-spacing:.08em!important}
+  .contact.contact-editorial address a{font-size:.86rem!important;line-height:1.42!important}
+  .contact.contact-editorial address p:last-child{opacity:.82!important}
 
   .footer{padding-top:34px!important;padding-bottom:24px!important}
 }
@@ -138,4 +205,5 @@
   .contact.contact-editorial .contact-copy h2{font-size:clamp(2.02rem,10.2vw,2.56rem)!important}
   .horse-ledger article,.horse-ledger article+article{grid-template-columns:112px minmax(0,1fr)!important;gap:14px!important}
   .news-feature-image{max-height:330px!important}
+  .news-feature-image.is-contain{width:min(76vw,292px)!important;max-height:none!important}
 }
