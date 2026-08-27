@@ -12,15 +12,16 @@ TOKEN = os.environ.get('GITHUB_SHA', 'local-audit')[:12]
 SITE_URL = os.environ.get('SITE_URL', 'https://hapo3005.github.io/Reitanlage/').rstrip('/') + '/'
 
 EXTRA_IMAGES = (
-    'images/reistunde1.png',
     'images/flyerferienreitskurs2.png',
     'images/frohefeiertage.png',
 )
 
-# These sources are genuinely small. A restrained 2x Lanczos enlargement plus
-# a mild unsharp mask gives them a cleaner presentation on modern screens
-# without pretending to reconstruct detail that is not in the original.
+# These photos benefit from a restrained 2x Lanczos enlargement plus a mild
+# unsharp mask. This improves modern-screen presentation without inventing
+# detail that is not present in the original source.
 UPSCALE_IMAGES = (
+    'images/eventbild1.png',
+    'images/eventbild2.png',
     'images/eventbild3.png',
     'images/eventbild4.png',
     'images/schulpferd1.png',
@@ -50,29 +51,27 @@ def save_webp(im: Image.Image, dest: Path, *, quality=87, lossless=False):
     im.save(dest, **kwargs)
 
 
-def upscale_photo(source: Path, dest: Path):
+def enlarged_photo(source: Path) -> Image.Image:
     im = Image.open(source)
     width, height = im.size
     enlarged = im.resize((width * 2, height * 2), Image.Resampling.LANCZOS)
-    enlarged = enlarged.filter(ImageFilter.UnsharpMask(radius=1.0, percent=105, threshold=3))
-    save_webp(enlarged, dest, quality=89)
+    return enlarged.filter(ImageFilter.UnsharpMask(radius=1.0, percent=105, threshold=3))
 
 
 if not OUT.exists():
     raise RuntimeError('Run build-release.py before build-journal.py')
 
-# The journal shares the production stylesheet; its page-specific rules are
-# appended at build time so the public site still ships only one CSS file.
+# Keep one public stylesheet. The previously validated intermediate-width news
+# fix and the journal rules are appended after the main release cascade.
 site_css = OUT / 'site.css'
-site_css.write_text(
-    site_css.read_text(encoding='utf-8')
-    + '\n\n/* ===== journal.css ===== */\n'
-    + (ROOT / 'journal.css').read_text(encoding='utf-8').rstrip()
-    + '\n',
-    encoding='utf-8',
-)
+css = site_css.read_text(encoding='utf-8')
+for name in ('release-polish.css', 'journal.css'):
+    path = ROOT / name
+    if path.exists():
+        css += f'\n\n/* ===== {name} ===== */\n' + path.read_text(encoding='utf-8').rstrip() + '\n'
+site_css.write_text(css, encoding='utf-8')
 
-# Restore more of the original site's imagery for the journal and optimize it.
+# Restore archival imagery that is intentionally not needed on the landing page.
 for src in EXTRA_IMAGES:
     source = ROOT / src
     if not source.exists():
@@ -81,21 +80,25 @@ for src in EXTRA_IMAGES:
     lossless = 'flyer' in source.name.lower()
     save_webp(im, OUT / webp_name(src), quality=88, lossless=lossless)
 
-    # The journal hero benefits from real responsive variants.
-    if source.name == 'reistunde1.png':
-        for width in (480, 720, 960, 1280):
-            if width >= im.width:
-                continue
-            height = round(im.height * width / im.width)
-            resized = im.resize((width, height), Image.Resampling.LANCZOS)
-            save_webp(resized, OUT / variant_name(src, width), quality=85)
-
-# Replace small public photos with restrained 2x display versions. Their aspect
-# ratio stays identical, so existing layouts and image focal points are stable.
+# Replace smaller public photos with clean 2x display versions. Existing layout
+# aspect ratios and focal points stay identical.
 for src in UPSCALE_IMAGES:
     source = ROOT / src
     if source.exists():
-        upscale_photo(source, OUT / webp_name(src))
+        enhanced = enlarged_photo(source)
+        save_webp(enhanced, OUT / webp_name(src), quality=89)
+
+# The Hofjournal hero uses a genuine event photo. Generate responsive versions
+# from the enhanced image so mobile devices do not download the full 2x file.
+hero_rel = 'images/eventbild1.png'
+hero_enhanced = enlarged_photo(ROOT / hero_rel)
+hero_width, hero_height = hero_enhanced.size
+for width in (480, 800, 1200):
+    if width >= hero_width:
+        continue
+    height = round(hero_height * width / hero_width)
+    resized = hero_enhanced.resize((width, height), Image.Resampling.LANCZOS)
+    save_webp(resized, OUT / variant_name(hero_rel, width), quality=85)
 
 
 def optimized_news_image(src: str) -> str:
@@ -121,12 +124,12 @@ def render_current_news(data):
         return '<p>Aktuell sind keine Meldungen veröffentlicht. Termine bitte direkt bei Carmen erfragen.</p>'
 
     featured = items[0]
-    fit_class = ' is-contain' if featured.get('imageFit') == 'contain' else ''
+    fit_class = 'is-contain' if featured.get('imageFit') == 'contain' else ''
     image = optimized_news_image(featured.get('image', ''))
     link = news_href(featured.get('link', '#kontakt'))
     main = f'''<div class="journal-current-grid">
       <article class="journal-current-main">
-        <figure class="{fit_class.strip()}"><img src="{escape(image)}" alt="{escape(featured.get('alt','Aktuelles von der Reitanlage Eichhorn-Nels'))}" loading="lazy" decoding="async"></figure>
+        <figure class="{fit_class}"><img src="{escape(image)}" alt="{escape(featured.get('alt','Aktuelles von der Reitanlage Eichhorn-Nels'))}" loading="lazy" decoding="async"></figure>
         <div class="journal-current-copy"><p class="journal-meta">{news_meta(featured)}</p><h3>{escape(featured['title'])}</h3><p>{escape(featured['text'])}</p><a class="news-link" href="{escape(link)}">{escape(featured.get('linkText','Anfragen'))}</a></div>
       </article>'''
 
@@ -148,29 +151,26 @@ html = html.replace('<!-- CURRENT_NEWS -->', render_current_news(news))
 # All local journal imagery is served in the optimized release format.
 all_local_images = set(EXTRA_IMAGES) | set(UPSCALE_IMAGES) | {
     'images/reitbeteiligung1.png',
-    'images/eventbild1.png',
-    'images/eventbild2.png',
     'images/familieanuth.png',
     'images/flyerferienreitkurs.png',
 }
 for src in all_local_images:
     html = html.replace(src, webp_name(src))
 
-# Responsive hero delivery; the full WebP remains the final srcset candidate.
-hero_src = webp_name('images/reistunde1.png')
-hero_source = Image.open(ROOT / 'images/reistunde1.png')
+# Responsive hero delivery from the enhanced authentic event photo.
+hero_src = webp_name(hero_rel)
 hero_candidates = []
-for width in (480, 720, 960, 1280):
-    if width < hero_source.width:
-        hero_candidates.append(f'{variant_name("images/reistunde1.png", width)} {width}w')
-hero_candidates.append(f'{hero_src} {hero_source.width}w')
+for width in (480, 800, 1200):
+    if width < hero_width:
+        hero_candidates.append(f'{variant_name(hero_rel, width)} {width}w')
+hero_candidates.append(f'{hero_src} {hero_width}w')
 html = html.replace(
-    f'<img src="{hero_src}" alt="Reitstunde auf der Reitanlage Eichhorn-Nels">',
-    f'<img src="{hero_src}" srcset="{", ".join(hero_candidates)}" sizes="(max-width:820px) 100vw, 56vw" alt="Reitstunde auf der Reitanlage Eichhorn-Nels" width="{hero_source.width}" height="{hero_source.height}" fetchpriority="high" decoding="async">',
+    f'<img src="{hero_src}" alt="Reiterinnen und Pferde auf der Reitanlage Eichhorn-Nels">',
+    f'<img src="{hero_src}" srcset="{", ".join(hero_candidates)}" sizes="(max-width:820px) 100vw, 56vw" alt="Reiterinnen und Pferde auf der Reitanlage Eichhorn-Nels" width="{hero_width}" height="{hero_height}" fetchpriority="high" decoding="async">',
     1,
 )
 
-# Add intrinsic sizes to the remaining journal images and keep them lazy.
+# Add intrinsic sizes to remaining journal images and keep them lazy.
 def improve_journal_img(match):
     tag = match.group(0)
     if 'width=' in tag:
@@ -231,4 +231,4 @@ if page_url not in sitemap:
     sitemap = sitemap.replace('</urlset>', entry + '</urlset>')
 sitemap_path.write_text(sitemap, encoding='utf-8')
 
-print('Built Aktuelles & Hofleben journal and enhanced small imagery.')
+print('Built Aktuelles & Hofleben journal with authentic enhanced imagery.')
