@@ -1,24 +1,16 @@
-/* Reitanlage Eichhorn-Nels — lean mobile hero, 2026-08-28.
-   Purpose: let image + headline breathe. This layer only touches the opening
-   hero on small screens; desktop composition and all later chapters remain intact. */
+/* Reitanlage Eichhorn-Nels — minimal mobile hero, 2026-08-28.
+   The hero introduces the brand and mood only; details live in the page below. */
 
 @media (max-width:820px){
   body:not(.journal-page) .hero-copy h1{
-    margin-bottom:18px!important;
-  }
-
-  body:not(.journal-page) .hero-intro{
-    max-width:31ch!important;
-    margin:0 0 18px!important;
-    font-size:clamp(.94rem,4vw,1.02rem)!important;
-    line-height:1.52!important;
+    margin-bottom:28px!important;
   }
 
   body:not(.journal-page) .hero-links{
-    gap:8px!important;
+    gap:10px!important;
   }
 
-  /* WhatsApp is intentionally a quiet secondary action on mobile. */
+  /* WhatsApp stays available without competing with the primary CTA. */
   body:not(.journal-page) .hero-links>a:nth-child(2){
     width:max-content!important;
     min-height:0!important;
@@ -39,12 +31,5 @@
     content:' →'!important;
     display:inline!important;
     margin-left:5px!important;
-  }
-}
-
-@media (max-width:430px){
-  body:not(.journal-page) .hero-intro{
-    max-width:29ch!important;
-    font-size:.94rem!important;
   }
 }
