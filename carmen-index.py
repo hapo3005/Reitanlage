@@ -13,31 +13,39 @@ namespace['replace_many'](Path('_site/index.html'), namespace['index_replacement
 # author of the hero and trim the opening copy without touching later sections.
 exec(Path('hero-personality.py').read_text(encoding='utf-8'), {})
 
-# One final homepage presentation layer is appended after every historical CSS
-# layer. Desktop contact fixes are scoped to min-width:821px; mobile remains
-# governed by the already-reviewed mobile composition files.
 css_path = Path('_site/site.css')
-css_marker = '/* ===== homepage-final-20260827.css ===== */'
 css = css_path.read_text(encoding='utf-8')
+
+# Desktop homepage authority.
+css_marker = '/* ===== homepage-final-20260827.css ===== */'
 assert css_marker not in css
 css += '\n\n' + css_marker + '\n' + Path('homepage-final-20260827.css').read_text(encoding='utf-8').rstrip() + '\n'
 
-# Consolidated large-desktop geometry pass. This is intentionally appended
-# after the homepage layer so legacy section rules cannot reintroduce the
-# spacing/grid defects caught during the final visual audit.
 desktop_marker = '/* ===== desktop-composition-final-20260827.css ===== */'
 assert desktop_marker not in css
 css += '\n\n' + desktop_marker + '\n' + Path('desktop-composition-final-20260827.css').read_text(encoding='utf-8').rstrip() + '\n'
+
+# Canonical mobile closing authority. It deliberately comes AFTER every
+# homepage visual layer so pricing, contact, footer and the closing header state
+# cannot be redefined by older CSS later in the cascade.
+mobile_closing_marker = '/* ===== mobile-closing-final-20260828.css ===== */'
+assert mobile_closing_marker not in css
+css += '\n\n' + mobile_closing_marker + '\n' + Path('mobile-closing-final-20260828.css').read_text(encoding='utf-8').rstrip() + '\n'
 css_path.write_text(css, encoding='utf-8')
 
-# The legacy observer can leave the previous chapter active near the bottom of
-# the page. A deterministic final pass keeps Contact active when Contact is the
-# visible closing chapter.
+# Deterministic contact-active state near the bottom of the page.
 js_path = Path('_site/site.js')
 js_marker = '/* ===== homepage-final-20260827.js ===== */'
 js = js_path.read_text(encoding='utf-8')
 assert js_marker not in js
 js += '\n\n' + js_marker + '\n' + Path('homepage-final-20260827.js').read_text(encoding='utf-8').rstrip() + '\n'
+
+# Mobile closing behavior is appended last for the homepage: once pricing is
+# reached, the floating header leaves the viewport and no longer obscures the
+# final price/contact composition.
+mobile_closing_js_marker = '/* ===== mobile-closing-final-20260828.js ===== */'
+assert mobile_closing_js_marker not in js
+js += '\n\n' + mobile_closing_js_marker + '\n' + Path('mobile-closing-final-20260828.js').read_text(encoding='utf-8').rstrip() + '\n'
 js_path.write_text(js, encoding='utf-8')
 
 index = Path('_site/index.html').read_text(encoding='utf-8')
@@ -52,9 +60,16 @@ assert index.count('class="hero-signature"') == 1
 assert 'Schön, dass Sie da sind.' not in index
 assert css_marker in final_css
 assert desktop_marker in final_css
+assert mobile_closing_marker in final_css
+assert final_css.rfind(mobile_closing_marker) > final_css.rfind(desktop_marker)
 assert js_marker in final_js
+assert mobile_closing_js_marker in final_js
+assert final_js.rfind(mobile_closing_js_marker) > final_js.rfind(js_marker)
+assert 'body.closing-zone:not(.nav-open) .header' in final_css
+assert 'body:not(.journal-page) .contact.contact-editorial::after' in final_css
+assert "body.classList.toggle('closing-zone', closing)" in final_js
 assert ('height:560px!important' in final_css) or ('desktop-contact-v3' in final_css)
 assert 'grid-template-columns:176px minmax(0,1fr)!important' in final_css
 assert 'height:auto!important' in final_css
 assert 'document.documentElement.scrollHeight-4' in final_js
-print('Applied strict Carmen voice, hero personality and final homepage/desktop composition passes.')
+print('Applied strict Carmen voice, hero personality and canonical desktop/mobile homepage composition passes.')
