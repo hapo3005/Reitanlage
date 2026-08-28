@@ -1,0 +1,285 @@
+/* Reitanlage Eichhorn-Nels — canonical mobile closing composition, 2026-08-28.
+   Loaded after all homepage layers. Owns only the mobile pricing/contact/footer close. */
+
+@media (max-width:820px){
+  /* Once the user reaches the closing chapter, content gets the full viewport.
+     The floating header returns automatically when scrolling back above prices. */
+  body.closing-zone:not(.nav-open) .header,
+  body.closing-zone:not(.nav-open) .header.scrolled{
+    transform:translateY(calc(-100% - 28px))!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  body:not(.journal-page) .pricing{
+    padding-bottom:28px!important;
+  }
+  body:not(.journal-page) .pricing + .contact.contact-editorial{
+    margin:0!important;
+  }
+
+  /* One continuous closing chapter: no floating paper card and no accidental overlaps. */
+  body:not(.journal-page) .contact.contact-editorial{
+    --close-green:#17382d;
+    --close-paper:#f4f0e7;
+    box-sizing:border-box!important;
+    display:block!important;
+    width:100%!important;
+    margin:0!important;
+    padding:18px 0 0!important;
+    overflow:visible!important;
+    background:var(--close-green)!important;
+    border:0!important;
+  }
+
+  body:not(.journal-page) .contact.contact-editorial .contact-image{
+    box-sizing:border-box!important;
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    height:236px!important;
+    min-height:236px!important;
+    max-height:236px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    background:#26392f!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image img{
+    display:block!important;
+    position:static!important;
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:50% 53%!important;
+    filter:saturate(.96) contrast(1.015)!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-image figcaption{
+    left:18px!important;
+    bottom:14px!important;
+    margin:0!important;
+    font-size:.54rem!important;
+    line-height:1.25!important;
+    letter-spacing:.11em!important;
+  }
+
+  /* Full-width editorial paper instead of an inset card. */
+  body:not(.journal-page) .contact.contact-editorial .contact-copy{
+    box-sizing:border-box!important;
+    display:block!important;
+    position:relative!important;
+    z-index:1!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:31px 20px 24px!important;
+    transform:none!important;
+    background:var(--close-paper)!important;
+    color:#1f2924!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy::before{
+    content:""!important;
+    display:block!important;
+    position:absolute!important;
+    top:0!important;
+    left:20px!important;
+    width:62px!important;
+    height:2px!important;
+    background:#98714e!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy .kicker{
+    margin:0 0 13px!important;
+    font-size:.66rem!important;
+    letter-spacing:.16em!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy h2{
+    width:100%!important;
+    max-width:12.8ch!important;
+    margin:0 0 16px!important;
+    font-size:clamp(1.84rem,8.2vw,2.12rem)!important;
+    line-height:1.015!important;
+    letter-spacing:-.035em!important;
+    text-wrap:balance!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy>p:not(.kicker){
+    width:100%!important;
+    max-width:35ch!important;
+    margin:0!important;
+    color:#68736d!important;
+    font-size:.94rem!important;
+    line-height:1.56!important;
+  }
+
+  body:not(.journal-page) .contact.contact-editorial .contact-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:22px 0 20px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-actions a{
+    box-sizing:border-box!important;
+    display:flex!important;
+    align-items:center!important;
+    width:100%!important;
+    min-height:50px!important;
+    margin:0!important;
+    padding:11px 15px!important;
+    border-radius:0!important;
+    font-size:.83rem!important;
+    line-height:1.2!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-actions a:first-child{
+    background:#17382d!important;
+    color:#fff!important;
+    border-color:#17382d!important;
+    font-weight:750!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-actions a:last-child{
+    background:transparent!important;
+    color:#17382d!important;
+    border:1px solid rgba(23,56,45,.56)!important;
+  }
+
+  /* Compact, legible directory: one calm list rather than oversized contact tiles. */
+  body:not(.journal-page) .contact.contact-editorial address{
+    box-sizing:border-box!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:17px 0 0!important;
+    border-top:1px solid rgba(31,41,36,.13)!important;
+    font-style:normal!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p,
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(2),
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(3),
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(4),
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(5){
+    box-sizing:border-box!important;
+    position:relative!important;
+    display:block!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:11px 0 11px 29px!important;
+    border:0!important;
+    border-bottom:1px solid rgba(31,41,36,.09)!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p:first-child{
+    padding:0 0 15px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p:last-child{
+    border-bottom:0!important;
+    opacity:.78!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p:not(:first-child)::before{
+    left:0!important;
+    top:13px!important;
+    width:16px!important;
+    height:16px!important;
+    background-size:16px 16px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p span{
+    display:block!important;
+    margin:0 0 3px!important;
+    font-size:.60rem!important;
+    line-height:1.2!important;
+    letter-spacing:.11em!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p:first-child span{
+    margin-bottom:5px!important;
+    font-size:1.22rem!important;
+    line-height:1.1!important;
+    letter-spacing:-.03em!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p strong{
+    font-size:.73rem!important;
+    line-height:1.35!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address a{
+    display:inline!important;
+    max-width:100%!important;
+    min-width:0!important;
+    font-size:.86rem!important;
+    line-height:1.4!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  /* Structural green closing band: contact and footer can no longer visually merge. */
+  body:not(.journal-page) .contact.contact-editorial::after{
+    content:""!important;
+    display:block!important;
+    width:100%!important;
+    height:20px!important;
+    background:var(--close-green)!important;
+  }
+
+  body:not(.journal-page) .footer{
+    box-sizing:border-box!important;
+    margin:0!important;
+    padding:28px 20px 24px!important;
+    gap:19px!important;
+    background:#ebe6dc!important;
+    border-top:0!important;
+  }
+  body:not(.journal-page) .footer nav{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+  }
+  body:not(.journal-page) .footer nav a{
+    min-width:0!important;
+    margin:0!important;
+    padding:3px 0!important;
+    font-size:.70rem!important;
+    white-space:nowrap!important;
+  }
+  body:not(.journal-page) .footer nav a:nth-child(1){justify-self:start!important}
+  body:not(.journal-page) .footer nav a:nth-child(2){justify-self:center!important}
+  body:not(.journal-page) .footer nav a:nth-child(3){justify-self:end!important}
+  body:not(.journal-page) .footer>p{
+    margin:0!important;
+    padding-top:15px!important;
+    font-size:.67rem!important;
+  }
+}
+
+@media (max-width:430px){
+  body:not(.journal-page) .pricing{padding-bottom:24px!important}
+  body:not(.journal-page) .contact.contact-editorial{padding-top:16px!important}
+  body:not(.journal-page) .contact.contact-editorial .contact-image{
+    height:220px!important;
+    min-height:220px!important;
+    max-height:220px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy{
+    padding:28px 18px 22px!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy::before{left:18px!important}
+  body:not(.journal-page) .contact.contact-editorial .contact-copy h2{
+    max-width:13ch!important;
+    font-size:clamp(1.76rem,8.25vw,1.98rem)!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial .contact-copy>p:not(.kicker){
+    font-size:.92rem!important;
+  }
+  body:not(.journal-page) .contact.contact-editorial address p,
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(2),
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(3),
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(4),
+  body:not(.journal-page) .contact.contact-editorial address p:nth-child(5){
+    padding-top:10px!important;
+    padding-bottom:10px!important;
+  }
+  body:not(.journal-page) .footer{padding-left:18px!important;padding-right:18px!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.closing-zone .header{transition:none!important}
+}
