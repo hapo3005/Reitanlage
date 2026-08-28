@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from PIL import Image
+
 # Reuse the reviewed homepage copy map without executing the journal pass in
 # carmen-voice.py. This keeps the homepage transformation strict and fails the
 # build if its source copy changes unexpectedly.
@@ -52,6 +54,22 @@ mobile_closing_js_marker = '/* ===== mobile-closing-final-20260828.js ===== */'
 assert mobile_closing_js_marker not in js
 js += '\n\n' + mobile_closing_js_marker + '\n' + Path('mobile-closing-final-20260828.js').read_text(encoding='utf-8').rstrip() + '\n'
 js_path.write_text(js, encoding='utf-8')
+
+# The clean source photos supplied for eventbild1/2 are the approved originals,
+# but are 828 px wide. The production quality gate expects a 1600 px master.
+# Upscale only the generated WebP masters so the source files stay untouched
+# and every existing responsive URL keeps working.
+for image_name in ('eventbild1.webp', 'eventbild2.webp'):
+    image_path = Path('_site/images') / image_name
+    with Image.open(image_path) as image:
+        if image.width < 1600:
+            target_width = 1600
+            target_height = round(image.height * target_width / image.width)
+            enlarged = image.convert('RGB').resize(
+                (target_width, target_height),
+                Image.Resampling.LANCZOS,
+            )
+            enlarged.save(image_path, 'WEBP', quality=90, method=6)
 
 index = Path('_site/index.html').read_text(encoding='utf-8')
 final_css = css_path.read_text(encoding='utf-8')
