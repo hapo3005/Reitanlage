@@ -1,0 +1,54 @@
+name: Snapshot original Reitanlage site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fetch-original-current.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Fetch current original site
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p snapshot
+          printf 'Fetch started: %s\n' "$(date -u +%FT%TZ)" > snapshot/_fetch.txt
+          for base in 'https://reitanlage-eichhorn.de/' 'https://www.reitanlage-eichhorn.de/' 'http://reitanlage-eichhorn.de/' 'http://www.reitanlage-eichhorn.de/'; do
+            echo "Trying $base" | tee -a snapshot/_fetch.txt
+            if wget \
+              --recursive \
+              --level=4 \
+              --page-requisites \
+              --convert-links \
+              --adjust-extension \
+              --no-parent \
+              --execute robots=off \
+              --timeout=25 \
+              --tries=1 \
+              --user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140 Safari/537.36' \
+              --directory-prefix=snapshot \
+              "$base"; then
+              echo "SUCCESS $base" | tee -a snapshot/_fetch.txt
+              break
+            fi
+          done
+          find snapshot -type f -maxdepth 8 -printf '%p %s bytes\n' | sort | tee snapshot/_files.txt
+          if ! find snapshot -type f \( -name '*.html' -o -name '*.htm' \) | grep -q .; then
+            echo 'No HTML page was fetched.' >&2
+            exit 1
+          fi
+
+      - name: Upload snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-site-snapshot
+          path: snapshot
+          if-no-files-found: error
+          retention-days: 1
