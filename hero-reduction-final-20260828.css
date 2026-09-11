@@ -3,33 +3,88 @@
 
 @media (max-width:820px){
   body:not(.journal-page) .hero-copy h1{
-    margin-bottom:28px!important;
+    margin-bottom:26px!important;
   }
 
   body:not(.journal-page) .hero-links{
+    width:100%!important;
+    max-width:none!important;
     gap:10px!important;
+    align-items:stretch!important;
   }
 
-  /* WhatsApp stays available without competing with the primary CTA. */
+  body:not(.journal-page) .hero-links>a{
+    width:100%!important;
+  }
+
+  /* WhatsApp is a real secondary CTA: visible, direct and clearly subordinate
+     to the cream primary action rather than reading like an orphaned text link. */
   body:not(.journal-page) .hero-links>a:nth-child(2){
-    width:max-content!important;
-    min-height:0!important;
-    padding:8px 2px!important;
-    border:0!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    backdrop-filter:none!important;
-    -webkit-backdrop-filter:none!important;
+    position:relative!important;
+    width:100%!important;
+    min-height:60px!important;
+    padding:0 15px 0 17px!important;
+    border:1px solid rgba(248,239,224,.54)!important;
+    border-radius:16px!important;
+    background:linear-gradient(135deg,rgba(19,55,43,.86),rgba(10,34,26,.78))!important;
+    box-shadow:0 12px 30px rgba(5,18,13,.20),inset 0 1px 0 rgba(255,255,255,.09)!important;
+    backdrop-filter:blur(16px) saturate(1.08)!important;
+    -webkit-backdrop-filter:blur(16px) saturate(1.08)!important;
+    display:flex!important;
+    align-items:center!important;
     justify-content:flex-start!important;
-    color:rgba(255,255,255,.88)!important;
-    font-size:.9rem!important;
+    gap:11px!important;
+    overflow:hidden!important;
+    color:#fff!important;
+    font-size:.96rem!important;
+    font-weight:720!important;
+    line-height:1.2!important;
+    letter-spacing:-.01em!important;
     text-decoration:none!important;
+    text-shadow:0 1px 8px rgba(0,0,0,.38)!important;
+    transform:translateZ(0)!important;
+    transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important;
   }
 
   body:not(.journal-page) .hero-links>a:nth-child(2)::after{
-    content:' →'!important;
-    display:inline!important;
-    margin-left:5px!important;
+    content:'→'!important;
+    flex:0 0 34px!important;
+    width:34px!important;
+    height:34px!important;
+    margin-left:auto!important;
+    border:1px solid rgba(248,239,224,.28)!important;
+    border-radius:11px!important;
+    background:rgba(248,239,224,.10)!important;
+    display:grid!important;
+    place-items:center!important;
+    color:#f7ead4!important;
+    font-size:1.05rem!important;
+    line-height:1!important;
+    text-shadow:none!important;
+    transition:transform .18s ease,background .18s ease!important;
+  }
+
+  body:not(.journal-page) .hero-links>a:nth-child(2):active{
+    transform:scale(.988)!important;
+    background:linear-gradient(135deg,rgba(24,65,51,.92),rgba(12,40,31,.84))!important;
+  }
+
+  body:not(.journal-page) .hero-links>a:nth-child(2):active::after{
+    transform:translateX(2px)!important;
+    background:rgba(248,239,224,.16)!important;
+  }
+}
+
+@media (hover:hover) and (pointer:fine) and (max-width:820px){
+  body:not(.journal-page) .hero-links>a:nth-child(2):hover{
+    transform:translateY(-2px)!important;
+    border-color:rgba(248,239,224,.72)!important;
+    background:linear-gradient(135deg,rgba(25,66,52,.92),rgba(12,39,30,.84))!important;
+    box-shadow:0 16px 34px rgba(5,18,13,.24),inset 0 1px 0 rgba(255,255,255,.11)!important;
+  }
+
+  body:not(.journal-page) .hero-links>a:nth-child(2):hover::after{
+    transform:translateX(2px)!important;
+    background:rgba(248,239,224,.16)!important;
   }
 }
