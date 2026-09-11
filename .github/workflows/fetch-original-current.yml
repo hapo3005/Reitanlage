@@ -12,128 +12,51 @@ permissions:
 jobs:
   snapshot:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 4
     steps:
-      - name: Fetch Aktuelles from original site
+      - name: Probe every original-domain variant
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p snapshot/images
-          cat > /tmp/fetch_legacy.py <<'PY'
-          from __future__ import annotations
-          from html.parser import HTMLParser
+          mkdir -p snapshot
+          n=0
+          : > snapshot/probe.txt
+          for base in \
+            'http://reitanlage-eichhorn.de/' \
+            'http://www.reitanlage-eichhorn.de/' \
+            'https://reitanlage-eichhorn.de/' \
+            'https://www.reitanlage-eichhorn.de/'; do
+            n=$((n+1))
+            echo "=== $base ===" | tee -a snapshot/probe.txt
+            curl -k -sS --connect-timeout 10 --max-time 30 \
+              -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.6 Safari/605.1.15' \
+              -D "snapshot/headers-$n.txt" -o "snapshot/body-$n.html" "$base" || true
+            printf 'NO-REDIRECT bytes=%s\n' "$(wc -c < "snapshot/body-$n.html" 2>/dev/null || echo 0)" | tee -a snapshot/probe.txt
+            grep -Eai '^(HTTP/|location:|server:|date:)' "snapshot/headers-$n.txt" | tee -a snapshot/probe.txt || true
+            curl -k -sS -L --connect-timeout 10 --max-time 35 \
+              -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.6 Safari/605.1.15' \
+              -w 'FOLLOW status=%{http_code} effective=%{url_effective} bytes=%{size_download}\n' \
+              -o "snapshot/follow-$n.html" "$base" | tee -a snapshot/probe.txt || true
+            python - "$base" "snapshot/follow-$n.html" <<'PY' | tee -a snapshot/probe.txt
+          import re,sys
           from pathlib import Path
-          from urllib.parse import urljoin, urlparse
-          import hashlib, re, subprocess
-
-          OUT = Path('snapshot')
-          bases = [
-              'https://reitanlage-eichhorn.de/',
-              'https://www.reitanlage-eichhorn.de/',
-              'http://reitanlage-eichhorn.de/',
-              'http://www.reitanlage-eichhorn.de/',
-          ]
-
-          def curl(url: str, output: Path) -> bool:
-              p = subprocess.run([
-                  'curl','-k','-L','--fail-with-body','--connect-timeout','12','--max-time','35',
-                  '--retry','1','--retry-delay','1',
-                  '-A','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.6 Safari/605.1.15',
-                  '-o',str(output),url
-              ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-              return p.returncode == 0 and output.exists() and output.stat().st_size > 0
-
-          class Parser(HTMLParser):
-              def __init__(self):
-                  super().__init__(convert_charrefs=True)
-                  self.links=[]; self.images=[]; self.text=[]; self._a=None; self._a_text=[]
-              def handle_starttag(self, tag, attrs):
-                  a=dict(attrs)
-                  if tag == 'a':
-                      self._a=a.get('href'); self._a_text=[]
-                  if tag in ('img','source'):
-                      vals=[]
-                      for key in ('src','data-src','data-lazy-src','data-original'):
-                          if a.get(key): vals.append(a[key])
-                      for key in ('srcset','data-srcset'):
-                          if a.get(key):
-                              vals += [x.strip().split()[0] for x in a[key].split(',') if x.strip()]
-                      for v in vals:
-                          self.images.append((v, a.get('alt','')))
-              def handle_endtag(self, tag):
-                  if tag == 'a' and self._a is not None:
-                      self.links.append((self._a, ' '.join(self._a_text).strip()))
-                      self._a=None; self._a_text=[]
-              def handle_data(self, data):
-                  s=' '.join(data.split())
-                  if s:
-                      self.text.append(s)
-                      if self._a is not None: self._a_text.append(s)
-
-          homepage=OUT/'home.html'
-          base_used=None
-          for base in bases:
-              if curl(base, homepage):
-                  base_used=base
-                  break
-          if not base_used:
-              raise SystemExit('Could not fetch original site homepage')
-
-          def parse(path: Path):
-              p=Parser(); p.feed(path.read_text(encoding='utf-8', errors='replace')); return p
-
-          home=parse(homepage)
-          candidates=[]
-          for href, label in home.links:
-              absolute=urljoin(base_used, href)
-              hay=(href+' '+label).lower()
-              if any(k in hay for k in ('aktuell','neuigkeit','news','hofleben')):
-                  if absolute.startswith(('http://','https://')) and absolute not in candidates:
-                      candidates.append(absolute)
-          pages=[(base_used, homepage)]
-          for i,url in enumerate(candidates[:8],1):
-              dest=OUT/f'aktuelles-{i}.html'
-              if curl(url,dest): pages.append((url,dest))
-
-          report=[]; manifest=[]; seen_img=set()
-          for idx,(url,path) in enumerate(pages):
-              p=parse(path)
-              report.append(f'=== PAGE {idx}: {url} ===')
-              report.append('TEXT:')
-              report.append('\n'.join(p.text))
-              report.append('IMAGES:')
-              for raw,alt in p.images:
-                  imgurl=urljoin(url,raw)
-                  if not imgurl.startswith(('http://','https://')): continue
-                  report.append(f'{alt}\t{imgurl}')
-                  if imgurl in seen_img: continue
-                  seen_img.add(imgurl)
-                  parsed=urlparse(imgurl)
-                  suffix=Path(parsed.path).suffix.lower()
-                  if suffix not in ('.jpg','.jpeg','.png','.webp','.gif','.avif'): suffix='.bin'
-                  stem=re.sub(r'[^A-Za-z0-9._-]+','-',Path(parsed.path).stem)[:70] or 'image'
-                  name=f'{len(seen_img):03d}-{stem}-{hashlib.sha1(imgurl.encode()).hexdigest()[:8]}{suffix}'
-                  dest=OUT/'images'/name
-                  if curl(imgurl,dest):
-                      manifest.append(f'{name}\t{alt}\t{imgurl}\t{dest.stat().st_size}')
-              report.append('')
-
-          (OUT/'report.txt').write_text('\n'.join(report),encoding='utf-8')
-          (OUT/'image-manifest.tsv').write_text('\n'.join(manifest)+'\n',encoding='utf-8')
-          (OUT/'_fetch.txt').write_text(f'BASE={base_used}\nPAGES={len(pages)}\nCANDIDATES={len(candidates)}\nIMAGES={len(manifest)}\n',encoding='utf-8')
-          print((OUT/'_fetch.txt').read_text())
-          print('--- Aktuelles candidates ---')
-          for c in candidates: print(c)
-          print('--- Report excerpt ---')
-          print((OUT/'report.txt').read_text(encoding='utf-8')[:30000])
+          base,path=sys.argv[1],Path(sys.argv[2])
+          s=path.read_text(encoding='utf-8',errors='replace') if path.exists() else ''
+          title=re.search(r'<title[^>]*>(.*?)</title>',s,re.I|re.S)
+          clean=re.sub(r'<script\b.*?</script>|<style\b.*?</style>',' ',s,flags=re.I|re.S)
+          clean=re.sub(r'<[^>]+>',' ',clean)
+          clean=re.sub(r'\s+',' ',clean).strip()
+          print('TITLE=', re.sub(r'\s+',' ',title.group(1)).strip() if title else '')
+          print('TEXT=', clean[:1200])
           PY
-          python /tmp/fetch_legacy.py
-          find snapshot -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+          done
+          echo '--- complete probe ---'
+          cat snapshot/probe.txt
 
-      - name: Upload snapshot
+      - name: Upload probe
         uses: actions/upload-artifact@v4
         with:
-          name: original-aktuelles-snapshot
+          name: original-domain-probe
           path: snapshot
           if-no-files-found: error
           retention-days: 1
