@@ -186,7 +186,6 @@ jobs:
           assert 'Google+' not in privacy
           assert 'Facebook-Plugin' not in privacy
 
-          # Security regression guardrails for every public HTML page.
           pages = [html, journal, imprint, privacy, not_found]
           for page in pages:
               assert 'http-equiv="Content-Security-Policy"' in page
@@ -231,7 +230,7 @@ jobs:
           assert not list(out.glob('*.py'))
           assert not list(out.glob('*.md'))
           total = sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
-          assert total < 7_000_000, total
+          assert total < 7 * 1024 * 1024, total
           print(f'Production artifact, image curation, consolidated CSS, mobile QA and security checks passed: {total / 1024 / 1024:.2f} MiB.')
           PY
 
