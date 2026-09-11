@@ -1,50 +1,38 @@
 {
-  "updated": "2026-08-27",
+  "updated": "2026-09-11",
   "items": [
     {
-      "category": "Ferienkurse",
-      "meta": "Termine auf Anfrage",
-      "title": "Ferienzeit mit Pferden",
-      "text": "In meinen Ferienkursen wird natürlich geritten. Genauso wichtig sind mir aber der Umgang mit dem Pferd, das Putzen, ein bisschen Theorie und die gemeinsame Zeit im Stall. Wenn Sie wissen möchten, wann der nächste Kurs stattfindet oder ob noch ein Platz frei ist, melden Sie sich gern bei mir.",
-      "details": [
-        "Für Kinder & Jugendliche",
-        "Reiten · Pflege · Theorie · Stallzeit",
-        "Aktuelle Termine direkt erfragen"
-      ],
-      "image": "images/flyerferienreitkurs.png",
-      "alt": "Ferienreitkurs auf der Reitanlage Eichhorn-Nels",
-      "imageFit": "contain",
-      "imageZoom": true,
-      "imagePosition": "50% 50%",
-      "imagePositionMobile": "50% 50%",
-      "link": "#kontakt",
-      "linkText": "Kursplatz anfragen"
+      "category": "Turniererfolg",
+      "meta": "Neu",
+      "title": "Herzlichen Glückwunsch!",
+      "text": "Wir gratulieren Nicole Wartner und ihrem jungen Verano ganz herzlich zum zweimaligen Sieg in der Dressurpferdeprüfung Klasse A – mit Wertnoten von 7,4 und 8,0.",
+      "image": "images/aktuelles-verano-sieg-1.jpg",
+      "alt": "Pferd mit Siegerschleife nach dem Erfolg in der Dressurpferdeprüfung",
+      "imageFit": "cover",
+      "imagePosition": "50% 45%",
+      "imagePositionMobile": "50% 45%"
     },
     {
-      "category": "Reitbeteiligungen",
-      "meta": "Aktuell",
-      "title": "Interesse an einer Reitbeteiligung?",
-      "text": "Ob eine Reitbeteiligung gerade möglich ist, hängt immer vom jeweiligen Pferd und von der aktuellen Situation ab. Schreiben Sie mir am besten kurz – dann können wir in Ruhe besprechen, was passen könnte.",
-      "image": "images/reitbeteiligung1.png",
-      "alt": "Reitbeteiligung auf der Reitanlage Eichhorn-Nels",
+      "category": "In Erinnerung",
+      "meta": "Maichen",
+      "title": "Maichen",
+      "text": "Du warst, wie du warst, und bist und bleibst in unserer Erinnerung. Wir danken dir für die Zeit, die du uns begleitet hast.",
+      "image": "images/aktuelles-maichen.jpg",
+      "alt": "Maichen auf dem Reitplatz",
       "imageFit": "cover",
-      "imagePosition": "50% 36%",
-      "imagePositionMobile": "50% 32%",
-      "link": "#kontakt",
-      "linkText": "Reitbeteiligung anfragen"
+      "imagePosition": "50% 35%",
+      "imagePositionMobile": "50% 35%"
     },
     {
-      "category": "Besuche & Termine",
-      "meta": "Bitte vorher abstimmen",
-      "title": "Besuch auf der Reitanlage",
-      "text": "Wenn Sie die Anlage kennenlernen oder etwas persönlich besprechen möchten, vereinbaren Sie bitte vorher kurz einen Termin mit mir. Das geht am einfachsten telefonisch oder per WhatsApp.",
-      "image": "images/eventbild4.png",
-      "alt": "Hofleben auf der Reitanlage Eichhorn-Nels",
+      "category": "Training",
+      "meta": "Verladetraining",
+      "title": "Verladetraining",
+      "text": "Mit der entsprechenden Kommunikation zwischen Mensch und Pferd wird das Verladen von Mal zu Mal leichter. Es ist immer wieder schön zu sehen, welche Fortschritte die einzelnen Paare machen. Auch der Austausch innerhalb der Gruppe ist sehr lehrreich.",
+      "image": "images/aktuelles-verladetraining.jpg",
+      "alt": "Pferd beim Verladetraining an einem Pferdeanhänger",
       "imageFit": "cover",
-      "imagePosition": "50% 42%",
-      "imagePositionMobile": "50% 38%",
-      "link": "#kontakt",
-      "linkText": "Besuch abstimmen"
+      "imagePosition": "50% 47%",
+      "imagePositionMobile": "50% 45%"
     }
   ]
 }
