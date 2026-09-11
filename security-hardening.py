@@ -5,6 +5,8 @@ import base64
 import hashlib
 import re
 
+from PIL import Image, ImageDraw
+
 OUT = Path(__file__).resolve().parent / "_site"
 
 CSP_META_RE = re.compile(
@@ -21,6 +23,45 @@ INLINE_SCRIPT_RE = re.compile(
 )
 INLINE_STYLE_RE = re.compile(r'<style\b[^>]*>(.*?)</style>', re.I | re.S)
 ANCHOR_RE = re.compile(r'<a\b[^>]*\bhref=["\'][^"\']+["\'][^>]*>', re.I)
+
+APPLE_META_NAMES = (
+    "apple-mobile-web-app-capable",
+    "mobile-web-app-capable",
+    "apple-mobile-web-app-status-bar-style",
+    "apple-mobile-web-app-title",
+    "format-detection",
+)
+APPLE_CSS_MARKER = "/* ===== apple-safari-20260911 ===== */"
+APPLE_CSS = r"""
+/* ===== apple-safari-20260911 ===== */
+:root{color-scheme:light}
+html{-webkit-text-size-adjust:100%}
+body{-webkit-font-smoothing:antialiased}
+a,button,summary{touch-action:manipulation;-webkit-tap-highlight-color:rgba(23,48,39,.14)}
+.header.scrolled{-webkit-backdrop-filter:blur(10px)}
+@supports (top:env(safe-area-inset-top)){
+  .header{top:env(safe-area-inset-top)}
+  .skip:focus{top:max(18px,env(safe-area-inset-top))}
+  @media (orientation:landscape) and (max-width:932px){
+    .header{left:env(safe-area-inset-left);right:env(safe-area-inset-right)}
+    .hero-copy{padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right))}
+    .facts{padding-left:max(30px,env(safe-area-inset-left));padding-right:max(30px,env(safe-area-inset-right))}
+    .stable,.pricing,.contact{padding-left:max(32px,env(safe-area-inset-left));padding-right:max(32px,env(safe-area-inset-right))}
+  }
+}
+@supports (-webkit-touch-callout:none){
+  input,textarea,select{font-size:16px}
+}
+""".strip() + "\n"
+
+APPLE_404_CSS = r"""
+html{-webkit-text-size-adjust:100%;color-scheme:light}
+body{-webkit-font-smoothing:antialiased}
+a{touch-action:manipulation;-webkit-tap-highlight-color:rgba(23,48,39,.14)}
+@supports (padding:env(safe-area-inset-top)){
+  body{padding-top:max(24px,env(safe-area-inset-top));padding-right:max(24px,env(safe-area-inset-right));padding-bottom:max(24px,env(safe-area-inset-bottom));padding-left:max(24px,env(safe-area-inset-left))}
+}
+""".strip()
 
 
 def sha256_source(value: str) -> str:
@@ -49,6 +90,83 @@ def secure_anchor(match: re.Match[str]) -> str:
     if re.search(r'\btarget=["\']_blank["\']', tag, re.I):
         tag = merge_rel(tag, "noopener", "noreferrer")
     return tag
+
+
+def build_apple_assets() -> None:
+    icon = Image.new("RGB", (180, 180), "#173027")
+    draw = ImageDraw.Draw(icon)
+    cream = "#f4f0e7"
+
+    # Geometric E/N mark matching the existing favicon language; no font
+    # dependency keeps CI output deterministic across GitHub runners.
+    draw.rectangle((40, 42, 50, 138), fill=cream)
+    draw.rectangle((50, 42, 83, 52), fill=cream)
+    draw.rectangle((50, 85, 78, 95), fill=cream)
+    draw.rectangle((50, 128, 83, 138), fill=cream)
+    draw.rectangle((100, 42, 110, 138), fill=cream)
+    draw.rectangle((140, 42, 150, 138), fill=cream)
+    draw.line((106, 47, 144, 133), fill=cream, width=10)
+    icon.save(OUT / "apple-touch-icon.png", "PNG", optimize=True)
+
+    mask_svg = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<path d="M14 17h15v4H19v8h9v4h-9v10h10v4H14V17Zm22 0h4l10 21V17h4v30h-4L40 26v21h-4V17Z"/>
+</svg>\n'''
+    (OUT / "safari-pinned-tab.svg").write_text(mask_svg, encoding="utf-8")
+
+
+def harden_stylesheets() -> None:
+    for filename in ("site.css", "legal-page.css"):
+        path = OUT / filename
+        if not path.exists():
+            continue
+        css = path.read_text(encoding="utf-8")
+        if APPLE_CSS_MARKER not in css:
+            path.write_text(css.rstrip() + "\n\n" + APPLE_CSS, encoding="utf-8")
+
+
+def add_apple_head(html: str) -> str:
+    for name in APPLE_META_NAMES:
+        html = re.sub(
+            rf'<meta\s+name=["\']{re.escape(name)}["\'][^>]*>\s*',
+            "",
+            html,
+            flags=re.I,
+        )
+    html = re.sub(
+        r'<link\s+rel=["\']apple-touch-icon["\'][^>]*>\s*',
+        "",
+        html,
+        flags=re.I,
+    )
+    html = re.sub(
+        r'<link\s+rel=["\']mask-icon["\'][^>]*>\s*',
+        "",
+        html,
+        flags=re.I,
+    )
+
+    viewport = '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
+    if re.search(r'<meta\s+name=["\']viewport["\'][^>]*>', html, re.I):
+        html = re.sub(
+            r'<meta\s+name=["\']viewport["\'][^>]*>',
+            viewport,
+            html,
+            count=1,
+            flags=re.I,
+        )
+    else:
+        html = html.replace("<head>", "<head>" + viewport, 1)
+
+    apple = (
+        '<meta name="format-detection" content="telephone=no">'
+        '<meta name="mobile-web-app-capable" content="yes">'
+        '<meta name="apple-mobile-web-app-capable" content="yes">'
+        '<meta name="apple-mobile-web-app-status-bar-style" content="default">'
+        '<meta name="apple-mobile-web-app-title" content="Eichhorn-Nels">'
+        '<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">'
+        '<link rel="mask-icon" href="safari-pinned-tab.svg" color="#173027">'
+    )
+    return html.replace(viewport, viewport + apple, 1)
 
 
 def security_policy(html: str) -> str:
@@ -91,6 +209,10 @@ def harden_html(path: Path) -> None:
     html = CSP_META_RE.sub("", html)
     html = REFERRER_META_RE.sub("", html)
     html = ANCHOR_RE.sub(secure_anchor, html)
+    html = add_apple_head(html)
+
+    if path.name == "404.html" and APPLE_404_CSS not in html:
+        html = html.replace("</style>", APPLE_404_CSS + "</style>", 1)
 
     policy = security_policy(html)
     meta = (
@@ -156,8 +278,8 @@ function newsLink(item){
   const href=safeNewsHref(item.link);
   if(!href||!item.linkText)return null;
   const a=document.createElement('a');
-  a.className='news-link';
   a.href=href;
+  a.className='news-link';
   a.textContent=item.linkText;
   if(href.startsWith('https://')){
     const target=new URL(href);
@@ -198,6 +320,8 @@ def main() -> None:
     if not OUT.exists():
         raise RuntimeError("_site does not exist; run the production build first")
 
+    build_apple_assets()
+    harden_stylesheets()
     harden_runtime_js()
     html_files = sorted(OUT.glob("*.html"))
     if not html_files:
@@ -206,7 +330,7 @@ def main() -> None:
         harden_html(path)
 
     print(
-        f"Security hardening applied to {len(html_files)} HTML files and production JavaScript."
+        f"Security hardening plus Apple/Safari optimization applied to {len(html_files)} HTML files."
     )
 
 
