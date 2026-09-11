@@ -279,3 +279,37 @@ body:not(.journal-page) .contact-actions a{transition:transform .18s ease,box-sh
   body:not(.journal-page) .horse-ledger article,
   body:not(.journal-page) .contact-actions a{transition:none!important}
 }
+
+/* ===== dark-section-contrast-guard-20260911 =====
+   Regression guard: visual-finish may style light editorial copy globally, but
+   dark chapters must always restore explicit high-contrast foreground colors. */
+body:not(.journal-page) .stable,
+body:not(.journal-page) .pricing{
+  color:#f4f0e7!important;
+}
+body:not(.journal-page) .stable-copy h2,
+body:not(.journal-page) .terrain h3,
+body:not(.journal-page) .pricing-intro h2{
+  color:#f8f5ef!important;
+}
+body:not(.journal-page) .stable-copy>p:not(.kicker),
+body:not(.journal-page) .stable-copy .lead,
+body:not(.journal-page) .terrain>p:not(.kicker),
+body:not(.journal-page) .pricing-intro>p:not(.kicker){
+  color:rgba(248,245,239,.82)!important;
+}
+body:not(.journal-page) .stable-copy .kicker,
+body:not(.journal-page) .terrain .kicker,
+body:not(.journal-page) .pricing-intro .kicker,
+body:not(.journal-page) .stable-specs dt{
+  color:#d8b78f!important;
+}
+body:not(.journal-page) .stable-specs dd,
+body:not(.journal-page) .price-highlight span{
+  color:rgba(248,245,239,.74)!important;
+}
+body:not(.journal-page) .price-highlight dt,
+body:not(.journal-page) .price-highlight dd,
+body:not(.journal-page) .price-details summary{
+  color:#f4f0e7!important;
+}
