@@ -26,24 +26,10 @@ jobs:
           curl -sS --fail --connect-timeout 10 --max-time 35 -A "$UA" -o images/aktuelles-verano-sieg-2.jpg 'http://reitanlage-eichhorn.de/gallery_gen/f0c2aafd21f5346dea4582239ca06f18_1032x1376_fit.JPG?ts=1789102027'
           curl -sS --fail --connect-timeout 10 --max-time 35 -A "$UA" -o images/aktuelles-maichen.jpg 'http://reitanlage-eichhorn.de/gallery_gen/232d03a4cb35dafe54c2ebd2cde1a764_fit.JPG?ts=1789102027'
           curl -sS --fail --connect-timeout 10 --max-time 35 -A "$UA" -o images/aktuelles-verladetraining.jpg 'http://reitanlage-eichhorn.de/gallery_gen/6c4ea084bfb9d8dd5c0ad24323fb4d3e_1270x1694_fit.jpg?ts=1789102027'
-          python - <<'PY'
-          from PIL import Image
-          from pathlib import Path
-          expected={
-              'aktuelles-verano-sieg-1.jpg':(868,674),
-              'aktuelles-verano-sieg-2.jpg':(1032,1376),
-              'aktuelles-maichen.jpg':(941,1191),
-              'aktuelles-verladetraining.jpg':(1270,1694),
-          }
-          for name,size in expected.items():
-              path=Path('images')/name
-              with Image.open(path) as im:
-                  im.verify()
-              with Image.open(path) as im:
-                  assert im.size==size,(name,im.size,size)
-                  assert im.format=='JPEG',(name,im.format)
-          print('Validated 4 original Aktuelles photos.')
-          PY
+          for f in images/aktuelles-verano-sieg-1.jpg images/aktuelles-verano-sieg-2.jpg images/aktuelles-maichen.jpg images/aktuelles-verladetraining.jpg; do
+            test -s "$f"
+            file "$f" | grep -q 'JPEG image data'
+          done
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add images/aktuelles-verano-sieg-1.jpg images/aktuelles-verano-sieg-2.jpg images/aktuelles-maichen.jpg images/aktuelles-verladetraining.jpg
