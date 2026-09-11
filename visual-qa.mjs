@@ -90,7 +90,8 @@ for (const viewport of viewports) {
     if (!document.querySelector('nav a[href="#fragen"]')) errors.push('primary navigation has no Fragen destination');
 
     const lesson = document.querySelector('.cinematic img');
-    if (!lesson || !lesson.currentSrc.includes('reistunde1')) errors.push('large Unterricht image is not the curated reistunde1 asset');
+    const lessonSources = lesson ? `${lesson.getAttribute('src') || ''} ${lesson.getAttribute('srcset') || ''}` : '';
+    if (!lesson || !lessonSources.includes('reistunde1')) errors.push('large Unterricht image is not the curated reistunde1 asset');
 
     for (const link of document.querySelectorAll('.hero-links>a')) {
       const rect = link.getBoundingClientRect();
