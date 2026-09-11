@@ -109,3 +109,87 @@
   setTimeout(syncCompactState, 180);
   setTimeout(syncCompactState, 520);
 })();
+
+/* Modern, accessible scroll-to-top control. */
+(() => {
+  const button = document.createElement('button');
+  const arrow = document.createElement('span');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  button.type = 'button';
+  button.className = 'back-to-top';
+  button.setAttribute('aria-label', 'Nach oben scrollen');
+  button.setAttribute('title', 'Nach oben');
+  button.style.cssText = [
+    'position:fixed',
+    'right:calc(20px + env(safe-area-inset-right,0px))',
+    'bottom:calc(20px + env(safe-area-inset-bottom,0px))',
+    'z-index:250',
+    'width:48px',
+    'height:48px',
+    'display:grid',
+    'place-items:center',
+    'padding:0',
+    'border:1px solid rgba(244,240,231,.42)',
+    'border-radius:50%',
+    'background:rgba(23,56,45,.94)',
+    'color:#f4f0e7',
+    'box-shadow:0 10px 28px rgba(7,24,17,.20),inset 0 1px 0 rgba(255,255,255,.14)',
+    'backdrop-filter:blur(10px)',
+    '-webkit-backdrop-filter:blur(10px)',
+    'cursor:pointer',
+    'opacity:0',
+    'visibility:hidden',
+    'pointer-events:none',
+    'transform:translateY(10px) scale(.94)',
+    'transition:opacity .22s ease,transform .22s ease,visibility .22s ease,background .18s ease,box-shadow .18s ease',
+    'touch-action:manipulation',
+    '-webkit-tap-highlight-color:transparent'
+  ].join(';');
+
+  arrow.textContent = '↑';
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.style.cssText = 'display:block;font:300 24px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;transform:translateY(-1px)';
+  button.appendChild(arrow);
+  document.body.appendChild(button);
+
+  const setVisible = () => {
+    const visible = (window.scrollY || window.pageYOffset || 0) > 560;
+    button.style.opacity = visible ? '1' : '0';
+    button.style.visibility = visible ? 'visible' : 'hidden';
+    button.style.pointerEvents = visible ? 'auto' : 'none';
+    button.style.transform = visible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(.94)';
+  };
+
+  button.addEventListener('click', () => {
+    window.scrollTo({ top: 0, left: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+  });
+  button.addEventListener('pointerenter', () => {
+    button.style.background = 'rgba(23,48,39,.99)';
+    button.style.boxShadow = '0 13px 32px rgba(7,24,17,.25),inset 0 1px 0 rgba(255,255,255,.18)';
+    button.style.transform = 'translateY(-2px) scale(1.02)';
+  });
+  button.addEventListener('pointerleave', setVisible);
+  button.addEventListener('focus', () => {
+    button.style.outline = '3px solid rgba(179,145,103,.58)';
+    button.style.outlineOffset = '3px';
+  });
+  button.addEventListener('blur', () => {
+    button.style.outline = 'none';
+  });
+
+  let scheduled = false;
+  const schedule = () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      setVisible();
+      scheduled = false;
+    });
+  };
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('pageshow', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+  setVisible();
+})();
