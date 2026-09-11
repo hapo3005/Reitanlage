@@ -1,4 +1,7 @@
 from pathlib import Path
+import json
+import os
+import re
 
 from PIL import Image
 
@@ -71,7 +74,111 @@ for image_name in ('eventbild1.webp', 'eventbild2.webp'):
             )
             enlarged.save(image_path, 'WEBP', quality=90, method=6)
 
-index = Path('_site/index.html').read_text(encoding='utf-8')
+# Structured data: make the business, website and actual service portfolio
+# explicit without adding invisible claims that are not present on the page.
+site_url = os.environ.get('SITE_URL', 'https://hapo3005.github.io/Reitanlage/').rstrip('/') + '/'
+business_id = site_url + '#business'
+website_id = site_url + '#website'
+webpage_id = site_url + '#webpage'
+
+services = [
+    ('Reitunterricht', 'Reitunterricht für Kinder, Jugendliche und Erwachsene mit Schul- oder Privatpferd.', '#ausbildung'),
+    ('Pferdepension', 'Pferdepension mit hellen Boxen, täglichem Auslauf und Heu aus eigenem Anbau.', '#anlage'),
+    ('Beritt und Pferdeausbildung', 'Einzel-, Teil- und Vollberitt sowie Longieren und Bodenarbeit.', '#ausbildung'),
+    ('Geführte Ausritte', 'Geführte Ausritte nach Absprache und mit entsprechender Reiterfahrung.', '#anlage'),
+    ('Ferienreitkurse und Reitabzeichen', 'Ferienreitkurse, Lehrgänge und Vorbereitung auf Reitabzeichen nach aktuellem Angebot.', '#aktuelles'),
+    ('Turnierbetreuung', 'Vorbereitung, Betreuung auf Turnieren und Vorstellung von Pferden nach Vereinbarung.', '#pferde'),
+]
+
+offers = []
+for name, description, anchor in services:
+    offers.append({
+        '@type': 'Offer',
+        'itemOffered': {
+            '@type': 'Service',
+            'name': name,
+            'description': description,
+            'url': site_url + anchor,
+            'provider': {'@id': business_id},
+        },
+    })
+
+schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebSite',
+            '@id': website_id,
+            'url': site_url,
+            'name': 'Reitanlage Eichhorn-Nels',
+            'inLanguage': 'de-DE',
+            'publisher': {'@id': business_id},
+        },
+        {
+            '@type': ['SportsActivityLocation', 'LocalBusiness'],
+            '@id': business_id,
+            'name': 'Reitanlage Eichhorn-Nels',
+            'url': site_url,
+            'telephone': '+49 174 3156082',
+            'email': 'eichhorn.c@t-online.de',
+            'image': site_url + 'social-preview.jpg',
+            'priceRange': '€€',
+            'address': {
+                '@type': 'PostalAddress',
+                'streetAddress': 'Siedlung Dadscheid 3',
+                'postalCode': '54518',
+                'addressLocality': 'Minderlittgen',
+                'addressRegion': 'Rheinland-Pfalz',
+                'addressCountry': 'DE',
+            },
+            'sameAs': ['https://www.facebook.com/groups/403038393066632/'],
+            'hasOfferCatalog': {
+                '@type': 'OfferCatalog',
+                'name': 'Leistungen der Reitanlage Eichhorn-Nels',
+                'itemListElement': offers,
+            },
+        },
+        {
+            '@type': 'WebPage',
+            '@id': webpage_id,
+            'url': site_url,
+            'name': 'Reitunterricht & Pferdepension bei Wittlich · Eichhorn-Nels',
+            'description': 'Reitunterricht für Kinder, Jugendliche und Erwachsene in Minderlittgen bei Wittlich. Dazu Pferdepension, Beritt, Ausritte, Reitabzeichen und Turnierbetreuung.',
+            'isPartOf': {'@id': website_id},
+            'about': {'@id': business_id},
+            'primaryImageOfPage': {
+                '@type': 'ImageObject',
+                'url': site_url + 'social-preview.jpg',
+            },
+            'inLanguage': 'de-DE',
+        },
+    ],
+}
+
+index_path = Path('_site/index.html')
+index = index_path.read_text(encoding='utf-8')
+schema_script = '<script type="application/ld+json">' + json.dumps(schema, ensure_ascii=False, separators=(',', ':')) + '</script>'
+index, schema_count = re.subn(
+    r'<script type="application/ld\+json">.*?</script>',
+    schema_script,
+    index,
+    count=1,
+    flags=re.S,
+)
+assert schema_count == 1
+index_path.write_text(index, encoding='utf-8')
+
+# Validate the generated graph before security-hardening adds its CSP hashes.
+match = re.search(r'<script type="application/ld\+json">(.*?)</script>', index, re.S)
+assert match
+parsed_schema = json.loads(match.group(1))
+graph = parsed_schema['@graph']
+business = next(node for node in graph if business_id == node.get('@id'))
+assert 'LocalBusiness' in business['@type']
+assert business['hasOfferCatalog']['@type'] == 'OfferCatalog'
+assert len(business['hasOfferCatalog']['itemListElement']) == len(services)
+assert all(item['itemOffered']['@type'] == 'Service' for item in business['hasOfferCatalog']['itemListElement'])
+
 final_css = css_path.read_text(encoding='utf-8')
 final_js = js_path.read_text(encoding='utf-8')
 assert 'Was Carmen im Unterricht' not in index
@@ -102,4 +209,4 @@ assert ('height:560px!important' in final_css) or ('desktop-contact-v3' in final
 assert 'grid-template-columns:176px minmax(0,1fr)!important' in final_css
 assert 'height:auto!important' in final_css
 assert 'document.documentElement.scrollHeight-4' in final_js
-print('Applied strict Carmen voice, minimal hero and canonical desktop/mobile homepage composition passes.')
+print('Applied strict Carmen voice, homepage composition and enhanced LocalBusiness service schema.')
