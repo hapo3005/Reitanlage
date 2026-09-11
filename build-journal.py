@@ -16,6 +16,13 @@ EXTRA_IMAGES = (
     'images/frohefeiertage.png',
 )
 
+CURRENT_NEWS_IMAGES = (
+    'images/aktuelles-verano-sieg-1.jpg',
+    'images/aktuelles-verano-sieg-2.jpg',
+    'images/aktuelles-maichen.jpg',
+    'images/aktuelles-verladetraining.jpg',
+)
+
 # These photos benefit from a restrained 2x Lanczos enlargement plus a mild
 # unsharp mask. This improves modern-screen presentation without inventing
 # detail that is not present in the original source.
@@ -80,6 +87,15 @@ for src in EXTRA_IMAGES:
     lossless = 'flyer' in source.name.lower()
     save_webp(im, OUT / webp_name(src), quality=88, lossless=lossless)
 
+# The newest Aktuelles photos come directly from the original Reitanlage site.
+# Publish optimized copies without altering the archived source originals.
+for src in CURRENT_NEWS_IMAGES:
+    source = ROOT / src
+    if not source.exists():
+        raise FileNotFoundError(source)
+    with Image.open(source) as im:
+        save_webp(im, OUT / webp_name(src), quality=87)
+
 # Replace smaller public photos with clean 2x display versions. Existing layout
 # aspect ratios and focal points stay identical.
 for src in UPSCALE_IMAGES:
@@ -108,14 +124,20 @@ def optimized_news_image(src: str) -> str:
 
 
 def news_href(link: str) -> str:
-    if not link:
-        return 'index.html#kontakt'
     return f'index.html{link}' if link.startswith('#') else link
 
 
 def news_meta(item):
     values = [item.get('category'), item.get('meta')]
     return ' · '.join(escape(v) for v in values if v)
+
+
+def news_action(item):
+    link = item.get('link')
+    text = item.get('linkText')
+    if not link or not text:
+        return ''
+    return f'<a class="news-link" href="{escape(news_href(link))}">{escape(text)}</a>'
 
 
 def render_current_news(data):
@@ -126,30 +148,39 @@ def render_current_news(data):
     featured = items[0]
     fit_class = 'is-contain' if featured.get('imageFit') == 'contain' else ''
     image = optimized_news_image(featured.get('image', ''))
-    link = news_href(featured.get('link', '#kontakt'))
     main = f'''<div class="journal-current-grid">
       <article class="journal-current-main">
         <figure class="{fit_class}"><img src="{escape(image)}" alt="{escape(featured.get('alt','Aktuelles von der Reitanlage Eichhorn-Nels'))}" loading="lazy" decoding="async"></figure>
-        <div class="journal-current-copy"><p class="journal-meta">{news_meta(featured)}</p><h3>{escape(featured['title'])}</h3><p>{escape(featured['text'])}</p><a class="news-link" href="{escape(link)}">{escape(featured.get('linkText','Anfragen'))}</a></div>
+        <div class="journal-current-copy"><p class="journal-meta">{news_meta(featured)}</p><h3>{escape(featured['title'])}</h3><p>{escape(featured['text'])}</p>{news_action(featured)}</div>
       </article>'''
 
     sides = []
     for item in items[1:]:
         image = optimized_news_image(item.get('image', ''))
-        link = news_href(item.get('link', '#kontakt'))
         sides.append(f'''<article class="journal-current-side">
           <figure><img src="{escape(image)}" alt="{escape(item.get('alt','Aktuelles von der Reitanlage Eichhorn-Nels'))}" loading="lazy" decoding="async"></figure>
-          <div class="journal-current-side-copy"><p class="journal-meta">{news_meta(item)}</p><h3>{escape(item['title'])}</h3><p>{escape(item['text'])}</p><a class="news-link" href="{escape(link)}">{escape(item.get('linkText','Anfragen'))}</a></div>
+          <div class="journal-current-side-copy"><p class="journal-meta">{news_meta(item)}</p><h3>{escape(item['title'])}</h3><p>{escape(item['text'])}</p>{news_action(item)}</div>
         </article>''')
     return main + '<div class="journal-current-side-list">' + ''.join(sides) + '</div></div>'
 
 
 news = json.loads((ROOT / 'aktuelles.json').read_text(encoding='utf-8'))
+
+# build-release.py creates the deployment JSON first. Point the newly synced
+# entries at the optimized WebP copies generated above before publication.
+deployed_news_path = OUT / 'aktuelles.json'
+deployed_news = json.loads(deployed_news_path.read_text(encoding='utf-8'))
+for item in deployed_news.get('items', []):
+    src = item.get('image')
+    if src in CURRENT_NEWS_IMAGES:
+        item['image'] = webp_name(src)
+deployed_news_path.write_text(json.dumps(deployed_news, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
 html = (ROOT / 'aktuelles.html').read_text(encoding='utf-8')
 html = html.replace('<!-- CURRENT_NEWS -->', render_current_news(news))
 
 # All local journal imagery is served in the optimized release format.
-all_local_images = set(EXTRA_IMAGES) | set(UPSCALE_IMAGES) | {
+all_local_images = set(EXTRA_IMAGES) | set(CURRENT_NEWS_IMAGES) | set(UPSCALE_IMAGES) | {
     'images/reitbeteiligung1.png',
     'images/familieanuth.png',
     'images/flyerferienreitkurs.png',
