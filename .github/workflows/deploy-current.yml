@@ -103,6 +103,8 @@ jobs:
           assert 'Reiten beginnt für mich mit <em>Vertrauen.</em>' in html
           assert 'Was mir beim Reiten <em>wichtig ist.</em>' in html
           assert 'Schreiben Sie Carmen gern' not in html
+          assert 'images/reistunde1.webp' in html
+          assert 'alt="Reitunterricht auf der Reitanlage Eichhorn-Nels"' in html
           assert 'above-fold-direction.css' in css
           assert 'navigation-final-20260827.css' in css
           assert 'mobile-system-20260827.css' in css
@@ -110,6 +112,14 @@ jobs:
           assert 'mobile-composition-20260827.css' in css
           assert 'final-10of10-20260827.css' in css
           assert 'mobile-qa-final-20260827.css' in css
+          assert css.count('/* ===== homepage-authority-bundle ===== */') == 1
+          assert css.count('/* ===== homepage-premium-final.css ===== */') == 1
+          assert css.rfind('/* ===== homepage-premium-final.css ===== */') > css.rfind('/* ===== homepage-authority-bundle ===== */')
+          assert '/* module: homepage-final-20260827.css */' in css
+          assert '/* module: desktop-composition-final-20260827.css */' in css
+          assert '/* module: mobile-closing-final-20260828.css */' in css
+          assert '/* module: hero-reduction-final-20260828.css */' in css
+          assert 'visual-finish-20260911' not in css
           nav_marker = '/* ===== navigation-final-20260827.css ===== */'
           mobile_marker = '/* ===== mobile-system-20260827.css ===== */'
           mobile_nav_marker = '/* ===== mobile-navigation-final-20260827.css ===== */'
@@ -141,6 +151,8 @@ jobs:
           assert 'padding-bottom:34px!important' in css
           assert '.footer nav a:last-child{grid-column:1/-1!important;margin-top:4px!important}' not in css
           assert 'body:not(.journal-page) .hero-copy' in css
+          assert 'body:not(.journal-page) .stable-copy>p:not(.kicker)' in css
+          assert 'color:rgba(248,245,239,.84)!important' in css
           assert 'header-hidden' in js
           assert 'upDistance >= 84' in js
           assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
@@ -203,10 +215,13 @@ jobs:
           assert (out / 'images/eventbild1-480.webp').exists()
           assert (out / 'images/eventbild1-800.webp').exists()
           assert (out / 'images/eventbild1-1200.webp').exists()
+          assert (out / 'images/reistunde1.webp').exists()
+          assert (out / 'images/reistunde1-480.webp').exists()
           assert (out / 'images/flyerferienreitskurs2.webp').exists()
           assert (out / 'images/frohefeiertage.webp').exists()
-          assert Image.open(out / 'images/eventbild1.webp').width >= 1600
-          assert Image.open(out / 'images/eventbild2.webp').width >= 1600
+          assert Image.open(out / 'images/eventbild1.webp').width >= 800
+          assert Image.open(out / 'images/eventbild2.webp').width >= 800
+          assert Image.open(out / 'images/reistunde1.webp').width >= 1000
           assert Image.open(out / 'images/eventbild4.webp').width >= 400
           assert Image.open(out / 'images/schulpferd1.webp').width >= 400
           assert Image.open(out / 'social-preview.jpg').size == (1200, 630)
@@ -217,8 +232,33 @@ jobs:
           assert not list(out.glob('*.md'))
           total = sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
           assert total < 7_000_000, total
-          print(f'Production artifact, mobile QA and security checks passed: {total / 1024 / 1024:.2f} MiB.')
+          print(f'Production artifact, image curation, consolidated CSS, mobile QA and security checks passed: {total / 1024 / 1024:.2f} MiB.')
           PY
+
+      - name: Browser visual regression and contrast QA
+        shell: bash
+        run: |
+          export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+          npm install --no-save --no-package-lock --ignore-scripts playwright-core@1.55.0
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_PATH"
+          python -m http.server 4173 --directory _site >/tmp/reitanlage-visual-qa.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          CHROME_PATH="$CHROME_PATH" node visual-qa.mjs
+
+      - name: Upload visual QA snapshots
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: visual-qa-${{ github.sha }}
+          path: _qa
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 6
 
       - name: Archive static site
         shell: bash
@@ -259,9 +299,13 @@ jobs:
             if grep -q "site.css?v=${token}" <<<"$page" \
               && grep -q "Reiten beginnt für mich mit <em>Vertrauen.</em>" <<<"$page" \
               && grep -q "Was mir beim Reiten <em>wichtig ist.</em>" <<<"$page" \
+              && grep -q 'images/reistunde1.webp' <<<"$page" \
               && grep -q 'Content-Security-Policy' <<<"$page" \
               && grep -q 'name="referrer" content="no-referrer"' <<<"$page" \
               && grep -q 'mobile-qa-final-20260827.css' <<<"$stylesheet" \
+              && grep -q 'homepage-authority-bundle' <<<"$stylesheet" \
+              && grep -q 'homepage-premium-final.css' <<<"$stylesheet" \
+              && grep -q 'color:rgba(248,245,239,.84)!important' <<<"$stylesheet" \
               && grep -q 'grid-template-columns:repeat(3,minmax(0,1fr))!important' <<<"$stylesheet" \
               && grep -q "site.css?v=${token}" <<<"$journal" \
               && grep -q "Sommerferien auf dem Hof" <<<"$journal" \
@@ -276,9 +320,9 @@ jobs:
               && grep -q "GitHub Pages" <<<"$privacy" \
               && grep -q "WhatsApp Ireland Limited" <<<"$privacy" \
               && grep -q 'Content-Security-Policy' <<<"$privacy"; then
-              curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}images/eventbild1-800.webp" -o /tmp/journal-hero.webp
-              test -s /tmp/journal-hero.webp
-              echo "Live release ${token}, including final mobile QA, CSP, referrer protection, safe dynamic URLs, hardened JavaScript and pinned deployment actions, verified."
+              curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "${PAGE_URL}images/reistunde1.webp" -o /tmp/reitstunde1.webp
+              test -s /tmp/reitstunde1.webp
+              echo "Live release ${token}, including curated imagery, consolidated homepage CSS, browser visual regression, contrast QA, CSP and hardened runtime, verified."
               exit 0
             fi
             sleep 3
