@@ -16,6 +16,10 @@ replacements = [
         '<p class="credential">Carmen Eichhorn-Nels · Trainer C Leistungssport · Dressur bis M · Springen bis L</p>',
         ''
     ),
+    (
+        '>Per WhatsApp schreiben</a>',
+        '>Direkt per WhatsApp anfragen</a>'
+    ),
 ]
 
 missing = []
@@ -35,5 +39,7 @@ assert 'Schön, dass Sie da sind.' not in html
 assert 'Reitunterricht für Kinder, Jugendliche und Erwachsene – vom Einstieg bis zur Turniervorbereitung.' not in html
 assert 'Trainer C Leistungssport · Dressur bis M · Springen bis L' not in html
 assert 'Reitanlage Eichhorn-Nels · Minderlittgen' in html
+assert 'Direkt per WhatsApp anfragen' in html
+assert 'Per WhatsApp schreiben' not in html
 path.write_text(html, encoding='utf-8')
 print('Applied minimal hero: identity, headline and actions only.')
