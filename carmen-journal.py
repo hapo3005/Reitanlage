@@ -26,6 +26,16 @@ forbidden = (
 for phrase in forbidden:
     assert phrase not in text, phrase
 
+# Keep the primary navigation consistent across the homepage and Hofjournal.
+nav_marker = '<a href="index.html#preise">Preise</a><a class="nav-cta" href="index.html#kontakt">Kontakt</a>'
+assert nav_marker in text
+assert 'href="index.html#fragen">Fragen</a>' not in text
+text = text.replace(
+    nav_marker,
+    '<a href="index.html#preise">Preise</a><a href="index.html#fragen">Fragen</a><a class="nav-cta" href="index.html#kontakt">Kontakt</a>',
+    1,
+)
+
 # Give each current Hofmeldung a stable fragment URL. This keeps the collection
 # page compact while allowing structured data to identify every post uniquely.
 news = json.loads(Path('_site/aktuelles.json').read_text(encoding='utf-8'))
@@ -181,6 +191,7 @@ assert item_list['numberOfItems'] == len(items)
 assert sum(node.get('@type') == 'BlogPosting' for node in graph) == len(items)
 for position in range(1, len(items) + 1):
     assert f'id="meldung-{position}"' in text
+assert text.count('href="index.html#fragen">Fragen</a>') == 1
 
 # This script runs after the global final desktop/mobile layers in the deploy
 # workflow. Append the dedicated Hofjournal authority here so no older generic
@@ -199,4 +210,4 @@ assert final_css.rfind(marker) > final_css.rfind('/* ===== final-10of10-20260827
 assert '.journal-page .journal-photoessay .journal-section-head h2' in final_css
 assert 'grid-template-columns:repeat(12,minmax(0,1fr))!important' in final_css
 
-print('Verified Carmen voice, Hofjournal design and structured data for current posts.')
+print('Verified Carmen voice, Hofjournal design, FAQ navigation and structured data for current posts.')
