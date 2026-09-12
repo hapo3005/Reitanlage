@@ -39,28 +39,13 @@ jobs:
         run: |
           python build-release.py
           python build-journal.py
-          printf '\n\n/* ===== journal-finish.css ===== */\n' >> _site/site.css
-          cat journal-finish.css >> _site/site.css
-          printf '\n\n/* ===== above-fold-direction.css ===== */\n' >> _site/site.css
-          cat above-fold-direction.css >> _site/site.css
-          printf '\n\n/* ===== navigation-final-20260827.css ===== */\n' >> _site/site.css
-          cat navigation-final-20260827.css >> _site/site.css
-          printf '\n\n/* ===== mobile-system-20260827.css ===== */\n' >> _site/site.css
-          cat mobile-system-20260827.css >> _site/site.css
-          printf '\n\n/* ===== mobile-navigation-final-20260827.css ===== */\n' >> _site/site.css
-          cat mobile-navigation-final-20260827.css >> _site/site.css
-          printf '\n\n/* ===== mobile-composition-20260827.css ===== */\n' >> _site/site.css
-          cat mobile-composition-20260827.css >> _site/site.css
-          printf '\n\n/* ===== final-10of10-20260827.css ===== */\n' >> _site/site.css
-          cat final-10of10-20260827.css >> _site/site.css
-          printf '\n\n/* ===== mobile-qa-final-20260827.css ===== */\n' >> _site/site.css
-          cat mobile-qa-final-20260827.css >> _site/site.css
           printf '\n\n/* ===== mobile-header.js ===== */\n' >> _site/site.js
           cat mobile-header.js >> _site/site.js
           python carmen-index.py
           python carmen-journal.py
           python release-quality.py
           python security-hardening.py
+          python verify-css-architecture.py
 
       - name: Verify production artifact
         shell: bash
@@ -75,12 +60,15 @@ jobs:
           html = (out / 'index.html').read_text(encoding='utf-8')
           journal = (out / 'aktuelles.html').read_text(encoding='utf-8')
           css = (out / 'site.css').read_text(encoding='utf-8')
+          canonical_css = Path('styles/site.css').read_text(encoding='utf-8').rstrip() + '\n'
           js = (out / 'site.js').read_text(encoding='utf-8')
           imprint = (out / 'impressum.html').read_text(encoding='utf-8')
           privacy = (out / 'datenschutz.html').read_text(encoding='utf-8')
           not_found = (out / '404.html').read_text(encoding='utf-8')
           sitemap = (out / 'sitemap.xml').read_text(encoding='utf-8')
           news = json.loads((out / 'aktuelles.json').read_text(encoding='utf-8'))
+
+          assert css == canonical_css
 
           assert '<section class="legal"' not in html
           assert 'href="impressum.html">Impressum</a>' in html
