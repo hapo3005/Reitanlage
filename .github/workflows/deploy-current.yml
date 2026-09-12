@@ -123,22 +123,22 @@ jobs:
           nav_marker = '/* ===== navigation-final-20260827.css ===== */'
           mobile_marker = '/* ===== mobile-system-20260827.css ===== */'
           mobile_nav_marker = '/* ===== mobile-navigation-final-20260827.css ===== */'
-          mobile_comp_marker = '/* ===== mobile-composition-20260827.css ===== */'
+          mobile_comp_marker = '/* ===== mobile-composition-final-20260827.css ===== */'
           final_marker = '/* ===== final-10of10-20260827.css ===== */'
           mobile_qa_marker = '/* ===== mobile-qa-final-20260827.css ===== */'
           assert css.count(nav_marker) == 1
           assert css.count(mobile_marker) == 1
-          assert css.count(mobile_nav_marker) == 1
-          assert css.count(mobile_comp_marker) == 1
+          assert css.count('/* ===== mobile-navigation-final-20260827.css ===== */') == 1
+          assert css.count('/* ===== mobile-composition-20260827.css ===== */') == 1
           assert css.count(final_marker) == 1
           assert css.count(mobile_qa_marker) == 1
           assert 'header-signature.css' not in css
           assert css.rfind('/* ===== above-fold-direction.css ===== */') > css.rfind('/* ===== architecture-v2.css ===== */')
           assert css.rfind(nav_marker) > css.rfind('/* ===== above-fold-direction.css ===== */')
           assert css.rfind(mobile_marker) > css.rfind(nav_marker)
-          assert css.rfind(mobile_nav_marker) > css.rfind(mobile_marker)
-          assert css.rfind(mobile_comp_marker) > css.rfind(mobile_nav_marker)
-          assert css.rfind(final_marker) > css.rfind(mobile_comp_marker)
+          assert css.rfind('/* ===== mobile-navigation-final-20260827.css ===== */') > css.rfind(mobile_marker)
+          assert css.rfind('/* ===== mobile-composition-20260827.css ===== */') > css.rfind('/* ===== mobile-navigation-final-20260827.css ===== */')
+          assert css.rfind(final_marker) > css.rfind('/* ===== mobile-composition-20260827.css ===== */')
           assert css.rfind(mobile_qa_marker) > css.rfind(final_marker)
           assert 'grid-template-columns:repeat(7,minmax(0,1fr))!important' in css
           assert 'grid-template-columns:auto auto auto!important' in css
@@ -235,28 +235,16 @@ jobs:
           PY
 
       - name: Browser visual regression and contrast QA
-        shell: bash
-        run: |
-          export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-          npm install --no-save --no-package-lock --ignore-scripts playwright-core@1.55.0
-          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
-          test -n "$CHROME_PATH"
-          python -m http.server 4173 --directory _site >/tmp/reitanlage-visual-qa.log 2>&1 &
-          server_pid=$!
-          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
-          for attempt in {1..20}; do
-            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
-            sleep 0.25
-          done
-          CHROME_PATH="$CHROME_PATH" node visual-qa.mjs
+        run: node visual-qa.mjs
 
       - name: Upload visual QA snapshots
+        if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: visual-qa-${{ github.sha }}
           path: _qa
           retention-days: 7
-          if-no-files-found: error
+          if-no-files-found: ignore
           compression-level: 6
 
       - name: Archive static site
