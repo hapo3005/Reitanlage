@@ -328,12 +328,14 @@ try {
         if (!audit.title.trim()) runtimeErrors.push('document title is empty');
         if (audit.lang !== 'de') runtimeErrors.push(`document lang is ${audit.lang || 'missing'}, expected de`);
 
-        // reducedMotion is already emulated above. Do not ask Playwright to
-        // inject its own animation-disabling stylesheet: WebKit correctly blocks
-        // that internal inline style under our strict production CSP.
+        // The page already honors prefers-reduced-motion. Explicitly keep
+        // screenshot animation/caret behavior untouched so Playwright does not
+        // inject helper styles that WebKit correctly rejects under our strict CSP.
         const screenshot = await page.screenshot({
           path: path.join(OUT_DIR, `${browserDef.name}-${viewport.name}.png`),
           fullPage: true,
+          animations: 'allow',
+          caret: 'initial',
         });
         const signature = visualSignature(screenshot, candidate.grid);
         candidate.signatures[label] = signature;
