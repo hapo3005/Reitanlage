@@ -260,6 +260,44 @@ try {
         }, { width });
 
         runtimeErrors.push(...audit.errors);
+
+        if (width <= 820) {
+          const mobileNavigationErrors = await page.evaluate(async () => {
+            const errors = [];
+            const trigger = document.querySelector('[data-menu]');
+            const nav = document.querySelector('[data-nav]');
+            const header = document.querySelector('[data-header]');
+            if (!trigger || !nav || !header) return ['menu trigger, navigation or header is missing'];
+
+            if (nav.classList.contains('open')) trigger.click();
+            trigger.click();
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+            const links = [...nav.querySelectorAll('a')];
+            const navRect = nav.getBoundingClientRect();
+            const headerRect = header.getBoundingClientRect();
+            const firstRect = links[0]?.getBoundingClientRect();
+            const lastRect = links.at(-1)?.getBoundingClientRect();
+            const visibleBottom = Math.min(navRect.bottom, window.innerHeight);
+
+            if (!nav.classList.contains('open')) errors.push('menu did not open');
+            if (Math.abs(nav.scrollTop) > 1) errors.push(`opened with scrollTop ${nav.scrollTop}px`);
+            if (navRect.top < headerRect.bottom + 4) {
+              errors.push(`panel top ${navRect.top.toFixed(1)}px overlaps header bottom ${headerRect.bottom.toFixed(1)}px`);
+            }
+            if (!firstRect || firstRect.top < navRect.top - 1 || firstRect.bottom > visibleBottom + 1) {
+              errors.push('first destination is not fully visible');
+            }
+            if (!lastRect || lastRect.top < navRect.top - 1 || lastRect.bottom > visibleBottom + 1) {
+              errors.push('last destination is not fully visible');
+            }
+
+            trigger.click();
+            return errors;
+          });
+          runtimeErrors.push(...mobileNavigationErrors.map(error => `mobile navigation: ${error}`));
+        }
+
         if (!audit.title.trim()) runtimeErrors.push('document title is empty');
         if (audit.lang !== 'de') runtimeErrors.push(`document lang is ${audit.lang || 'missing'}, expected de`);
 
