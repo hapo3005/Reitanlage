@@ -59,6 +59,7 @@ jobs:
           cat mobile-header.js >> _site/site.js
           python carmen-index.py
           python carmen-journal.py
+          python release-quality.py
           python security-hardening.py
 
       - name: Verify production artifact
@@ -123,22 +124,22 @@ jobs:
           nav_marker = '/* ===== navigation-final-20260827.css ===== */'
           mobile_marker = '/* ===== mobile-system-20260827.css ===== */'
           mobile_nav_marker = '/* ===== mobile-navigation-final-20260827.css ===== */'
-          mobile_comp_marker = '/* ===== mobile-composition-final-20260827.css ===== */'
+          mobile_comp_marker = '/* ===== mobile-composition-20260827.css ===== */'
           final_marker = '/* ===== final-10of10-20260827.css ===== */'
           mobile_qa_marker = '/* ===== mobile-qa-final-20260827.css ===== */'
           assert css.count(nav_marker) == 1
           assert css.count(mobile_marker) == 1
-          assert css.count('/* ===== mobile-navigation-final-20260827.css ===== */') == 1
-          assert css.count('/* ===== mobile-composition-20260827.css ===== */') == 1
+          assert css.count(mobile_nav_marker) == 1
+          assert css.count(mobile_comp_marker) == 1
           assert css.count(final_marker) == 1
           assert css.count(mobile_qa_marker) == 1
           assert 'header-signature.css' not in css
           assert css.rfind('/* ===== above-fold-direction.css ===== */') > css.rfind('/* ===== architecture-v2.css ===== */')
           assert css.rfind(nav_marker) > css.rfind('/* ===== above-fold-direction.css ===== */')
           assert css.rfind(mobile_marker) > css.rfind(nav_marker)
-          assert css.rfind('/* ===== mobile-navigation-final-20260827.css ===== */') > css.rfind(mobile_marker)
-          assert css.rfind('/* ===== mobile-composition-20260827.css ===== */') > css.rfind('/* ===== mobile-navigation-final-20260827.css ===== */')
-          assert css.rfind(final_marker) > css.rfind('/* ===== mobile-composition-20260827.css ===== */')
+          assert css.rfind(mobile_nav_marker) > css.rfind(mobile_marker)
+          assert css.rfind(mobile_comp_marker) > css.rfind(mobile_nav_marker)
+          assert css.rfind(final_marker) > css.rfind(mobile_comp_marker)
           assert css.rfind(mobile_qa_marker) > css.rfind(final_marker)
           assert 'grid-template-columns:repeat(7,minmax(0,1fr))!important' in css
           assert 'grid-template-columns:auto auto auto!important' in css
@@ -153,9 +154,15 @@ jobs:
           assert 'body:not(.journal-page) .hero-copy' in css
           assert 'body:not(.journal-page) .stable-copy>p:not(.kicker)' in css
           assert 'color:rgba(248,245,239,.84)!important' in css
+          assert 'release-quality-20260912' in css
           assert 'header-hidden' in js
           assert 'upDistance >= 84' in js
           assert all(str(item.get('image', '')).endswith('.webp') for item in news.get('items', []))
+          assert '<script defer src="site.js?v=' in html
+          assert 'imagesrcset="images/reitbeteiligung1-400.webp 400w' in html
+          assert 'images/reistunde1-400.webp 400w' in html
+          assert '<dd class="price-note">' in html
+          assert 'class="wordmark" href="#start" aria-label=' not in html
 
           assert '<body class="journal-page">' in journal
           assert 'Aktuelles &amp; Hofleben' in journal or 'Aktuelles & Hofleben' in journal
@@ -210,6 +217,9 @@ jobs:
           assert (out / 'site.css').stat().st_size > 60000
           assert (out / 'site.js').stat().st_size > 5000
           assert (out / 'images/reitbeteiligung1-480.webp').stat().st_size < 150_000
+          assert (out / 'images/reitbeteiligung1-400.webp').exists()
+          assert (out / 'images/eventbild1-400.webp').exists()
+          assert (out / 'images/reistunde1-400.webp').exists()
           assert (out / 'images/flyerferienreitkurs.webp').stat().st_size < 1_100_000
           assert (out / 'images/eventbild1-480.webp').exists()
           assert (out / 'images/eventbild1-800.webp').exists()
@@ -287,6 +297,7 @@ jobs:
               && grep -q "Reiten beginnt für mich mit <em>Vertrauen.</em>" <<<"$page" \
               && grep -q "Was mir beim Reiten <em>wichtig ist.</em>" <<<"$page" \
               && grep -q 'images/reistunde1.webp' <<<"$page" \
+              && grep -q 'release-quality-20260912' <<<"$stylesheet" \
               && grep -q 'Content-Security-Policy' <<<"$page" \
               && grep -q 'name="referrer" content="no-referrer"' <<<"$page" \
               && grep -q 'mobile-qa-final-20260827.css' <<<"$stylesheet" \
