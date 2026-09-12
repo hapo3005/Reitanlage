@@ -17,9 +17,8 @@ namespace['replace_many'](Path('_site/index.html'), namespace['index_replacement
 # Keep the opening intentionally minimal: identity, message and actions only.
 exec(Path('hero-personality.py').read_text(encoding='utf-8'), {})
 
-# One deterministic late homepage bundle. The source modules remain separated by
-# responsibility, but production gets one ordered authority block plus one small
-# premium finish layer. This prevents future ad-hoc append chains.
+# Validate the canonical homepage layers. CSS is never appended during a build:
+# styles/site.css is the single reviewed source of visual truth.
 css_path = Path('_site/site.css')
 css = css_path.read_text(encoding='utf-8')
 homepage_modules = (
@@ -30,18 +29,11 @@ homepage_modules = (
 )
 authority_marker = '/* ===== homepage-authority-bundle ===== */'
 premium_marker = '/* ===== homepage-premium-final.css ===== */'
-assert authority_marker not in css
-assert premium_marker not in css
-module_chunks = []
-for name in homepage_modules:
-    module_text = Path(name).read_text(encoding='utf-8').rstrip()
-    assert module_text
-    module_chunks.append(f'/* module: {name} */\n{module_text}')
-css += '\n\n' + authority_marker + '\n' + '\n\n'.join(module_chunks) + '\n'
-premium_css = Path('homepage-premium-final.css').read_text(encoding='utf-8').rstrip()
+assert css.count(authority_marker) == 1
+assert css.count(premium_marker) == 1
 assert 'dark chapters must always restore' not in Path('hero-reduction-final-20260828.css').read_text(encoding='utf-8')
-css += '\n\n' + premium_marker + '\n' + premium_css + '\n'
-css_path.write_text(css, encoding='utf-8')
+for name in homepage_modules:
+    assert f'/* module: {name} */' in css
 
 # Deterministic contact-active state near the bottom of the page.
 js_path = Path('_site/site.js')
