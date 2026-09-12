@@ -21,13 +21,13 @@ index, wordmark_count = re.subn(
 assert wordmark_count == 1
 
 # Accessibility: definition-list grouping may contain dt/dd only. Keep the
-# existing visual notes, but model them as additional descriptions instead of
-# stray span children inside the dl grouping divs.
+# existing visual notes inside dd elements; the inner span preserves the
+# established contrast/visual QA target without invalidating dl structure.
 price_match = re.search(r'(<dl class="price-highlight"[^>]*>)(.*?)(</dl>)', index, re.S)
 assert price_match
 price_body, note_count = re.subn(
     r'<span>(.*?)</span>',
-    r'<dd class="price-note">\1</dd>',
+    r'<dd class="price-note"><span>\1</span></dd>',
     price_match.group(2),
     flags=re.S,
 )
@@ -169,7 +169,7 @@ CSS.write_text(css, encoding='utf-8')
 # document if upstream markup changes later.
 final_index = INDEX.read_text(encoding='utf-8')
 assert 'class="wordmark" href="#start" aria-label=' not in final_index
-assert '<dd class="price-note">3 × 30 Min. + Einführung</dd>' in final_index
+assert '<dd class="price-note"><span>3 × 30 Min. + Einführung</span></dd>' in final_index
 assert '<script defer src="site.js?v=' in final_index
 assert 'imagesrcset="images/reitbeteiligung1-400.webp 400w' in final_index
 assert final_index.count('images/eventbild1-400.webp') >= 2
