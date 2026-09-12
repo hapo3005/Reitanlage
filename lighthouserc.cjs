@@ -1,7 +1,7 @@
 module.exports = {
   ci: {
     collect: {
-      url: ['http://127.0.0.1:4173/'],
+      url: ['https://127.0.0.1:4174/'],
       numberOfRuns: 3,
       settings: {
         formFactor: 'mobile',
@@ -13,7 +13,7 @@ module.exports = {
           disabled: false,
         },
         throttlingMethod: 'simulate',
-        chromeFlags: '--headless=new --no-sandbox --disable-dev-shm-usage',
+        chromeFlags: '--headless=new --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors',
       },
     },
     assert: {
