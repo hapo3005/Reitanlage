@@ -1,7 +1,7 @@
 import https from 'node:https';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import zlib from 'node:zlib';
 
 const ROOT = path.resolve(process.env.QA_SITE_DIR || '_site');
 const PORT = Number(process.env.QA_HTTPS_PORT || 4174);
@@ -24,6 +24,7 @@ const mime = new Map([
   ['.txt', 'text/plain; charset=utf-8'],
   ['.webmanifest', 'application/manifest+json; charset=utf-8'],
 ]);
+const compressible = new Set(['.html', '.css', '.js', '.json', '.svg', '.xml', '.txt', '.webmanifest']);
 
 function resolveRequest(urlPath) {
   const clean = decodeURIComponent(urlPath.split('?')[0]).replace(/^\/+/, '');
@@ -44,12 +45,26 @@ const server = https.createServer({
     return;
   }
 
-  const type = mime.get(path.extname(target).toLowerCase()) || 'application/octet-stream';
-  res.writeHead(200, {
+  const ext = path.extname(target).toLowerCase();
+  const type = mime.get(ext) || 'application/octet-stream';
+  const acceptsGzip = /(?:^|,)\s*gzip\s*(?:,|$)/i.test(req.headers['accept-encoding'] || '');
+  const useGzip = acceptsGzip && compressible.has(ext);
+  const headers = {
     'content-type': type,
-    'cache-control': 'no-store',
-  });
-  fs.createReadStream(target).pipe(res);
+    // GitHub Pages serves cacheable public resources rather than no-store.
+    // A short cache policy is production-representative while keeping every
+    // one-run QA origin deterministic.
+    'cache-control': ext === '.html' ? 'public, max-age=0, must-revalidate' : 'public, max-age=600',
+  };
+  if (useGzip) {
+    headers['content-encoding'] = 'gzip';
+    headers.vary = 'Accept-Encoding';
+  }
+  res.writeHead(200, headers);
+
+  const stream = fs.createReadStream(target);
+  if (useGzip) stream.pipe(zlib.createGzip({ level: 9 })).pipe(res);
+  else stream.pipe(res);
 });
 
 server.listen(PORT, '127.0.0.1', () => {
