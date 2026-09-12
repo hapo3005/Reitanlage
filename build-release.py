@@ -27,6 +27,7 @@ CSS_PARTS = [
     'news-zoom-polish.css',
     'news-cta-polish.css',
     'hero-premium-20260827.css',
+    'price-polish-20260912.css',
 ]
 
 IMAGE_META = {
