@@ -177,12 +177,17 @@ try {
           }
         });
 
-        await page.emulateMedia({ reducedMotion: 'reduce' });
+        // Do not use Playwright's reduced-motion emulation here. In WebKit the
+        // emulation is implemented with a helper <style> element, which our
+        // production CSP correctly rejects and would therefore create a false
+        // positive in the security gate. We instead let the page render under
+        // its real browser defaults and wait for initial motion to settle.
         await page.goto(URL, { waitUntil: 'networkidle' });
         await page.evaluate(async () => {
           if (document.fonts?.ready) await document.fonts.ready;
           window.scrollTo(0, 0);
         });
+        await page.waitForTimeout(1200);
 
         const audit = await page.evaluate(({ width }) => {
           const errors = [];
