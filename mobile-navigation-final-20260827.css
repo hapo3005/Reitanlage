@@ -50,7 +50,7 @@
     left:14px!important;
     right:14px!important;
     bottom:auto!important;
-    inset:auto 14px auto 14px!important;
+    inset:90px 14px auto 14px!important;
     width:auto!important;
     height:auto!important;
     min-height:0!important;
@@ -162,7 +162,7 @@
     top:82px!important;
     left:10px!important;
     right:10px!important;
-    inset:auto 10px auto 10px!important;
+    inset:82px 10px auto 10px!important;
     padding:6px 12px 8px!important;
     border-radius:16px!important;
   }
