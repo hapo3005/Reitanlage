@@ -11,24 +11,19 @@ OUT = ROOT / '_site'
 TOKEN = os.environ.get('GITHUB_SHA', 'local-audit')[:12]
 SITE_URL = os.environ.get('SITE_URL', 'https://hapo3005.github.io/Reitanlage/').rstrip('/') + '/'
 
-CSS_PARTS = [
-    'rebuild-base.css',
-    'hero-mobile.css',
-    'responsive.css',
-    'mobile-safety.css',
-    'contact-finish.css',
-    'site-finish.css',
-    'mobile-final-20260826.css',
-    'news-expanded.css',
-    'footer-fix.css',
-    'photo-zoom.css',
-    'ui-polish.css',
-    'ui-refine.css',
-    'news-zoom-polish.css',
-    'news-cta-polish.css',
-    'hero-premium-20260827.css',
-    'price-polish-20260912.css',
-]
+CANONICAL_CSS = ROOT / 'styles' / 'site.css'
+CSS_MARKERS = (
+    '/* ===== rebuild-base.css ===== */',
+    '/* ===== architecture-v2.css — final production layer ===== */',
+    '/* ===== navigation-final-20260827.css ===== */',
+    '/* ===== mobile-navigation-final-20260827.css ===== */',
+    '/* ===== faq-premium-20260911 ===== */',
+    '/* ===== homepage-authority-bundle ===== */',
+    '/* ===== homepage-premium-final.css ===== */',
+    '/* ===== journal-10of10-20260827.css ===== */',
+    '/* ===== release-quality-20260912 ===== */',
+    '/* ===== apple-safari-20260911 ===== */',
+)
 
 IMAGE_META = {
     'images/reitbeteiligung1.png': (1471, 1962),
@@ -78,20 +73,16 @@ if OUT.exists():
     shutil.rmtree(OUT)
 OUT.mkdir(parents=True)
 
-# Compile the validated CSS cascade into one production file.
-css_chunks = []
-for name in CSS_PARTS:
-    path = ROOT / name
-    css_chunks.append(f'/* ===== {name} ===== */\n{path.read_text(encoding="utf-8").rstrip()}\n')
-css_chunks.append(
-    '/* ===== release guardrails ===== */\n'
-    'html,body{max-width:100%;}\n'
-    'img{max-width:100%;}\n'
-    '.hero-image img{object-position:52% 48%}\n'
-    '.contact.contact-editorial address p:nth-child(4) a::after{content:"  ·  Route öffnen"!important}\n'
-    '@media(max-width:820px){.hero-copy,.hero-copy h1{color:#fff}.hero-copy .kicker,.hero-copy h1 em{color:#eadbc2}}\n'
-)
-(OUT / 'site.css').write_text('\n'.join(css_chunks), encoding='utf-8')
+# Publish the reviewed stylesheet without rebuilding an implicit override chain.
+# All visual authority lives in this one file; the markers make accidental
+# duplication and re-appending fail at build time.
+css = CANONICAL_CSS.read_text(encoding='utf-8').rstrip() + '\n'
+for marker in CSS_MARKERS:
+    if css.count(marker) != 1:
+        raise RuntimeError(f'Canonical CSS marker must occur once: {marker}')
+if 'inset:auto' in css.replace(' ', ''):
+    raise RuntimeError('Canonical CSS must not reset the mobile navigation inset')
+(OUT / 'site.css').write_text(css, encoding='utf-8')
 
 # Bundle JS plus keyboard/focus safeguards.
 js_parts = ['script.js', 'accessibility-finish.js']
