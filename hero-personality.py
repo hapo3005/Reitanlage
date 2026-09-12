@@ -62,42 +62,42 @@ faq = '''<section class="faq-section" id="fragen" aria-labelledby="faq-title">
     </div>
 
     <div class="faq-panel" data-reveal>
-      <div class="faq-panel-head"><span>Kurz &amp; persönlich beantwortet</span><strong>09</strong></div>
+      <div class="faq-panel-head"><span>Kurz &amp; persönlich beantwortet</span><strong>Carmen antwortet</strong></div>
       <div class="faq-list">
         <details class="faq-item">
-          <summary><span class="faq-number">01</span><span class="faq-question">Für wen ist der Reitunterricht geeignet?</span></summary>
+          <summary><span class="faq-question">Für wen ist der Reitunterricht geeignet?</span></summary>
           <div class="faq-answer"><p>Ich unterrichte Kinder, Jugendliche und Erwachsene – vom Anfänger und Wiedereinsteiger bis zum Freizeit- und Turnierreiter. Der Unterricht richtet sich nach dem jeweiligen Ausbildungsstand von Reiter und Pferd.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">02</span><span class="faq-question">Brauche ich ein eigenes Pferd?</span></summary>
+          <summary><span class="faq-question">Brauche ich ein eigenes Pferd?</span></summary>
           <div class="faq-answer"><p>Nein. Sie können mit einem meiner Lehrpferde oder mit dem eigenen Pferd zum Unterricht kommen. Für Anfänger und Wiedereinsteiger stehen ausgebildete Lehrpferde zur Verfügung.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">03</span><span class="faq-question">Welche Unterrichtsformen gibt es?</span></summary>
+          <summary><span class="faq-question">Welche Unterrichtsformen gibt es?</span></summary>
           <div class="faq-answer"><p>Je nach Ausbildungsstand sind Einzel- und Gruppenunterricht, Longenunterricht, Dressur, Cavaletti, Springgymnastik und Parcoursarbeit möglich. Auch gezielte Turniervorbereitung gehört zum Angebot.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">04</span><span class="faq-question">Was kostet Reitunterricht?</span></summary>
+          <summary><span class="faq-question">Was kostet Reitunterricht?</span></summary>
           <div class="faq-answer"><p>Die aktuell gültigen Preise finden Sie direkt im <a href="#preise">Preisbereich</a> über diesen Fragen. Dort sind Unterricht, Karten, Pferdepension und Pferdeausbildung übersichtlich aufgeführt.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">05</span><span class="faq-question">Gibt es Pferdepension auf der Anlage?</span></summary>
+          <summary><span class="faq-question">Gibt es Pferdepension auf der Anlage?</span></summary>
           <div class="faq-answer"><p>Ja. Zur Anlage gehören 18 helle Pony-, Großpferd- und Paddockboxen. Je nach Wetter kommen die Pferde täglich in kleinen Gruppen auf die Weide oder aufs Paddock; das Heu stammt aus eigenem Anbau.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">06</span><span class="faq-question">Welche Trainingsmöglichkeiten gibt es vor Ort?</span></summary>
+          <summary><span class="faq-question">Welche Trainingsmöglichkeiten gibt es vor Ort?</span></summary>
           <div class="faq-answer"><p>Reithalle und Außenplatz sind jeweils etwa 20 × 40 Meter groß. Außerdem gehören ein Waschplatz, ein Solarium und eine beheizte Sattelkammer zur Anlage. Direkt vom Hof führen Wege ins umliegende Gelände.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">07</span><span class="faq-question">Werden auch Beritt und Turnierbetreuung angeboten?</span></summary>
+          <summary><span class="faq-question">Werden auch Beritt und Turnierbetreuung angeboten?</span></summary>
           <div class="faq-answer"><p>Ja. Möglich sind Einzel-, Teil- und Vollberitt sowie Longieren und Bodenarbeit. Je nach Vereinbarung begleite ich Schüler, Einsteller und Privatreiter außerdem bei der Vorbereitung und auf Turnieren oder stelle Pferde selbst vor.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">08</span><span class="faq-question">Gibt es Ferienreitkurse, Lehrgänge oder Reitabzeichen?</span></summary>
+          <summary><span class="faq-question">Gibt es Ferienreitkurse, Lehrgänge oder Reitabzeichen?</span></summary>
           <div class="faq-answer"><p>Diese Angebote gehören immer wieder zum Hofleben. Die Termine wechseln – wenn Sie wissen möchten, was aktuell geplant ist oder ob noch ein Platz frei ist, fragen Sie bitte direkt bei mir nach.</p></div>
         </details>
         <details class="faq-item">
-          <summary><span class="faq-number">09</span><span class="faq-question">Muss ich einen Besuch vorher abstimmen?</span></summary>
+          <summary><span class="faq-question">Muss ich einen Besuch vorher abstimmen?</span></summary>
           <div class="faq-answer"><p>Ja. Wenn Sie die Anlage kennenlernen oder etwas persönlich besprechen möchten, stimmen Sie den Termin bitte vorher kurz mit mir ab. Am einfachsten erreichen Sie mich per WhatsApp, Telefon oder E-Mail.</p></div>
         </details>
       </div>
@@ -149,22 +149,23 @@ faq_css = r'''
 .faq-panel{position:relative;overflow:hidden;border:1px solid rgba(244,240,231,.16);border-radius:30px;background:linear-gradient(150deg,#17382d 0%,#112b22 58%,#0f271f 100%);box-shadow:0 32px 80px rgba(10,30,21,.18),inset 0 1px 0 rgba(255,255,255,.08)}
 .faq-panel::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 86% 2%,rgba(179,145,103,.19),transparent 31%);pointer-events:none}
 .faq-panel-head{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:23px 26px 19px;border-bottom:1px solid rgba(244,240,231,.14);color:rgba(244,240,231,.62);font-size:.69rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
-.faq-panel-head strong{display:grid;place-items:center;width:38px;height:28px;border:1px solid rgba(179,145,103,.48);border-radius:999px;color:#d3b08b;font-size:.68rem;letter-spacing:.08em}
+.faq-panel-head strong{color:#d3b08b;font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-size:.96rem;font-style:italic;font-weight:500;line-height:1;letter-spacing:-.02em;text-transform:none;white-space:nowrap}
 .faq-list{position:relative}
 .faq-item{margin:0;border:0;border-bottom:1px solid rgba(244,240,231,.12);background:transparent;transition:background .2s ease}
 .faq-item:last-child{border-bottom:0}
-.faq-item summary{display:grid;grid-template-columns:46px minmax(0,1fr) 42px;gap:18px;align-items:center;min-height:88px;padding:20px 24px;cursor:pointer;list-style:none;color:#f4f0e7;font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-size:clamp(1.08rem,1.32vw,1.28rem);font-weight:600;line-height:1.26;letter-spacing:-.018em;transition:color .18s ease,transform .18s ease}
+.faq-item summary{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:22px;align-items:center;min-height:88px;padding:22px 26px 22px 30px;cursor:pointer;list-style:none;color:#f4f0e7;font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-size:clamp(1.08rem,1.32vw,1.28rem);font-weight:600;line-height:1.26;letter-spacing:-.018em;transition:color .18s ease,transform .18s ease}
 .faq-item summary::-webkit-details-marker{display:none}
 .faq-item summary::marker{content:""}
-.faq-number{display:grid;place-items:center;width:36px;height:28px;border:1px solid rgba(179,145,103,.38);border-radius:999px;color:#d3b08b;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:.63rem;font-weight:800;letter-spacing:.10em}
-.faq-question{min-width:0}
+.faq-question{display:flex;align-items:flex-start;gap:14px;min-width:0}
+.faq-question::before{content:"";flex:0 0 18px;width:18px;height:1px;margin-top:.72em;background:#d3b08b;opacity:.48;transition:width .2s ease,flex-basis .2s ease,opacity .2s ease}
+.faq-item[open] .faq-question::before{flex-basis:28px;width:28px;opacity:.9}
 .faq-item summary::after{content:"+";display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(244,240,231,.24);border-radius:50%;background:rgba(244,240,231,.035);color:#f4f0e7;font:300 1.28rem/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;transition:transform .24s cubic-bezier(.2,.8,.2,1),background .18s ease,border-color .18s ease,color .18s ease}
 .faq-item summary:hover{color:#e1c4a3}
 .faq-item summary:hover::after{border-color:rgba(211,176,139,.72);background:rgba(179,145,103,.10)}
 .faq-item[open]{background:linear-gradient(90deg,rgba(255,255,255,.045),rgba(179,145,103,.055))}
 .faq-item[open] summary{color:#f8f3ea}
 .faq-item[open] summary::after{border-color:#d3b08b;background:#d3b08b;color:#17382d;transform:rotate(45deg)}
-.faq-answer{max-width:780px;padding:0 68px 28px 88px}
+.faq-answer{max-width:780px;padding:0 68px 28px 62px}
 .faq-answer p{margin:0;color:rgba(244,240,231,.72);font-size:.96rem;line-height:1.75}
 .faq-answer a{color:#e1c4a3;text-decoration-color:rgba(225,196,163,.54);text-decoration-thickness:1px;text-underline-offset:3px}
 .faq-item[open] .faq-answer{animation:faqAnswerIn .24s ease both}
@@ -195,11 +196,13 @@ faq_css = r'''
   .faq-contact-link{width:100%;box-sizing:border-box;margin-top:26px;min-height:50px;font-size:.84rem}
   .faq-panel{border-radius:24px}
   .faq-panel-head{padding:18px 17px 15px;font-size:.61rem;letter-spacing:.14em}
-  .faq-panel-head strong{width:34px;height:26px;font-size:.61rem}
-  .faq-item summary{grid-template-columns:34px minmax(0,1fr) 34px;gap:11px;min-height:76px;padding:17px 15px;font-size:1rem;line-height:1.3}
-  .faq-number{width:30px;height:24px;font-size:.56rem}
+  .faq-panel-head strong{font-size:.84rem}
+  .faq-item summary{grid-template-columns:minmax(0,1fr) 34px;gap:13px;min-height:76px;padding:19px 17px 19px 18px;font-size:1rem;line-height:1.3}
+  .faq-question{gap:11px}
+  .faq-question::before{flex-basis:15px;width:15px}
+  .faq-item[open] .faq-question::before{flex-basis:22px;width:22px}
   .faq-item summary::after{width:32px;height:32px;font-size:1.12rem}
-  .faq-answer{padding:0 44px 22px 59px}
+  .faq-answer{padding:0 48px 24px 44px}
   .faq-answer p{font-size:.92rem;line-height:1.66}
 }
 @media(max-width:430px){
@@ -208,10 +211,12 @@ faq_css = r'''
   .faq-contact-link{padding-left:15px}
   .faq-contact-arrow{width:34px;height:34px}
   .faq-panel{border-radius:21px}
-  .faq-item summary{grid-template-columns:31px minmax(0,1fr) 31px;gap:9px;padding:16px 13px;font-size:.96rem}
-  .faq-answer{padding:0 38px 20px 53px}
+  .faq-panel-head{align-items:flex-end}
+  .faq-panel-head strong{max-width:8.5rem;text-align:right;line-height:1.08}
+  .faq-item summary{grid-template-columns:minmax(0,1fr) 31px;gap:11px;padding:18px 15px;font-size:.96rem}
+  .faq-answer{padding:0 42px 22px 41px}
 }
-@media(prefers-reduced-motion:reduce){.faq-contact-link,.faq-contact-arrow,.faq-item,.faq-item summary,.faq-item summary::after{transition:none}.faq-item[open] .faq-answer{animation:none}}
+@media(prefers-reduced-motion:reduce){.faq-contact-link,.faq-contact-arrow,.faq-item,.faq-item summary,.faq-item summary::after,.faq-question::before{transition:none}.faq-item[open] .faq-answer{animation:none}}
 '''.strip()
 css_path.write_text(css.rstrip() + '\n\n' + faq_css + '\n', encoding='utf-8')
 
