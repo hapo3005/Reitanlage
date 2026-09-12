@@ -142,28 +142,11 @@ index = index[:lesson_img.start()] + lesson_tag + index[lesson_img.end():]
 
 INDEX.write_text(index, encoding='utf-8')
 
-# Contrast fixes are intentionally narrow. They retain the visual hierarchy but
-# provide a safe margin above WCAG AA rather than sitting on the 4.5:1 boundary.
+# Contrast fixes are stored in the canonical stylesheet and validated here.
 css = CSS.read_text(encoding='utf-8')
 marker = '/* ===== release-quality-20260912 ===== */'
-assert marker not in css
-css += f'''\n\n{marker}
-body:not(.journal-page) .chapter-light .chapter-index>.kicker{{color:#785a3f!important}}
-body:not(.journal-page) .footer .wordmark span,
-body:not(.journal-page) .footer>p,
-body:not(.journal-page) .footer>p span{{color:#59635e!important}}
-body:not(.journal-page) .price-highlight dd.price-note{{
-  grid-column:1/-1!important;
-  margin:0!important;
-  color:rgba(248,245,239,.76)!important;
-  font-family:var(--sans)!important;
-  font-size:.69rem!important;
-  font-weight:400!important;
-  line-height:1.5!important;
-  letter-spacing:0!important;
-}}
-'''
-CSS.write_text(css, encoding='utf-8')
+assert css.count(marker) == 1
+assert 'body:not(.journal-page) .price-highlight dd.price-note' in css
 
 # Release assertions: fail here instead of shipping a partially transformed
 # document if upstream markup changes later.
