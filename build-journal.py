@@ -68,15 +68,12 @@ def enlarged_photo(source: Path) -> Image.Image:
 if not OUT.exists():
     raise RuntimeError('Run build-release.py before build-journal.py')
 
-# Keep one public stylesheet. The previously validated intermediate-width news
-# fix and the journal rules are appended after the main release cascade.
+# Journal styles are part of the canonical stylesheet. Validate their presence
+# without mutating the production cascade during the build.
 site_css = OUT / 'site.css'
 css = site_css.read_text(encoding='utf-8')
-for name in ('release-polish.css', 'journal.css'):
-    path = ROOT / name
-    if path.exists():
-        css += f'\n\n/* ===== {name} ===== */\n' + path.read_text(encoding='utf-8').rstrip() + '\n'
-site_css.write_text(css, encoding='utf-8')
+assert css.count('/* ===== journal.css ===== */') == 1
+assert '.journal-page' in css
 
 # Restore archival imagery that is intentionally not needed on the landing page.
 for src in EXTRA_IMAGES:
