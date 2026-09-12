@@ -27,6 +27,15 @@ function sleep(ms) {
 function fail(errors, label) {
   if (errors.length) throw new Error(`${label}:\n- ${errors.join('\n- ')}`);
 }
+function addCspErrors(errors, violations) {
+  for (const violation of violations) {
+    const source = violation.sourceFile || 'inline/unknown';
+    const blocked = violation.blockedURI || 'inline';
+    errors.push(
+      `CSP ${violation.effectiveDirective || violation.violatedDirective} blocked=${blocked} source=${source}:${violation.lineNumber}:${violation.columnNumber} sample=${violation.sample || '-'}`,
+    );
+  }
+}
 
 run('npm', [
   'install', '--no-save', '--no-package-lock', '--ignore-scripts',
@@ -177,11 +186,10 @@ try {
           }
         });
 
-        // Do not use Playwright's reduced-motion emulation here. In WebKit the
-        // emulation is implemented with a helper <style> element, which our
-        // production CSP correctly rejects and would therefore create a false
-        // positive in the security gate. We instead let the page render under
-        // its real browser defaults and wait for initial motion to settle.
+        // Runtime/CSP validation is deliberately completed before screenshot
+        // capture. Playwright may use engine-specific helper styles while
+        // producing a full-page image; those belong to the QA harness and are
+        // not executable production page behavior.
         await page.goto(URL, { waitUntil: 'networkidle' });
         await page.evaluate(async () => {
           if (document.fonts?.ready) await document.fonts.ready;
@@ -255,6 +263,19 @@ try {
         if (!audit.title.trim()) runtimeErrors.push('document title is empty');
         if (audit.lang !== 'de') runtimeErrors.push(`document lang is ${audit.lang || 'missing'}, expected de`);
 
+        const runtimeCspViolations = await page.evaluate(() => window.__qaCspViolations || []);
+        addCspErrors(runtimeErrors, runtimeCspViolations);
+        const genericCsp = /Refused to apply a stylesheet because/i;
+        runtimeErrors.push(...consoleErrors.filter(message => !(runtimeCspViolations.length && genericCsp.test(message))));
+        fail(runtimeErrors, `${label} production runtime`);
+
+        // From this point on, browser instrumentation is excluded from runtime
+        // security accounting. Screenshot capture still fails normally if the
+        // browser cannot produce the image, while production CSP has already
+        // been validated under the same HTTPS origin.
+        await page.evaluate(() => { window.__qaCspViolations = []; });
+        consoleErrors.length = 0;
+
         const screenshot = await page.screenshot({
           path: path.join(OUT, `${browserName}-${viewportName}.png`),
           fullPage: true,
@@ -263,22 +284,9 @@ try {
         });
         const actual = signature(screenshot, candidate.grid);
         candidate.signatures[label] = actual;
-        if (baseline) runtimeErrors.push(...compare(actual, baseline.signatures?.[label], label));
+        const visualErrors = baseline ? compare(actual, baseline.signatures?.[label], label) : [];
+        fail(visualErrors, `${label} visual regression`);
 
-        const cspViolations = await page.evaluate(() => window.__qaCspViolations || []);
-        if (cspViolations.length) {
-          for (const violation of cspViolations) {
-            const source = violation.sourceFile || 'inline/unknown';
-            const blocked = violation.blockedURI || 'inline';
-            runtimeErrors.push(
-              `CSP ${violation.effectiveDirective || violation.violatedDirective} blocked=${blocked} source=${source}:${violation.lineNumber}:${violation.columnNumber} sample=${violation.sample || '-'}`,
-            );
-          }
-        }
-        const genericCsp = /Refused to apply a stylesheet because/i;
-        runtimeErrors.push(...consoleErrors.filter(message => !(cspViolations.length && genericCsp.test(message))));
-
-        fail(runtimeErrors, label);
         console.log(`Cross-browser QA ${label}: passed (${audit.pageHeight}px page height).`);
         await context.close();
       }
