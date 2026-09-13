@@ -6338,10 +6338,12 @@ body:not(.journal-page) .faq-section .faq-lede{color:rgba(29,41,36,.69)!importan
   }
   body:not(.journal-page) .hero-copy{
     z-index:2!important;
+    align-self:start!important;
     justify-content:center!important;
     width:auto!important;
     max-width:660px!important;
     min-height:0!important;
+    margin-top:clamp(68px,8vh,88px)!important;
     padding:0!important;
     color:var(--premium-ink)!important;
     background:transparent!important;
@@ -6459,6 +6461,7 @@ body:not(.journal-page) .faq-section .faq-lede{color:rgba(29,41,36,.69)!importan
     max-width:10.4ch!important;
     font-size:clamp(3.2rem,6vw,3.8rem)!important;
   }
+  body:not(.journal-page) .hero-copy{margin-top:56px!important}
   body:not(.journal-page) .hero-links{align-items:stretch!important}
   body:not(.journal-page) .hero-links .text-link{width:100%!important}
   body:not(.journal-page) .hero-image{height:clamp(500px,calc(100svh - 170px),680px)!important}
