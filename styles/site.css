@@ -6318,7 +6318,7 @@ body:not(.journal-page) .faq-section .faq-lede{color:rgba(29,41,36,.69)!importan
     display:grid!important;
     grid-template-columns:minmax(360px,.78fr) minmax(520px,1.22fr)!important;
     align-items:center!important;
-    min-height:100svh!important;
+    min-height:0!important;
     gap:clamp(40px,4vw,72px)!important;
     padding:clamp(118px,13vh,138px) max(36px,calc((100vw - 1780px)/2)) clamp(34px,4vh,44px)!important;
     overflow:hidden!important;
