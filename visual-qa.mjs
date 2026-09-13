@@ -258,7 +258,8 @@ try {
             const heroCopy = document.querySelector('.hero-copy')?.getBoundingClientRect();
             const heroActions = document.querySelector('.hero-links')?.getBoundingClientRect();
             const heroImage = document.querySelector('.hero-image')?.getBoundingClientRect();
-            if (!header || !hero || !heroCopy || !heroActions || !heroImage || !heroTitle) {
+            const facts = document.querySelector('.facts')?.getBoundingClientRect();
+            if (!header || !hero || !heroCopy || !heroActions || !heroImage || !heroTitle || !facts) {
               errors.push('desktop hero geometry is incomplete');
             } else {
               if (heroTitle.top < header.bottom + 18) errors.push(`hero title overlaps header (${heroTitle.top.toFixed(1)}px < ${(header.bottom + 18).toFixed(1)}px)`);
@@ -269,7 +270,8 @@ try {
               if (heroImage.bottom > window.innerHeight - 20) errors.push('hero image is clipped by the first viewport');
               if (heroImage.width < width * .42) errors.push('hero image lost desktop visual authority');
               if (heroCopy.width > width * .48) errors.push('hero copy lane is too wide');
-              if (hero.height < window.innerHeight - 2) errors.push('desktop hero is shorter than the viewport');
+              if (heroImage.bottom - heroActions.bottom > 190) errors.push(`desktop hero leaves ${Math.round(heroImage.bottom - heroActions.bottom)}px unused below its actions`);
+              if (facts.top > window.innerHeight - 70) errors.push('desktop hero hides the transition into its factual summary');
             }
           }
           if (width <= 820) {
