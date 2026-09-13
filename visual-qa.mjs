@@ -93,6 +93,7 @@ const viewports = [
   ['mobile-390', 390, 844],
   ['tablet-820', 820, 1100],
   ['desktop-1440', 1440, 1000],
+  ['desktop-wide-1920', 1920, 900],
 ];
 const baseline = fs.existsSync(BASELINE) ? JSON.parse(fs.readFileSync(BASELINE, 'utf8')) : null;
 const candidate = { version: 1, playwright: PLAYWRIGHT_VERSION, grid: 24, signatures: {} };
@@ -251,6 +252,26 @@ try {
           requireContrast('.price-highlight span', ['#15372b','#102b21']);
           const heroTitle = document.querySelector('.hero-copy h1')?.getBoundingClientRect();
           if (!heroTitle || heroTitle.width < Math.min(240, width * .55)) errors.push('hero title collapsed unexpectedly');
+          if (width > 820) {
+            const header = document.querySelector('.header')?.getBoundingClientRect();
+            const hero = document.querySelector('.hero')?.getBoundingClientRect();
+            const heroCopy = document.querySelector('.hero-copy')?.getBoundingClientRect();
+            const heroActions = document.querySelector('.hero-links')?.getBoundingClientRect();
+            const heroImage = document.querySelector('.hero-image')?.getBoundingClientRect();
+            if (!header || !hero || !heroCopy || !heroActions || !heroImage || !heroTitle) {
+              errors.push('desktop hero geometry is incomplete');
+            } else {
+              if (heroTitle.top < header.bottom + 18) errors.push(`hero title overlaps header (${heroTitle.top.toFixed(1)}px < ${(header.bottom + 18).toFixed(1)}px)`);
+              if (heroTitle.bottom > window.innerHeight - 88) errors.push(`hero title leaves first viewport (${heroTitle.bottom.toFixed(1)}px > ${window.innerHeight - 88}px)`);
+              if (heroActions.bottom > window.innerHeight - 24) errors.push(`hero actions leave first viewport (${heroActions.bottom.toFixed(1)}px > ${window.innerHeight - 24}px)`);
+              if (heroTitle.top - header.bottom > 260) errors.push(`desktop hero has ${Math.round(heroTitle.top - header.bottom)}px dead space above title`);
+              if (heroImage.top < header.bottom + 12) errors.push('hero image begins underneath the header');
+              if (heroImage.bottom > window.innerHeight - 20) errors.push('hero image is clipped by the first viewport');
+              if (heroImage.width < width * .42) errors.push('hero image lost desktop visual authority');
+              if (heroCopy.width > width * .48) errors.push('hero copy lane is too wide');
+              if (hero.height < window.innerHeight - 2) errors.push('desktop hero is shorter than the viewport');
+            }
+          }
           if (width <= 820) {
             for (const figure of document.querySelectorAll('.horse-ledger figure')) {
               if (figure.getBoundingClientRect().width > 140) errors.push('archival horse image rendered too large on mobile');
