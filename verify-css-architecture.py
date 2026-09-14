@@ -37,7 +37,7 @@ workflow = WORKFLOW.read_text(encoding='utf-8')
 assert not re.search(r'>>\s*_site/site\.css', workflow), 'Workflow appends to site.css'
 assert not re.search(r'\bcat\s+[^\n]+\.css\s*>>', workflow), 'Workflow rebuilds a CSS cascade'
 
-for filename in ('build-journal.py', 'hero-personality.py', 'carmen-index.py', 'carmen-journal.py', 'release-quality.py'):
+for filename in ('build-journal.py', 'carmen-index.py', 'carmen-journal.py', 'release-quality.py'):
     source = (ROOT / filename).read_text(encoding='utf-8')
     assert not re.search(r'(?:css_path|CSS)\.write_text\(', source), f'{filename} mutates production CSS'
 
