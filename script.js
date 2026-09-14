@@ -139,7 +139,16 @@ function ensureNewsLightbox(){
   lightboxClose.addEventListener('click',closeNewsLightbox);
   lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeNewsLightbox();});
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'&&lightbox&&!lightbox.hidden)closeNewsLightbox();
+    if(!lightbox||lightbox.hidden)return;
+    if(e.key==='Escape'){
+      e.preventDefault();
+      closeNewsLightbox();
+      return;
+    }
+    if(e.key==='Tab'){
+      e.preventDefault();
+      lightboxClose.focus();
+    }
   });
 }
 
@@ -178,7 +187,7 @@ function openPhotoLightbox(img){
 }
 
 function initPhotoZoom(root=document){
-  root.querySelectorAll('main img').forEach(img=>{
+  root.querySelectorAll('main figure img').forEach(img=>{
     if(img.dataset.photoZoomReady==='true')return;
     if(img.closest('.news-media-button'))return;
     if(img.closest('a,button'))return;
