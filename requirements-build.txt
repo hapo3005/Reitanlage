@@ -1,2 +1,2 @@
 # Build-only dependency; pinned for reproducible GitHub Pages releases.
-Pillow==12.3.0
+Pillow==13.0.0
